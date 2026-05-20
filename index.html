@@ -3,25 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Bezliny Cleaning Corporation - Innovative drone-based cleaning solutions. Faster, Safer, and Sustainable.">
-    <title>Bezliny Cleaning Corporation | Drone Cleaning Solutions</title>
+    <meta name="description" content="Bezliny Cleaning Corporation - World-leading autonomous drone cleaning, inspection & surface treatment. Safer, faster, sustainable.">
+    <title>Bezliny | Autonomous Drone Cleaning & Inspection</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;600;700;800&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
     <!-- Navigation -->
-    <nav class="navbar">
+    <nav class="navbar" id="navbar">
         <div class="nav-container">
-            <a href="#" class="logo">BEZLINY</a>
+            <a href="index.html" class="logo">BEZLINY</a>
             <div class="nav-links" id="navLinks">
-                <a href="#home">Home</a>
-                <a href="#services">Services</a>
-                <a href="#about">About</a>
-                <a href="#contact">Contact</a>
+                <a href="index.html" class="active">Home</a>
+                <a href="pages/services.html">Services</a>
+                <a href="pages/about.html">About</a>
+                <a href="pages/gallery.html">Gallery</a>
+                <a href="pages/contact.html">Contact</a>
             </div>
+            <a href="pages/contact.html" class="nav-cta">Get a Quote</a>
             <div class="nav-toggle" id="navToggle">
                 <span></span>
                 <span></span>
@@ -30,171 +32,200 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero Section - Full Screen Video -->
     <section class="hero" id="home">
         <video class="hero-video" autoplay muted loop playsinline>
             <source src="https://video.wixstatic.com/video/9c4719_886c9535d3e94958a802eb75303e73d3/1080p/mp4/file.mp4" type="video/mp4">
         </video>
         <div class="hero-overlay"></div>
         <div class="hero-content">
-            <h6 class="hero-welcome">Welcome to BEZLINY</h6>
-            <h1 class="hero-heading">This is where others stop<br>and where we begin.</h1>
-            <p class="hero-sub">We reach the unreachable and clean what others Can't</p>
-            <div class="hero-cta">
-                <a href="#contact" class="btn-cta">Contact us<br><span>for drone<br>Service</span></a>
+            <p class="hero-tag reveal">AUTONOMOUS DRONE TECHNOLOGY</p>
+            <h1 class="reveal reveal-delay-1">Where others stop,<br>we begin.</h1>
+            <p class="hero-sub reveal reveal-delay-2">We reach the unreachable and clean what others can't.<br>Faster. Safer. Sustainable.</p>
+            <div class="hero-buttons reveal reveal-delay-3">
+                <a href="pages/services.html" class="btn btn-primary">Our Services</a>
+                <a href="pages/contact.html" class="btn btn-outline">Contact Us</a>
             </div>
         </div>
-    </section>
-
-    <!-- Mission Section -->
-    <section class="mission">
-        <div class="container">
-            <h3 class="mission-label">Our Mission</h3>
-            <h2 class="mission-heading">we offer Innovative Drone Solutions powered by<br>Bezliny<br>It is Faster, Safer, and Sustainable</h2>
-            <p class="mission-text">Revolutionizing cleaning with cutting-edge drone technology, Bezliny Cleaning Corporation is a global leader in eco-friendly and efficient cleaning solutions.</p>
-            <p class="mission-text">Our innovative drone technology saves time, enhances safety, reduces costs, and protects the environment. With a commitment to sustainability, we are dedicated to providing exceptional cleaning services that exceed expectations.</p>
+        <div class="scroll-indicator">
+            <span></span>
         </div>
     </section>
 
-    <!-- Services Section -->
-    <section class="services" id="services">
+    <!-- Intro Section -->
+    <section class="intro">
         <div class="container">
-            <h2 class="services-heading">Few Examples of What We Offer</h2>
-            <div class="services-grid">
-                <div class="service-card">
-                    <img src="https://static.wixstatic.com/media/11062b_757cf7810a414357ab396a6efedfe347~mv2.jpg/v1/fill/w_600,h_400,al_c,q_80,usm_0.66_1.00_0.01/11062b_757cf7810a414357ab396a6efedfe347~mv2.jpg" alt="Residential Cleaning">
-                    <div class="service-info">
-                        <span class="service-num">01.</span>
-                        <h3>Residential, Hotel & Public Complex Cleaning</h3>
-                    </div>
+            <div class="intro-grid">
+                <div class="intro-text reveal-left">
+                    <h6 class="section-tag">Our Mission</h6>
+                    <h2>Innovative Drone Solutions<br>Powered by Bezliny</h2>
+                    <p>Revolutionizing cleaning with cutting-edge drone technology. Bezliny Cleaning Corporation is a global leader in eco-friendly and efficient cleaning solutions for high-risk and hard-to-reach environments.</p>
+                    <p>Our innovative drone technology saves time, enhances safety, reduces costs, and protects the environment.</p>
+                    <a href="pages/about.html" class="btn btn-text">Learn More →</a>
                 </div>
-                <div class="service-card">
-                    <img src="https://static.wixstatic.com/media/11062b_a867ce2a2c3e4eadb3cd449c1835cfb3~mv2.jpeg/v1/fill/w_600,h_400,al_c,q_80,usm_0.66_1.00_0.01/11062b_a867ce2a2c3e4eadb3cd449c1835cfb3~mv2.jpeg" alt="High-Rise Cleaning">
-                    <div class="service-info">
-                        <span class="service-num">02.</span>
-                        <h3>High-Rise and complex area cleaning</h3>
-                    </div>
-                </div>
-                <div class="service-card">
-                    <img src="https://static.wixstatic.com/media/b714e3a8b5ef4881bf7d7b75a134aec1.jpg/v1/fill/w_600,h_400,al_c,q_80,usm_0.66_1.00_0.01/b714e3a8b5ef4881bf7d7b75a134aec1.jpg" alt="Solar Panel Cleaning">
-                    <div class="service-info">
-                        <span class="service-num">03.</span>
-                        <h3>Solar Panel and Roof Top Drone Cleaning</h3>
-                    </div>
-                </div>
-                <div class="service-card">
-                    <img src="https://static.wixstatic.com/media/6d3e5c430e424d9fab701477d9fabe7e.jpg/v1/fill/w_600,h_400,al_c,q_80,usm_0.66_1.00_0.01/6d3e5c430e424d9fab701477d9fabe7e.jpg" alt="Industrial Cleaning">
-                    <div class="service-info">
-                        <span class="service-num">04.</span>
-                        <h3>Industrial & Commercial Exterior Cleaning</h3>
-                    </div>
-                </div>
-                <div class="service-card">
-                    <img src="https://static.wixstatic.com/media/11062b_fb6e16aa0e32436898cd0b4d5a46050f~mv2.jpg/v1/fill/w_600,h_400,al_c,q_80,usm_0.66_1.00_0.01/11062b_fb6e16aa0e32436898cd0b4d5a46050f~mv2.jpg" alt="Wind Turbines">
-                    <div class="service-info">
-                        <span class="service-num">05.</span>
-                        <h3>Wind platforms and turbines</h3>
-                    </div>
-                </div>
-                <div class="service-card">
-                    <img src="https://static.wixstatic.com/media/11062b_94a2d4c70e5e4e21922fb1d2315ec74a~mv2.jpg/v1/fill/w_600,h_400,al_c,q_80,usm_0.66_1.00_0.01/11062b_94a2d4c70e5e4e21922fb1d2315ec74a~mv2.jpg" alt="Window Cleaning">
-                    <div class="service-info">
-                        <span class="service-num">06.</span>
-                        <h3>Low-Rise & Mid-Rise Window Cleaning</h3>
-                    </div>
+                <div class="intro-visual reveal-right">
+                    <video autoplay muted loop playsinline>
+                        <source src="https://video.wixstatic.com/video/11062b_5bd9417cfcdf4be390d13db795a1541c/720p/mp4/file.mp4" type="video/mp4">
+                    </video>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Video Section 1 -->
-    <section class="video-section">
-        <div class="container">
-            <video class="content-video" autoplay muted loop playsinline>
-                <source src="https://video.wixstatic.com/video/11062b_5bd9417cfcdf4be390d13db795a1541c/720p/mp4/file.mp4" type="video/mp4">
-            </video>
-        </div>
-    </section>
-
-    <!-- Hazardous Environments Section -->
-    <section class="hazardous">
-        <div class="container">
-            <h2 class="hazardous-heading">Cleaning, Surface Treatment, and Inspection in Hazardous Environments</h2>
-            <p>At Bezliny, our drone-based cleaning, surface treatment, and inspection services eliminate the need for workers to operate in hazardous environments.</p>
-            <p>This dramatically reduces—or even removes—the cost and complexity of scaffolding and rope access. We specialize in industrial and offshore cleaning, surface treatment, and inspection, providing sustainable and cost-effective solutions tailored for sectors like oil and gas.</p>
-            <p>These facilities are mainly composed of metallic structures that require careful cleaning to preserve protective coatings and extend their lifespan.</p>
-            <p>Our in-house developed Bezliny Drone Cleaner delivers highly effective cleaning without damaging surfaces, ensuring the long-term protection of critical assets.</p>
-        </div>
-    </section>
-
-    <!-- Privacy Section -->
-    <section class="privacy">
-        <div class="container">
-            <p>The data processor is always responsible for ensuring that all collected data and personal information are stored and managed in full compliance with the applicable Data Processing Agreement and relevant laws.</p>
-            <p>In cases where individuals, sensitive personal information, or other confidential content are inadvertently captured during data collection, the data processor must redact such information before any further use.</p>
-            <p>The operating pilot(s) are required to promptly inform third parties if the collected data contains content that could compromise personal privacy.</p>
-            <p>Additionally, the pilot(s) must take all reasonable measures to conduct data collection in a way that minimizes the likelihood of capturing individuals, sensitive personal information, or other confidential content in the collected imagery.</p>
-            <p><strong>We are committed to upholding the highest standards of privacy and data protection.</strong></p>
-            <p>The drones used during cleaning operations are controlled solely by the pilot, and the recording function is completely disabled, ensuring that no videos or images are captured or stored.</p>
-            <p>For certain projects, an additional small drone may be used to film the cleaning drone in action. This is done strictly for marketing purposes or to document the work being performed, and only with the client's prior consent.</p>
-            <p>In these cases, all collected data is managed responsibly in accordance with applicable data protection regulations, with Bezliny acting as the authorized data processor.</p>
-            <h3 class="privacy-highlight">We are dedicated to upholding the highest levels of privacy and data security.</h3>
-        </div>
-    </section>
-
-    <!-- Video Section 2 -->
-    <section class="video-section">
-        <div class="container">
-            <video class="content-video" autoplay muted loop playsinline>
-                <source src="https://video.wixstatic.com/video/11062b_e345dcd4a33f48ef901934544f0488c1/720p/mp4/file.mp4" type="video/mp4">
-            </video>
-        </div>
-    </section>
-
-    <!-- Stats Section -->
+    <!-- Stats Counter Section -->
     <section class="stats">
         <div class="container">
-            <p class="stats-intro">Innovative drone technology that saves time, enhances safety, reduces costs, and protects the environment.</p>
-            <h2 class="stats-heading">Bezliny Drone Systems<br>Faster, Safer, and Built for the Future</h2>
-            <p class="stats-text">Bezliny delivers advanced drone technology designed to transform cleaning and inspection across high-risk and hard-to-reach environments. Our solutions remove the need for scaffolding, rope access, and manual high-altitude work, providing a safer and more efficient alternative for modern infrastructure.</p>
-            <p class="stats-text">We offer a wide range of services, including façade cleaning, window cleaning, solar panel cleaning, industrial structure cleaning, and precision aerial inspections.</p>
-            <p class="stats-text">Our intelligent sensor technology enables high-accuracy navigation, consistent cleaning quality, and reliable performance in challenging conditions — all while supporting strict HSE (Health, Safety, and Environment) standards.</p>
             <div class="stats-grid">
-                <div class="stat-item">
-                    <h3>FASTER</h3>
+                <div class="stat-item reveal">
+                    <h3 class="counter" data-target="10">0</h3>
+                    <span class="stat-suffix">x</span>
                     <p>Faster than traditional methods</p>
                 </div>
-                <div class="stat-item">
-                    <h3>99%</h3>
-                    <p>Safer</p>
+                <div class="stat-item reveal reveal-delay-1">
+                    <h3 class="counter" data-target="99">0</h3>
+                    <span class="stat-suffix">%</span>
+                    <p>Safer operations</p>
                 </div>
-                <div class="stat-item">
-                    <h3>100%</h3>
-                    <p>Sustainable</p>
+                <div class="stat-item reveal reveal-delay-2">
+                    <h3 class="counter" data-target="100">0</h3>
+                    <span class="stat-suffix">%</span>
+                    <p>Sustainable & eco-friendly</p>
+                </div>
+                <div class="stat-item reveal reveal-delay-3">
+                    <h3 class="counter" data-target="60">0</h3>
+                    <span class="stat-suffix">+</span>
+                    <p>Countries served</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section class="contact" id="contact">
+    <!-- Services Preview -->
+    <section class="services-preview">
         <div class="container">
-            <h2 class="contact-heading">CONTACT US</h2>
-            <p class="contact-sub">For the Innovative way to keeps your buildings Smarter, Safer, & Cleaner all year around<br>Lets get you an appointment</p>
-            <form class="contact-form" id="contactForm">
-                <input type="text" name="name" placeholder="Name" required>
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="text" name="phone" placeholder="Phone">
-                <input type="text" name="subject" placeholder="Subject">
-                <textarea name="message" placeholder="Type your message here..." required></textarea>
-                <button type="submit" class="btn-submit">Submit</button>
-            </form>
+            <div class="section-header reveal">
+                <h6 class="section-tag">What We Do</h6>
+                <h2>Our Services</h2>
+                <p>From residential buildings to offshore platforms — we clean what others can't reach.</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card reveal">
+                    <div class="service-img">
+                        <img src="https://static.wixstatic.com/media/11062b_757cf7810a414357ab396a6efedfe347~mv2.jpg/v1/fill/w_600,h_400,al_c,q_80/11062b_757cf7810a414357ab396a6efedfe347~mv2.jpg" alt="Residential Cleaning">
+                    </div>
+                    <div class="service-content">
+                        <span class="service-num">01</span>
+                        <h3>Residential & Hotel Cleaning</h3>
+                        <p>Professional drone cleaning for residential buildings, hotels, and public complexes.</p>
+                    </div>
+                </div>
+                <div class="service-card reveal reveal-delay-1">
+                    <div class="service-img">
+                        <img src="https://static.wixstatic.com/media/11062b_a867ce2a2c3e4eadb3cd449c1835cfb3~mv2.jpeg/v1/fill/w_600,h_400,al_c,q_80/11062b_a867ce2a2c3e4eadb3cd449c1835cfb3~mv2.jpeg" alt="High-Rise Cleaning">
+                    </div>
+                    <div class="service-content">
+                        <span class="service-num">02</span>
+                        <h3>High-Rise & Façade Cleaning</h3>
+                        <p>Reaching extreme heights without scaffolding or rope access.</p>
+                    </div>
+                </div>
+                <div class="service-card reveal reveal-delay-2">
+                    <div class="service-img">
+                        <img src="https://static.wixstatic.com/media/b714e3a8b5ef4881bf7d7b75a134aec1.jpg/v1/fill/w_600,h_400,al_c,q_80/b714e3a8b5ef4881bf7d7b75a134aec1.jpg" alt="Solar Panel Cleaning">
+                    </div>
+                    <div class="service-content">
+                        <span class="service-num">03</span>
+                        <h3>Solar Panel & Rooftop</h3>
+                        <p>Maintain peak solar efficiency with gentle yet thorough drone cleaning.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="section-cta reveal">
+                <a href="pages/services.html" class="btn btn-primary">View All Services</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Full-Width Video Break -->
+    <section class="video-break">
+        <video autoplay muted loop playsinline>
+            <source src="https://video.wixstatic.com/video/11062b_e345dcd4a33f48ef901934544f0488c1/720p/mp4/file.mp4" type="video/mp4">
+        </video>
+        <div class="video-break-overlay">
+            <div class="container">
+                <h2 class="reveal">Cleaning in Hazardous Environments</h2>
+                <p class="reveal reveal-delay-1">Our drone-based services eliminate the need for workers in hazardous environments. No scaffolding. No rope access. No risk.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Section -->
+    <section class="technology">
+        <div class="container">
+            <div class="tech-grid">
+                <div class="tech-visual reveal-left">
+                    <img src="https://static.wixstatic.com/media/6d3e5c430e424d9fab701477d9fabe7e.jpg/v1/fill/w_800,h_600,al_c,q_80/6d3e5c430e424d9fab701477d9fabe7e.jpg" alt="Bezliny Drone Technology">
+                </div>
+                <div class="tech-content reveal-right">
+                    <h6 class="section-tag">Technology</h6>
+                    <h2>Bezliny Drone Systems</h2>
+                    <p>Our proprietary sensor technology provides centimeter-level precision, setting a new standard for quality and significantly improving HSE performance.</p>
+                    <ul class="tech-features">
+                        <li><span class="feature-icon">⚡</span> Non-contact cleaning approach</li>
+                        <li><span class="feature-icon">🛡️</span> Patented roof safety system</li>
+                        <li><span class="feature-icon">🎯</span> Centimeter-level precision</li>
+                        <li><span class="feature-icon">🌱</span> Chemical-free, eco-friendly</li>
+                    </ul>
+                    <a href="pages/about.html" class="btn btn-primary">Our Technology</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content reveal">
+                <h2>Ready to experience the future of cleaning?</h2>
+                <p>Let's keep your buildings Smarter, Safer & Cleaner all year around.</p>
+                <a href="pages/contact.html" class="btn btn-primary btn-lg">Get an Appointment</a>
+            </div>
         </div>
     </section>
 
     <!-- Footer -->
     <footer class="footer">
-        <p>&copy; 2026 Bezliny Cleaning Corporation. All rights reserved.</p>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3 class="logo">BEZLINY</h3>
+                    <p>Autonomous drone cleaning, inspection & surface treatment. Safer, faster, sustainable.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Navigation</h4>
+                    <a href="index.html">Home</a>
+                    <a href="pages/services.html">Services</a>
+                    <a href="pages/about.html">About</a>
+                    <a href="pages/gallery.html">Gallery</a>
+                    <a href="pages/contact.html">Contact</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Services</h4>
+                    <a href="pages/services.html">Façade Cleaning</a>
+                    <a href="pages/services.html">Solar Panel Cleaning</a>
+                    <a href="pages/services.html">Industrial Cleaning</a>
+                    <a href="pages/services.html">Drone Inspections</a>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contact</h4>
+                    <p>info@bezliny.com</p>
+                    <p>www.bezliny.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Bezliny Cleaning Corporation. All rights reserved.</p>
+            </div>
+        </div>
     </footer>
 
     <script src="script.js"></script>
