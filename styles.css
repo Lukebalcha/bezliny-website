@@ -345,6 +345,18 @@ h3 { font-size: clamp(1.2rem, 2vw, 1.5rem); }
     background: var(--bg-secondary);
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
+    position: relative;
+}
+
+.stats::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0.5;
 }
 
 .stats-grid {
@@ -568,6 +580,26 @@ h3 { font-size: clamp(1.2rem, 2vw, 1.5rem); }
     padding: 8rem 0;
     background: var(--bg-primary);
     text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-section::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+    opacity: 0.4;
+    animation: ctaGlow 6s ease-in-out infinite;
+}
+
+@keyframes ctaGlow {
+    0%, 100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.3; }
+    50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.5; }
 }
 
 .cta-content h2 {
