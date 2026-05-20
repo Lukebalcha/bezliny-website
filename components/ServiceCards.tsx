@@ -71,27 +71,27 @@ export default function ServiceCards() {
       {services.map((service, i) => (
         <motion.div
           key={service.num}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 24, filter: "blur(3px)" }}
+          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: i * 0.1 }}
-          whileHover={{ y: -4, transition: { duration: 0.2 } }}
-          className="group relative p-8 rounded-2xl border border-white/5 bg-[#111] hover:border-[#34C7FF]/20 hover:bg-[#111]/80 transition-all duration-500 overflow-hidden"
+          transition={{ duration: 0.9, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+          whileHover={{ y: -6, transition: { duration: 0.3, ease: "easeOut" } }}
+          className="group relative p-8 rounded-2xl border border-white/[0.04] bg-[#111113] hover:border-white/10 transition-all duration-500 overflow-hidden"
         >
-          {/* Glow on hover */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#34C7FF]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          {/* Subtle light sweep on hover */}
+          <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
           
           <div className="relative">
             <div className="flex items-center justify-between mb-6">
-              <div className="w-12 h-12 rounded-xl bg-[#34C7FF]/10 flex items-center justify-center text-[#34C7FF] group-hover:bg-[#34C7FF]/20 transition-colors">
+              <div className="w-12 h-12 rounded-xl bg-white/[0.04] flex items-center justify-center text-white/70 group-hover:text-white group-hover:bg-white/[0.08] transition-all duration-500">
                 {service.icon}
               </div>
-              <span className="text-xs text-white/20 font-mono">{service.num}</span>
+              <span className="text-xs text-white/15 font-mono">{service.num}</span>
             </div>
-            <h3 className="text-xl font-semibold mb-3 group-hover:text-[#34C7FF] transition-colors">
+            <h3 className="text-xl font-semibold mb-3 text-white/90 group-hover:text-white transition-colors duration-300">
               {service.title}
             </h3>
-            <p className="text-sm text-white/50 leading-relaxed">{service.desc}</p>
+            <p className="text-sm text-white/40 leading-relaxed">{service.desc}</p>
           </div>
         </motion.div>
       ))}

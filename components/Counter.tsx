@@ -29,7 +29,7 @@ export default function Counter({ end, suffix = "", label }: Props) {
 
   useEffect(() => {
     if (!started) return;
-    const duration = 2000;
+    const duration = 2200;
     const steps = 60;
     const increment = end / steps;
     let current = 0;
@@ -48,16 +48,16 @@ export default function Counter({ end, suffix = "", label }: Props) {
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.6 }}
+      transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
       className="text-center"
     >
-      <div className="text-4xl md:text-5xl font-bold font-[family-name:var(--font-space)] text-white">
+      <div className="text-4xl md:text-5xl font-bold font-[family-name:var(--font-space)] text-[#10b981]">
         {count}{suffix}
       </div>
-      <div className="mt-2 text-sm text-white/50 uppercase tracking-wider">{label}</div>
+      <div className="mt-2 text-sm text-white/40 uppercase tracking-wider">{label}</div>
     </motion.div>
   );
 }

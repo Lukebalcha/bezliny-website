@@ -40,7 +40,7 @@ export default function Navbar() {
             <span className="text-2xl font-bold tracking-wider font-[family-name:var(--font-space)]">
               BEZLINY
             </span>
-            <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-[#34C7FF] transition-all duration-300 group-hover:w-full" />
+            <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full" />
           </Link>
 
           {/* Desktop Nav */}
@@ -60,7 +60,7 @@ export default function Navbar() {
           <div className="hidden md:block">
             <Link
               href="/contact"
-              className="px-6 py-2.5 text-sm font-medium bg-[#34C7FF] text-black rounded-full hover:bg-[#5dd6ff] transition-all duration-300 hover:shadow-[0_0_30px_rgba(52,199,255,0.3)]"
+              className="px-6 py-2.5 text-sm font-medium bg-white text-black rounded-full hover:bg-white/90 transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)]"
             >
               Get a Quote
             </Link>
@@ -100,7 +100,7 @@ export default function Navbar() {
               ))}
               <Link
                 href="/contact"
-                className="mt-4 px-6 py-3 text-center text-sm font-medium bg-[#34C7FF] text-black rounded-full"
+                className="mt-4 px-6 py-3 text-center text-sm font-medium bg-white text-black rounded-full"
               >
                 Get a Quote
               </Link>

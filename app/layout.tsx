@@ -3,6 +3,8 @@ import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import CursorFollower from "@/components/CursorFollower";
+import PageLoader from "@/components/PageLoader";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -27,7 +29,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
-      <body className="bg-black text-white font-sans antialiased">
+      <body className="bg-[#09090b] text-white font-sans antialiased grain">
+        <PageLoader />
+        <CursorFollower />
         <Navbar />
         <main>{children}</main>
         <Footer />

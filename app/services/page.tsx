@@ -4,13 +4,13 @@ import ServiceCards from "@/components/ServiceCards";
 export default function ServicesPage() {
   return (
     <>
-      <section className="pt-32 pb-20 relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#34C7FF]/5 to-transparent opacity-50" />
+      <section className="pt-36 pb-24 relative">
+        <div className="absolute top-20 right-8 text-[14rem] font-bold text-white/[0.015] font-[family-name:var(--font-space)] select-none pointer-events-none leading-none">S</div>
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
           <FadeUp>
-            <span className="text-xs uppercase tracking-[0.3em] text-[#34C7FF]">What We Do</span>
+            <span className="text-[11px] uppercase tracking-[0.3em] text-white/25">What We Do</span>
             <h1 className="mt-4 text-5xl md:text-7xl font-bold font-[family-name:var(--font-space)]">Our Services</h1>
-            <p className="mt-6 text-xl text-white/50 max-w-2xl">
+            <p className="mt-6 text-xl text-white/35 max-w-2xl">
               Comprehensive drone-based solutions for the most demanding industrial environments. 
               Safe, efficient, and environmentally responsible.
             </p>
@@ -18,33 +18,33 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section className="pb-32">
+      <section className="pb-36">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <ServiceCards />
         </div>
       </section>
 
       {/* Process */}
-      <section className="py-32 border-t border-white/5">
+      <section className="py-36 border-t border-white/[0.04]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <FadeUp>
-            <div className="text-center mb-16">
-              <span className="text-xs uppercase tracking-[0.3em] text-[#34C7FF]">Process</span>
+            <div className="text-center mb-20">
+              <span className="text-[11px] uppercase tracking-[0.3em] text-white/25">Process</span>
               <h2 className="mt-4 text-4xl md:text-5xl font-bold font-[family-name:var(--font-space)]">How We Work</h2>
             </div>
           </FadeUp>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {[
               { step: "01", title: "Assessment", desc: "Site survey and detailed project planning" },
               { step: "02", title: "Preparation", desc: "Risk analysis and equipment configuration" },
               { step: "03", title: "Execution", desc: "Autonomous drone operation with live monitoring" },
               { step: "04", title: "Reporting", desc: "Full documentation with inspection data" },
             ].map((item, i) => (
-              <FadeUp key={item.step} delay={i * 0.1}>
-                <div className="relative p-6 rounded-2xl glass text-center">
-                  <div className="text-3xl font-bold text-[#34C7FF]/30 font-[family-name:var(--font-space)]">{item.step}</div>
-                  <h3 className="mt-4 text-lg font-semibold">{item.title}</h3>
-                  <p className="mt-2 text-sm text-white/50">{item.desc}</p>
+              <FadeUp key={item.step} delay={i * 0.08}>
+                <div className="relative p-8 rounded-2xl border border-white/[0.04] bg-[#111113] text-center">
+                  <div className="text-3xl font-bold text-[#10b981]/25 font-[family-name:var(--font-space)]">{item.step}</div>
+                  <h3 className="mt-4 text-lg font-semibold text-white/80">{item.title}</h3>
+                  <p className="mt-2 text-sm text-white/35">{item.desc}</p>
                 </div>
               </FadeUp>
             ))}

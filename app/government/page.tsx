@@ -6,10 +6,10 @@ export default function GovernmentPage() {
     <>
       {/* Hero */}
       <section className="pt-32 pb-20 relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#34C7FF]/5 to-transparent opacity-30" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#10b981]/5 to-transparent opacity-30" />
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
           <FadeUp>
-            <span className="text-xs uppercase tracking-[0.3em] text-[#34C7FF]">Public Sector</span>
+            <span className="text-xs uppercase tracking-[0.3em] text-[#10b981]">Public Sector</span>
             <h1 className="mt-4 text-5xl md:text-7xl font-bold font-[family-name:var(--font-space)]">
               Government &<br />Public Sector
             </h1>
@@ -30,7 +30,7 @@ export default function GovernmentPage() {
         <div className="relative z-10 flex items-center justify-center h-full">
           <FadeUp>
             <p className="text-center text-2xl md:text-3xl font-bold font-[family-name:var(--font-space)] max-w-2xl px-6">
-              Serving Public Infrastructure with <span className="text-[#34C7FF]">Autonomous Precision</span>
+              Serving Public Infrastructure with <span className="text-[#10b981]">Autonomous Precision</span>
             </p>
           </FadeUp>
         </div>
@@ -42,7 +42,7 @@ export default function GovernmentPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <SlideIn direction="left">
               <div>
-                <span className="text-xs uppercase tracking-[0.3em] text-[#34C7FF]">Why Bezliny</span>
+                <span className="text-xs uppercase tracking-[0.3em] text-[#10b981]">Why Bezliny</span>
                 <h2 className="mt-4 text-3xl md:text-4xl font-bold font-[family-name:var(--font-space)] leading-tight">
                   Reducing Costs While Protecting Public Assets
                 </h2>
@@ -67,7 +67,7 @@ export default function GovernmentPage() {
                   { value: "100%", label: "Public safety maintained" },
                 ].map((stat) => (
                   <div key={stat.label} className="p-6 rounded-2xl glass text-center">
-                    <div className="text-2xl font-bold text-[#34C7FF] font-[family-name:var(--font-space)]">{stat.value}</div>
+                    <div className="text-2xl font-bold text-[#10b981] font-[family-name:var(--font-space)]">{stat.value}</div>
                     <div className="text-sm text-white/50 mt-2">{stat.label}</div>
                   </div>
                 ))}
@@ -82,7 +82,7 @@ export default function GovernmentPage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <FadeUp>
             <div className="text-center mb-16">
-              <span className="text-xs uppercase tracking-[0.3em] text-[#34C7FF]">Sectors</span>
+              <span className="text-xs uppercase tracking-[0.3em] text-[#10b981]">Sectors</span>
               <h2 className="mt-4 text-4xl md:text-5xl font-bold font-[family-name:var(--font-space)]">
                 Public Sector Applications
               </h2>
@@ -123,11 +123,11 @@ export default function GovernmentPage() {
               },
             ].map((sector, i) => (
               <FadeUp key={sector.title} delay={i * 0.1}>
-                <div className="group p-8 rounded-2xl border border-white/5 bg-[#111] hover:border-[#34C7FF]/20 transition-all duration-500 h-full">
-                  <div className="w-12 h-12 rounded-xl bg-[#34C7FF]/10 flex items-center justify-center text-[#34C7FF] mb-6 group-hover:bg-[#34C7FF]/20 transition-colors">
+                <div className="group p-8 rounded-2xl border border-white/5 bg-[#111] hover:border-[#10b981]/20 transition-all duration-500 h-full">
+                  <div className="w-12 h-12 rounded-xl bg-[#10b981]/10 flex items-center justify-center text-[#10b981] mb-6 group-hover:bg-[#10b981]/20 transition-colors">
                     {sector.icon}
                   </div>
-                  <h3 className="text-xl font-semibold mb-3 group-hover:text-[#34C7FF] transition-colors">{sector.title}</h3>
+                  <h3 className="text-xl font-semibold mb-3 group-hover:text-[#10b981] transition-colors">{sector.title}</h3>
                   <p className="text-sm text-white/50 leading-relaxed">{sector.desc}</p>
                 </div>
               </FadeUp>
@@ -142,7 +142,7 @@ export default function GovernmentPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <FadeUp>
               <div>
-                <span className="text-xs uppercase tracking-[0.3em] text-[#34C7FF]">Compliance</span>
+                <span className="text-xs uppercase tracking-[0.3em] text-[#10b981]">Compliance</span>
                 <h2 className="mt-4 text-3xl md:text-4xl font-bold font-[family-name:var(--font-space)] leading-tight">
                   Meeting Government Standards
                 </h2>
@@ -163,8 +163,8 @@ export default function GovernmentPage() {
                   "Environmental impact documentation",
                 ].map((item) => (
                   <div key={item} className="flex items-center gap-4 p-4 rounded-xl glass">
-                    <div className="w-8 h-8 rounded-lg bg-[#34C7FF]/10 flex items-center justify-center shrink-0">
-                      <svg className="w-4 h-4 text-[#34C7FF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div className="w-8 h-8 rounded-lg bg-[#10b981]/10 flex items-center justify-center shrink-0">
+                      <svg className="w-4 h-4 text-[#10b981]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                     </div>
@@ -182,13 +182,13 @@ export default function GovernmentPage() {
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
           <FadeUp>
             <h2 className="text-3xl md:text-5xl font-bold font-[family-name:var(--font-space)]">
-              Partner with Bezliny for <span className="text-[#34C7FF]">Public Sector</span> Projects
+              Partner with Bezliny for <span className="text-[#10b981]">Public Sector</span> Projects
             </h2>
             <p className="mt-6 text-white/50 text-lg max-w-xl mx-auto">
               Contact our government relations team to discuss procurement, tenders, or pilot programs.
             </p>
             <div className="mt-10">
-              <Link href="/contact" className="px-10 py-4 bg-[#34C7FF] text-black font-semibold rounded-full hover:bg-[#5dd6ff] transition-all duration-300 hover:shadow-[0_0_40px_rgba(52,199,255,0.3)] text-lg">
+              <Link href="/contact" className="px-10 py-4 bg-[#10b981] text-black font-semibold rounded-full hover:bg-[#5dd6ff] transition-all duration-300 hover:shadow-[0_0_40px_rgba(52,199,255,0.3)] text-lg">
                 Contact Government Team
               </Link>
             </div>
