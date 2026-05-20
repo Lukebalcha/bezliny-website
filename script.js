@@ -100,6 +100,36 @@ if (heroVideo) {
     });
 }
 
+// --- Premium card tilt effect on hover ---
+document.querySelectorAll('.service-card').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = (y - centerY) / 20;
+        const rotateY = (centerX - x) / 20;
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+    });
+});
+
+// --- Smooth navbar background transition ---
+const heroSection = document.querySelector('.hero');
+if (heroSection) {
+    const heroHeight = heroSection.offsetHeight;
+    window.addEventListener('scroll', () => {
+        const opacity = Math.min(window.scrollY / 200, 1);
+        if (navbar) {
+            navbar.style.background = `rgba(10, 10, 10, ${opacity * 0.95})`;
+        }
+    });
+}
+
 // --- Contact form handler ---
 const contactForm = document.getElementById('contactForm');
 if (contactForm) {
@@ -112,7 +142,7 @@ if (contactForm) {
         const subject = formData.get('subject') || 'Website Inquiry';
         const message = formData.get('message');
 
-        const mailtoLink = `mailto:info@bezliny.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\nPhone: ${phone}\n\n${message}`)}`;
+        const mailtoLink = `mailto:cooperation@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\nPhone: ${phone}\n\n${message}`)}`;
         window.location.href = mailtoLink;
         contactForm.reset();
     });

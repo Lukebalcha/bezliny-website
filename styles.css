@@ -19,9 +19,9 @@
     --accent-dark: #0e9fd4;
     --accent-glow: rgba(52, 199, 255, 0.15);
     --text-white: #ffffff;
-    --text-light: #e0e0e0;
-    --text-gray: #999999;
-    --text-muted: #666666;
+    --text-light: #f0f0f0;
+    --text-gray: #b0b0b0;
+    --text-muted: #777777;
     --border: rgba(255, 255, 255, 0.08);
     --radius: 8px;
     --radius-lg: 16px;
@@ -547,6 +547,20 @@ h3 { font-size: clamp(1.2rem, 2vw, 1.5rem); }
 
 .feature-icon {
     font-size: 1.2rem;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-glow);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.feature-icon svg {
+    width: 18px;
+    height: 18px;
+    fill: var(--accent);
 }
 
 /* === CTA SECTION === */
