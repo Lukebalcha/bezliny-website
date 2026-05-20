@@ -437,6 +437,30 @@ h3 { font-size: clamp(1.2rem, 2vw, 1.5rem); }
 .service-img {
     overflow: hidden;
     height: 220px;
+    position: relative;
+}
+
+.drone-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 0 12px rgba(52, 199, 255, 0.3);
+    z-index: 2;
+}
+
+.drone-badge svg {
+    width: 22px;
+    height: 22px;
+    color: var(--accent);
 }
 
 .service-img img {
