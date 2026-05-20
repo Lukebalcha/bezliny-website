@@ -166,12 +166,13 @@ h3 { font-size: clamp(1.2rem, 2vw, 1.5rem); }
 }
 
 .nav-links a {
-    color: var(--text-gray);
+    color: #ffffff;
     font-size: 0.85rem;
     font-weight: 500;
     letter-spacing: 0.5px;
     transition: color var(--transition);
     position: relative;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
 
 .nav-links a::after {
