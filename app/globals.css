@@ -5,8 +5,8 @@
   --font-display: var(--font-space), system-ui, sans-serif;
   --color-accent: #d4d4d8;
   --color-accent-bright: #ffffff;
-  --color-green: #10b981;
-  --color-green-bright: #34d399;
+  --color-green: #c8cdd3;
+  --color-green-bright: #e2e8f0;
   --color-surface: #09090b;
   --color-surface-elevated: #111113;
   --color-surface-glass: rgba(255, 255, 255, 0.02);
@@ -60,7 +60,7 @@ video::-moz-media-controls {
 }
 
 .gradient-text-green {
-  background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+  background: linear-gradient(135deg, #c8cdd3 0%, #e2e8f0 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -89,7 +89,7 @@ video::-moz-media-controls {
   left: 0;
   width: 40px;
   height: 1px;
-  background: linear-gradient(90deg, #10b981, transparent);
+  background: linear-gradient(90deg, #c8cdd3, transparent);
 }
 
 /* Subtle grain texture overlay */

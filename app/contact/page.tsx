@@ -7,9 +7,9 @@ export default function ContactPage() {
       <section className="pt-32 pb-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <FadeUp>
-            <span className="text-xs uppercase tracking-[0.3em] text-white/40">Get In Touch</span>
+            <span className="text-xs uppercase tracking-[0.3em] text-white/65">Get In Touch</span>
             <h1 className="mt-4 text-5xl md:text-7xl font-bold font-[family-name:var(--font-space)]">Contact</h1>
-            <p className="mt-6 text-xl text-white/65 max-w-2xl">
+            <p className="mt-6 text-xl text-white/85 max-w-2xl">
               Ready to transform your maintenance operations? Let&apos;s discuss how our drone technology can work for you.
             </p>
           </FadeUp>
@@ -24,7 +24,7 @@ export default function ContactPage() {
               <div className="space-y-8">
                 <div className="p-6 rounded-2xl glass">
                   <h3 className="text-lg font-semibold mb-4">Headquarters</h3>
-                  <div className="space-y-3 text-white/60">
+                  <div className="space-y-3 text-white/80">
                     <p>Warsaw, Poland</p>
                     <p>European Union</p>
                   </div>
@@ -32,18 +32,18 @@ export default function ContactPage() {
                 <div className="p-6 rounded-2xl glass">
                   <h3 className="text-lg font-semibold mb-4">Direct Contact</h3>
                   <div className="space-y-3">
-                    <a href="mailto:cooperation@gmail.com" className="block text-white/60 hover:text-white/40 transition-colors">
+                    <a href="mailto:cooperation@gmail.com" className="block text-white/80 hover:text-white/65 transition-colors">
                       cooperation@gmail.com
                     </a>
-                    <a href="tel:+48579366868" className="block text-white/60 hover:text-white/40 transition-colors">
+                    <a href="tel:+48579366868" className="block text-white/80 hover:text-white/65 transition-colors">
                       +48 579 366 868
                     </a>
                   </div>
                 </div>
                 <div className="p-6 rounded-2xl glass">
                   <h3 className="text-lg font-semibold mb-4">Operations</h3>
-                  <p className="text-white/60">Global — 15+ Countries</p>
-                  <p className="text-white/60 mt-1">Available 24/7 for emergency deployments</p>
+                  <p className="text-white/80">Global — 15+ Countries</p>
+                  <p className="text-white/80 mt-1">Available 24/7 for emergency deployments</p>
                 </div>
               </div>
             </FadeUp>

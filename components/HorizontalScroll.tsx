@@ -43,9 +43,9 @@ export default function HorizontalScroll({ items }: { items: HorizontalItem[] })
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="p-6 rounded-2xl border border-white/[0.04] bg-[#111113]"
             >
-              <span className="text-3xl font-bold text-[#10b981]/20 font-[family-name:var(--font-space)]">{item.num}</span>
+              <span className="text-3xl font-bold text-[#c8cdd3]/20 font-[family-name:var(--font-space)]">{item.num}</span>
               <h3 className="mt-3 text-lg font-semibold text-white/85">{item.title}</h3>
-              <p className="mt-2 text-sm text-white/35 leading-relaxed">{item.desc}</p>
+              <p className="mt-2 text-sm text-white/60 leading-relaxed">{item.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -59,7 +59,7 @@ export default function HorizontalScroll({ items }: { items: HorizontalItem[] })
       <div className="sticky top-0 h-screen flex items-center overflow-hidden">
         <div className="absolute top-1/2 -translate-y-1/2 left-[10vw] z-10">
           <span className="text-[11px] uppercase tracking-[0.3em] text-white/20">Process</span>
-          <h2 className="mt-2 text-2xl font-bold font-[family-name:var(--font-space)] text-white/60">How We Deliver</h2>
+          <h2 className="mt-2 text-2xl font-bold font-[family-name:var(--font-space)] text-white/80">How We Deliver</h2>
         </div>
         <motion.div style={{ x }} className="flex gap-6 pl-[10vw] pt-20">
           {items.map((item) => (
@@ -67,9 +67,9 @@ export default function HorizontalScroll({ items }: { items: HorizontalItem[] })
               key={item.num}
               className="shrink-0 w-[38vw] lg:w-[28vw] p-10 rounded-3xl border border-white/[0.04] bg-[#111113]/90 backdrop-blur-sm"
             >
-              <span className="text-5xl font-bold text-[#10b981]/15 font-[family-name:var(--font-space)]">{item.num}</span>
+              <span className="text-5xl font-bold text-[#c8cdd3]/15 font-[family-name:var(--font-space)]">{item.num}</span>
               <h3 className="mt-6 text-xl font-semibold text-white/85">{item.title}</h3>
-              <p className="mt-4 text-white/35 leading-relaxed text-sm">{item.desc}</p>
+              <p className="mt-4 text-white/60 leading-relaxed text-sm">{item.desc}</p>
               <div className="mt-8 w-full h-[1px] bg-gradient-to-r from-white/[0.06] to-transparent" />
             </div>
           ))}

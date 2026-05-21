@@ -18,7 +18,7 @@ export default function SplineScene({
       {/* Loading state */}
       {!loaded && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-8 h-8 border-2 border-[#10b981]/30 border-t-[#10b981] rounded-full animate-spin" />
+          <div className="w-8 h-8 border-2 border-[#c8cdd3]/30 border-t-[#c8cdd3] rounded-full animate-spin" />
         </div>
       )}
       <iframe

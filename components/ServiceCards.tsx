@@ -83,7 +83,7 @@ export default function ServiceCards() {
           
           <div className="relative">
             <div className="flex items-center justify-between mb-6">
-              <div className="w-12 h-12 rounded-xl bg-white/[0.04] flex items-center justify-center text-white/70 group-hover:text-white group-hover:bg-white/[0.08] transition-all duration-500">
+              <div className="w-12 h-12 rounded-xl bg-white/[0.04] flex items-center justify-center text-white/90 group-hover:text-white group-hover:bg-white/[0.08] transition-all duration-500">
                 {service.icon}
               </div>
               <span className="text-xs text-white/15 font-mono">{service.num}</span>
@@ -91,7 +91,7 @@ export default function ServiceCards() {
             <h3 className="text-xl font-semibold mb-3 text-white/90 group-hover:text-white transition-colors duration-300">
               {service.title}
             </h3>
-            <p className="text-sm text-white/40 leading-relaxed">{service.desc}</p>
+            <p className="text-sm text-white/65 leading-relaxed">{service.desc}</p>
           </div>
         </motion.div>
       ))}

@@ -9,7 +9,7 @@ export default function GradientMesh() {
       <motion.div
         className="absolute w-[800px] h-[800px] rounded-full opacity-[0.03]"
         style={{
-          background: "radial-gradient(circle, #10b981 0%, transparent 70%)",
+          background: "radial-gradient(circle, #c8cdd3 0%, transparent 70%)",
           top: "-20%",
           right: "-10%",
         }}
@@ -37,7 +37,7 @@ export default function GradientMesh() {
       <motion.div
         className="absolute w-[500px] h-[500px] rounded-full opacity-[0.02]"
         style={{
-          background: "radial-gradient(circle, #10b981 0%, transparent 70%)",
+          background: "radial-gradient(circle, #c8cdd3 0%, transparent 70%)",
           top: "40%",
           left: "30%",
         }}

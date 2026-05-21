@@ -8,9 +8,9 @@ export default function ServicesPage() {
         <div className="absolute top-20 right-8 text-[14rem] font-bold text-white/[0.015] font-[family-name:var(--font-space)] select-none pointer-events-none leading-none">S</div>
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
           <FadeUp>
-            <span className="text-[11px] uppercase tracking-[0.3em] text-white/40">What We Do</span>
+            <span className="text-[11px] uppercase tracking-[0.3em] text-white/65">What We Do</span>
             <h1 className="mt-4 text-5xl md:text-7xl font-bold font-[family-name:var(--font-space)]">Our Services</h1>
-            <p className="mt-6 text-xl text-white/35 max-w-2xl">
+            <p className="mt-6 text-xl text-white/60 max-w-2xl">
               Comprehensive drone-based solutions for the most demanding industrial environments. 
               Safe, efficient, and environmentally responsible.
             </p>
@@ -29,7 +29,7 @@ export default function ServicesPage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <FadeUp>
             <div className="text-center mb-20">
-              <span className="text-[11px] uppercase tracking-[0.3em] text-white/40">Process</span>
+              <span className="text-[11px] uppercase tracking-[0.3em] text-white/65">Process</span>
               <h2 className="mt-4 text-4xl md:text-5xl font-bold font-[family-name:var(--font-space)]">How We Work</h2>
             </div>
           </FadeUp>
@@ -42,9 +42,9 @@ export default function ServicesPage() {
             ].map((item, i) => (
               <FadeUp key={item.step} delay={i * 0.08}>
                 <div className="relative p-8 rounded-2xl border border-white/[0.04] bg-[#111113] text-center">
-                  <div className="text-3xl font-bold text-[#10b981]/25 font-[family-name:var(--font-space)]">{item.step}</div>
+                  <div className="text-3xl font-bold text-[#c8cdd3]/25 font-[family-name:var(--font-space)]">{item.step}</div>
                   <h3 className="mt-4 text-lg font-semibold text-white/80">{item.title}</h3>
-                  <p className="mt-2 text-sm text-white/35">{item.desc}</p>
+                  <p className="mt-2 text-sm text-white/60">{item.desc}</p>
                 </div>
               </FadeUp>
             ))}
