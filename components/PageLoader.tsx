@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 
 const Scene3D = dynamic(() => import("@/components/Scene3D"), { ssr: false });
 
-const certifications = ["ISO 9001", "ISO 14001", "CE Certified", "EASA Approved", "UDT Certified"];
+const certifications = ["PANSA Registered", "ULC Certified", "CE Certified", "EASA Compliant", "ISO 14001"];
 
 export default function PageLoader() {
   const [loading, setLoading] = useState(true);
