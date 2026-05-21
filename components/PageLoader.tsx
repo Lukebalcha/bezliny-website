@@ -2,6 +2,9 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
+
+const Scene3D = dynamic(() => import("@/components/Scene3D"), { ssr: false });
 
 const certifications = ["ISO 9001", "ISO 14001", "CE", "EASA", "NATO"];
 
@@ -32,6 +35,10 @@ export default function PageLoader() {
           exit={{ opacity: 0, scale: 1.05, filter: "blur(8px)" }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
         >
+          {/* 3D Drone scene in the background of the loader */}
+          <div className="absolute inset-0 z-0">
+            <Scene3D />
+          </div>
           {/* Top line */}
           <motion.div
             className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#10b981] to-transparent"
@@ -40,7 +47,7 @@ export default function PageLoader() {
             transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
           />
 
-          <div className="relative flex flex-col items-center">
+          <div className="relative z-10 flex flex-col items-center">
             {/* BEZLINY name */}
             <motion.span
               className="text-4xl md:text-6xl font-bold tracking-[0.4em] font-[family-name:var(--font-space)] text-white block"

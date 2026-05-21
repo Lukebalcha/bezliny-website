@@ -13,7 +13,6 @@ export default function Home() {
       {/* Hero — Full viewport cinematic with 3D */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <HeroVideo />
-        <Hero3D />
         <div className="video-overlay absolute inset-0 z-[2]" />
         
         {/* Thin corner frames — hidden on mobile for clean look */}
