@@ -86,6 +86,23 @@ body {
   z-index: 9999;
 }
 
+/* Smooth scroll momentum */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(16, 185, 129, 0.2);
+  color: #ffffff;
+}
+
+/* Smooth link transitions globally */
+a {
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 ::-webkit-scrollbar {
   width: 4px;
 }

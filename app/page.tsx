@@ -5,14 +5,16 @@ import ServiceCards from "@/components/ServiceCards";
 import { TextReveal, ParagraphReveal } from "@/components/TextReveal";
 import MagneticButton from "@/components/MagneticButton";
 import HorizontalScroll from "@/components/HorizontalScroll";
+import { Hero3D, Section3D, MeshGradient } from "@/components/Dynamic3D";
 
 export default function Home() {
   return (
     <>
-      {/* Hero — Full viewport cinematic */}
+      {/* Hero — Full viewport cinematic with 3D */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <HeroVideo />
-        <div className="video-overlay absolute inset-0 z-10" />
+        <Hero3D />
+        <div className="video-overlay absolute inset-0 z-[2]" />
         
         {/* Thin corner frames — hidden on mobile for clean look */}
         <div className="hidden md:block absolute top-8 left-8 w-16 h-16 border-l border-t border-white/10 z-20" />
@@ -170,6 +172,8 @@ export default function Home() {
 
       {/* Technology */}
       <section className="py-20 md:py-40 relative overflow-hidden">
+        <Section3D />
+        <MeshGradient />
         <div className="hidden md:block absolute top-32 left-8 text-[12rem] font-bold text-white/[0.015] font-[family-name:var(--font-space)] select-none pointer-events-none leading-none">05</div>
         <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-20 items-center">
@@ -240,6 +244,7 @@ export default function Home() {
 
       {/* CTA */}
       <section className="py-20 md:py-40 relative overflow-hidden">
+        <MeshGradient />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#10b981]/[0.015] to-transparent" />
         <div className="relative max-w-4xl mx-auto px-5 md:px-6 lg:px-8 text-center">
           <TextReveal
