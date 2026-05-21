@@ -2,7 +2,6 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
-import { Inline3D } from "@/components/Dynamic3D";
 
 interface HorizontalItem {
   num: string;
@@ -30,7 +29,6 @@ export default function HorizontalScroll({ items }: { items: HorizontalItem[] })
   if (isMobile) {
     return (
       <section className="py-24 px-6 relative">
-        <Inline3D />
         <div className="relative z-[1] mb-12">
           <span className="text-[11px] uppercase tracking-[0.3em] text-white/25">Process</span>
           <h2 className="mt-3 text-3xl font-bold font-[family-name:var(--font-space)]">How We Deliver</h2>
@@ -43,7 +41,7 @@ export default function HorizontalScroll({ items }: { items: HorizontalItem[] })
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="p-6 rounded-2xl border border-white/[0.04] bg-[#111113]/95 backdrop-blur-sm"
+              className="p-6 rounded-2xl border border-white/[0.04] bg-[#111113]"
             >
               <span className="text-3xl font-bold text-[#c8cdd3]/20 font-[family-name:var(--font-space)]">{item.num}</span>
               <h3 className="mt-3 text-lg font-semibold text-white/90">{item.title}</h3>
@@ -59,12 +57,11 @@ export default function HorizontalScroll({ items }: { items: HorizontalItem[] })
   return (
     <div ref={containerRef} className="relative" style={{ height: `${items.length * 50}vh` }}>
       <div className="sticky top-0 h-screen flex items-center overflow-hidden">
-        <Inline3D />
         <div className="absolute top-1/2 -translate-y-1/2 left-[10vw] z-10">
           <span className="text-[11px] uppercase tracking-[0.3em] text-white/20">Process</span>
           <h2 className="mt-2 text-2xl font-bold font-[family-name:var(--font-space)] text-white/90">How We Deliver</h2>
         </div>
-        <motion.div style={{ x }} className="relative z-[1] flex gap-6 pl-[10vw] pt-20">
+        <motion.div style={{ x }} className="flex gap-6 pl-[10vw] pt-20">
           {items.map((item) => (
             <div
               key={item.num}

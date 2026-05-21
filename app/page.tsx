@@ -7,6 +7,7 @@ import MagneticButton from "@/components/MagneticButton";
 import HorizontalScroll from "@/components/HorizontalScroll";
 import { Section3D, MeshGradient } from "@/components/Dynamic3D";
 import AutoVideo from "@/components/AutoVideo";
+import { DroneTransition, BurstTransition } from "@/components/ScrollTransitions";
 
 export default function Home() {
   return (
@@ -131,6 +132,7 @@ export default function Home() {
       </section>
 
       {/* Services — with subtle section number */}
+      <DroneTransition direction="left" />
       <section className="py-20 md:py-40 relative">
         <div className="hidden md:block absolute top-32 right-8 text-[12rem] font-bold text-white/[0.015] font-[family-name:var(--font-space)] select-none pointer-events-none leading-none">03</div>
         <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
@@ -153,6 +155,7 @@ export default function Home() {
       </section>
 
       {/* Horizontal Scroll Process */}
+      <BurstTransition />
       <HorizontalScroll items={[
         { num: "01", title: "Site Assessment", desc: "Comprehensive drone survey and structural analysis. Our engineers evaluate every surface, height, and environmental factor before any operation begins." },
         { num: "02", title: "Mission Planning", desc: "AI-driven flight path optimization. Every millimeter is calculated — pressure, temperature, water flow — for perfect results with zero surface damage." },
@@ -183,6 +186,7 @@ export default function Home() {
       </section>
 
       {/* Technology */}
+      <DroneTransition direction="right" />
       <section className="py-20 md:py-40 relative overflow-hidden">
         <Section3D />
         <MeshGradient />
@@ -226,6 +230,7 @@ export default function Home() {
       </section>
 
       {/* Global Presence */}
+      <BurstTransition />
       <section className="py-20 md:py-40 relative">
         <div className="absolute inset-0 border-t border-white/[0.04]" />
         <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8 text-center relative">

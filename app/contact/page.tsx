@@ -1,11 +1,10 @@
 import { FadeUp } from "@/components/Animations";
 import ContactForm from "@/components/ContactForm";
-import { Background3D } from "@/components/Dynamic3D";
+import { DroneTransition } from "@/components/ScrollTransitions";
 
 export default function ContactPage() {
   return (
     <>
-      <Background3D />
       <section className="pt-32 pb-20 relative z-[1]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <FadeUp>
@@ -17,6 +16,8 @@ export default function ContactPage() {
           </FadeUp>
         </div>
       </section>
+
+      <DroneTransition direction="right" />
 
       <section className="pb-32 relative z-[1]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
