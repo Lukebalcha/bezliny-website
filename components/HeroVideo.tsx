@@ -13,34 +13,40 @@ export default function HeroVideo() {
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
-  // Force autoplay on mobile
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-    
-    const playVideo = () => {
-      video.play().catch(() => {
-        // If autoplay blocked, try muted play
-        video.muted = true;
-        video.play().catch(() => {});
-      });
+
+    const play = () => {
+      video.muted = true;
+      video.play().catch(() => {});
     };
 
-    // Play immediately
-    playVideo();
+    play();
 
-    // Also play on user interaction (for iOS)
-    const handleInteraction = () => {
-      playVideo();
-      document.removeEventListener("touchstart", handleInteraction);
-      document.removeEventListener("click", handleInteraction);
+    // Retry on any user interaction
+    const onInteract = () => play();
+    document.addEventListener("touchstart", onInteract, { passive: true });
+    document.addEventListener("click", onInteract, { passive: true });
+    document.addEventListener("scroll", onInteract, { passive: true });
+
+    // Retry on visibility change
+    const onVisible = () => {
+      if (document.visibilityState === "visible") play();
     };
-    document.addEventListener("touchstart", handleInteraction, { once: true });
-    document.addEventListener("click", handleInteraction, { once: true });
+    document.addEventListener("visibilitychange", onVisible);
+
+    // Retry periodically
+    const retries = [500, 1000, 2000, 3000, 5000].map(ms =>
+      setTimeout(play, ms)
+    );
 
     return () => {
-      document.removeEventListener("touchstart", handleInteraction);
-      document.removeEventListener("click", handleInteraction);
+      document.removeEventListener("touchstart", onInteract);
+      document.removeEventListener("click", onInteract);
+      document.removeEventListener("scroll", onInteract);
+      document.removeEventListener("visibilitychange", onVisible);
+      retries.forEach(clearTimeout);
     };
   }, []);
 
@@ -56,7 +62,7 @@ export default function HeroVideo() {
         controls={false}
         disablePictureInPicture
         className="w-full h-full object-cover"
-        style={{ WebkitMediaControls: "none" } as React.CSSProperties}
+        webkit-playsinline="true"
       >
         <source src="/assets/drone-hero.mp4" type="video/mp4" />
       </video>
