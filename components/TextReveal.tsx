@@ -11,23 +11,23 @@ interface Props {
   as?: "h1" | "h2" | "h3" | "p" | "span";
 }
 
-// Word-by-word cinematic reveal
+// Word-by-word cinematic reveal — mobile-safe
 export function TextReveal({ text, className = "", delay = 0, as: Tag = "h2" }: Props) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const isInView = useInView(ref, { once: true, margin: "-40px" });
   const words = text.split(" ");
 
   return (
     <Tag ref={ref} className={className}>
       {words.map((word, i) => (
-        <span key={i} className="inline-block overflow-hidden mr-[0.25em]">
+        <span key={i} className="inline-block overflow-hidden mr-[0.22em] pb-[0.05em]">
           <motion.span
             className="inline-block"
-            initial={{ y: "100%", opacity: 0 }}
-            animate={isInView ? { y: "0%", opacity: 1 } : { y: "100%", opacity: 0 }}
+            initial={{ y: "110%", opacity: 0 }}
+            animate={isInView ? { y: "0%", opacity: 1 } : { y: "110%", opacity: 0 }}
             transition={{
-              duration: 0.7,
-              delay: delay + i * 0.04,
+              duration: 0.8,
+              delay: delay + i * 0.05,
               ease: [0.16, 1, 0.3, 1],
             }}
           >
@@ -57,18 +57,18 @@ export function LineReveal({ children, className = "", delay = 0 }: { children: 
   );
 }
 
-// Paragraph that fades in character by character (for body text)
+// Paragraph smooth reveal
 export function ParagraphReveal({ text, className = "", delay = 0 }: Props) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-40px" });
+  const isInView = useInView(ref, { once: true, margin: "-30px" });
 
   return (
     <motion.p
       ref={ref}
       className={className}
-      initial={{ opacity: 0, y: 12 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
-      transition={{ duration: 1.2, delay, ease: [0.16, 1, 0.3, 1] }}
+      initial={{ opacity: 0, y: 16 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+      transition={{ duration: 1.4, delay, ease: [0.16, 1, 0.3, 1] }}
     >
       {text}
     </motion.p>
