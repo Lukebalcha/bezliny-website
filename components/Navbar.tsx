@@ -3,18 +3,21 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-
-const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/services", label: "Services" },
-  { href: "/about", label: "About" },
-  { href: "/government", label: "Government" },
-  { href: "/contact", label: "Contact" },
-];
+import { useLang } from "@/lib/LangContext";
+import LangSwitcher from "@/components/LangSwitcher";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { t } = useLang();
+
+  const navLinks = [
+    { href: "/", label: t.nav.home },
+    { href: "/services", label: t.nav.services },
+    { href: "/about", label: t.nav.about },
+    { href: "/government", label: t.nav.government },
+    { href: "/contact", label: t.nav.contact },
+  ];
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -56,13 +59,14 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* CTA */}
-          <div className="hidden md:block">
+          {/* CTA + Lang Switcher */}
+          <div className="hidden md:flex items-center gap-4">
+            <LangSwitcher />
             <Link
               href="/contact"
               className="px-6 py-2.5 text-sm font-medium bg-white text-black rounded-full hover:bg-white/90 transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)]"
             >
-              Get a Quote
+              {t.nav.quote}
             </Link>
           </div>
 
@@ -98,11 +102,14 @@ export default function Navbar() {
                   {link.label}
                 </Link>
               ))}
+              <div className="mt-2">
+                <LangSwitcher />
+              </div>
               <Link
                 href="/contact"
                 className="mt-4 px-6 py-3 text-center text-sm font-medium bg-white text-black rounded-full"
               >
-                Get a Quote
+                {t.nav.quote}
               </Link>
             </div>
           </motion.div>

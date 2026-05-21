@@ -5,15 +5,16 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CursorFollower from "@/components/CursorFollower";
 import PageLoader from "@/components/PageLoader";
+import { LangProvider } from "@/lib/LangContext";
 
 const inter = Inter({
   variable: "--font-inter",
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
 });
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space",
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
 });
 
 export const metadata: Metadata = {
@@ -30,11 +31,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <body className="bg-[#09090b] text-white font-sans antialiased grain">
-        <PageLoader />
-        <CursorFollower />
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
+        <LangProvider>
+          <PageLoader />
+          <CursorFollower />
+          <Navbar />
+          <main>{children}</main>
+          <Footer />
+        </LangProvider>
       </body>
     </html>
   );

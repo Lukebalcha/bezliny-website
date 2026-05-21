@@ -1,0 +1,130 @@
+{
+  "nav": {
+    "home": "Strona główna",
+    "services": "Usługi",
+    "about": "O nas",
+    "government": "Sektor publiczny",
+    "contact": "Kontakt",
+    "quote": "Wycena"
+  },
+  "hero": {
+    "badge": "Przemysłowa Technologia Dronowa",
+    "title": "Autonomiczne Czyszczenie Dronami Infrastruktury Przemysłowej",
+    "subtitle": "Zero rusztowań. Zero ryzyka. Absolutna precyzja.",
+    "cta": "Zamów ocenę",
+    "ctaSecondary": "Nasze możliwości"
+  },
+  "trust": { "label": "Zaufane i certyfikowane" },
+  "stats": {
+    "countries": "Krajów",
+    "projects": "Zrealizowanych projektów",
+    "safety": "Bezpieczeństwo",
+    "cost": "Redukcja kosztów"
+  },
+  "mission": {
+    "label": "Nasza Misja",
+    "title": "Eliminacja Ryzyka Ludzkiego w Utrzymaniu Przemysłowym",
+    "text": "Co roku tysiące pracowników zostaje rannych podczas prac konserwacyjnych na wysokościach. Autonomiczna platforma dronowa Bezliny zastępuje niebezpieczną pracę ręczną precyzyjnymi systemami robotycznymi — zapewniając lepsze wyniki przy jednoczesnym zachowaniu bezpieczeństwa ludzi.",
+    "risk": "Ryzyko ludzkie",
+    "faster": "Szybsza realizacja",
+    "chemical": "Bez chemii",
+    "operation": "Zdolność operacyjna"
+  },
+  "services": {
+    "label": "Rozwiązania",
+    "title": "Usługi Klasy Przemysłowej",
+    "subtitle": "Od wieżowców po platformy offshore — precyzyjne operacje dronowe dla każdego sektora.",
+    "viewAll": "Zobacz wszystkie usługi",
+    "facade": "Czyszczenie Elewacji Wysokościowych",
+    "facadeDesc": "Szkło, beton i okładziny — dowolna wysokość, bez rusztowań.",
+    "bridge": "Mosty i Infrastruktura",
+    "bridgeDesc": "Czyszczenie i inspekcja dźwigarów, pomostów i podpór bez zakłócania ruchu.",
+    "oil": "Platformy Naftowe i Gazowe",
+    "oilDesc": "Platformy offshore, kominy spalinowe i zbiorniki — ochrona powłok.",
+    "wind": "Czyszczenie Turbin Wiatrowych",
+    "windDesc": "Czyszczenie i inspekcja łopat na wysokości — maksymalizacja wydajności energetycznej.",
+    "ship": "Czyszczenie Statków",
+    "shipDesc": "Konserwacja kadłuba i nadbudówki powyżej linii wodnej — w porcie lub na morzu.",
+    "inspection": "Inspekcja Przemysłowa",
+    "inspectionDesc": "Inspekcja wizualna i termiczna konstrukcji, rurociągów i sprzętu."
+  },
+  "process": {
+    "label": "Proces",
+    "title": "Jak Realizujemy",
+    "step01": "Ocena Terenu",
+    "step01Desc": "Kompleksowy przegląd dronowy i analiza strukturalna. Nasi inżynierowie oceniają każdą powierzchnię, wysokość i czynnik środowiskowy przed rozpoczęciem operacji.",
+    "step02": "Planowanie Misji",
+    "step02Desc": "Optymalizacja trasy lotu oparta na AI. Każdy milimetr jest obliczany — ciśnienie, temperatura, przepływ wody — dla idealnych rezultatów bez uszkodzeń powierzchni.",
+    "step03": "Autonomiczna Realizacja",
+    "step03Desc": "Nawigacja GPS-RTK z precyzją centymetrową. Nasze drony działają w pełni autonomicznie, podczas gdy operatorzy monitorują z bezpiecznej odległości.",
+    "step04": "Weryfikacja i Raportowanie",
+    "step04Desc": "Inspekcja termiczna i wizualna 4K po operacji. Pełna dokumentacja zgodności dostarczana w ciągu 24 godzin."
+  },
+  "videoBreak": {
+    "title": "Precyzyjna Inżynieria. Zero Kompromisów.",
+    "text": "Nasze autorskie systemy czyszczące wykorzystują filtrowaną wodę, kontrolowane ciepło i skalibrowane ciśnienie — chroniąc powierzchnie przy jednoczesnym dostarczaniu niezrównanych rezultatów."
+  },
+  "technology": {
+    "label": "Technologia",
+    "title": "Systemy Dronowe Bezliny",
+    "text": "Nasza autorska technologia sensoryczna zapewnia precyzję centymetrową, wyznaczając nowy standard jakości i znacząco poprawiając wyniki BHP.",
+    "f1": "Bezkontaktowe podejście do czyszczenia",
+    "f1d": "Zachowuje integralność powierzchni",
+    "f2": "Opatentowany system bezpieczeństwa",
+    "f2d": "Automatyczne unikanie kolizji",
+    "f3": "Precyzja centymetrowa",
+    "f3d": "Nawigacja GPS-RTK",
+    "f4": "Operacja bez chemikaliów",
+    "f4d": "Technologia czystej wody"
+  },
+  "global": {
+    "label": "Globalny Zasięg",
+    "title": "Działamy na Całym Świecie",
+    "subtitle": "Od wieżowców Warszawy po platformy offshore na Morzu Północnym.",
+    "europe": "Europa",
+    "europeDetail": "Siedziba — Warszawa, Polska",
+    "scandinavia": "Skandynawia",
+    "scandinaviaDetail": "Operacje Nordyckie",
+    "middleeast": "Bliski Wschód",
+    "middleeastDetail": "Sektor Naftowo-Gazowy",
+    "asia": "Azja i Pacyfik",
+    "asiaDetail": "Ekspansja 2026"
+  },
+  "cta": {
+    "title": "Gotowy na Eliminację Rusztowań na Zawsze?",
+    "text": "Dołącz do najbardziej innowacyjnych firm na świecie, które już przeszły na autonomiczną konserwację dronową.",
+    "button": "Rozpocznij projekt"
+  },
+  "contactPage": {
+    "label": "Skontaktuj się",
+    "title": "Kontakt",
+    "subtitle": "Gotowy na transformację operacji konserwacyjnych? Porozmawiajmy o tym, jak nasza technologia dronowa może dla Ciebie pracować.",
+    "hq": "Siedziba główna",
+    "hqCity": "Warszawa, Polska",
+    "hqRegion": "Unia Europejska",
+    "directContact": "Kontakt bezpośredni",
+    "operations": "Operacje",
+    "opsGlobal": "Globalnie — 15+ krajów",
+    "opsAvail": "Dostępni 24/7 w przypadku wdrożeń awaryjnych",
+    "formName": "Imię i nazwisko",
+    "formEmail": "Email",
+    "formMessage": "Wiadomość",
+    "formSend": "Wyślij wiadomość"
+  },
+  "servicesPage": {
+    "label": "Co robimy",
+    "title": "Nasze Usługi",
+    "subtitle": "Kompleksowe rozwiązania dronowe dla najbardziej wymagających środowisk przemysłowych. Bezpieczne, wydajne i odpowiedzialne ekologicznie.",
+    "processLabel": "Proces",
+    "processTitle": "Jak Pracujemy",
+    "s01": "Ocena",
+    "s01d": "Przegląd terenu i szczegółowe planowanie projektu",
+    "s02": "Przygotowanie",
+    "s02d": "Analiza ryzyka i konfiguracja sprzętu",
+    "s03": "Realizacja",
+    "s03d": "Autonomiczna operacja drona z monitoringiem na żywo",
+    "s04": "Raportowanie",
+    "s04d": "Pełna dokumentacja z danymi inspekcyjnymi"
+  },
+  "footer": { "rights": "Wszelkie prawa zastrzeżone." }
+}
