@@ -17,15 +17,36 @@ export default function HeroVideo() {
     const video = videoRef.current;
     if (!video) return;
 
+    // Force attributes
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "true");
+    video.setAttribute("x5-video-player-type", "h5");
+    video.setAttribute("x5-video-player-fullscreen", "false");
+    video.muted = true;
+    video.defaultMuted = true;
+    video.autoplay = true;
+
     const play = () => {
       video.muted = true;
-      video.play().catch(() => {});
+      const p = video.play();
+      if (p) p.catch(() => {});
     };
 
     play();
 
+    const onLoaded = () => play();
+    video.addEventListener("loadeddata", onLoaded);
+    video.addEventListener("canplay", onLoaded);
+
     // Retry on any user interaction
-    const onInteract = () => play();
+    const onInteract = () => {
+      play();
+      if (!video.paused) {
+        document.removeEventListener("touchstart", onInteract);
+        document.removeEventListener("click", onInteract);
+        document.removeEventListener("scroll", onInteract);
+      }
+    };
     document.addEventListener("touchstart", onInteract, { passive: true });
     document.addEventListener("click", onInteract, { passive: true });
     document.addEventListener("scroll", onInteract, { passive: true });
@@ -37,15 +58,22 @@ export default function HeroVideo() {
     document.addEventListener("visibilitychange", onVisible);
 
     // Retry periodically
-    const retries = [500, 1000, 2000, 3000, 5000].map(ms =>
+    const retries = [100, 300, 500, 1000, 2000, 3000, 5000, 8000].map(ms =>
       setTimeout(play, ms)
     );
+
+    // Resume if paused externally
+    const onPause = () => setTimeout(play, 100);
+    video.addEventListener("pause", onPause);
 
     return () => {
       document.removeEventListener("touchstart", onInteract);
       document.removeEventListener("click", onInteract);
       document.removeEventListener("scroll", onInteract);
       document.removeEventListener("visibilitychange", onVisible);
+      video.removeEventListener("loadeddata", onLoaded);
+      video.removeEventListener("canplay", onLoaded);
+      video.removeEventListener("pause", onPause);
       retries.forEach(clearTimeout);
     };
   }, []);
@@ -62,7 +90,10 @@ export default function HeroVideo() {
         controls={false}
         disablePictureInPicture
         className="w-full h-full object-cover"
+        // @ts-ignore
         webkit-playsinline="true"
+        x5-video-player-type="h5"
+        x5-video-player-fullscreen="false"
       >
         <source src="/assets/drone-hero.mp4" type="video/mp4" />
       </video>

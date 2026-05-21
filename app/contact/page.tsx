@@ -1,9 +1,11 @@
 import { FadeUp } from "@/components/Animations";
 import ContactForm from "@/components/ContactForm";
+import { Background3D } from "@/components/Dynamic3D";
 
 export default function ContactPage() {
   return (
     <>
+      <Background3D />
       <section className="pt-32 pb-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <FadeUp>

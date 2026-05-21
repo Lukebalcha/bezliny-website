@@ -204,7 +204,7 @@ function Particles() {
   );
 }
 
-// Ground grid — holographic floor
+// Ground grid — holographic floor (visible on both desktop and mobile)
 function GroundGrid() {
   const ref = useRef<THREE.Mesh>(null);
 
@@ -212,12 +212,14 @@ function GroundGrid() {
     if (!ref.current) return;
     ref.current.position.y = -2;
     ref.current.rotation.x = -Math.PI / 2;
+    // Gentle pulsing
+    (ref.current.material as THREE.MeshBasicMaterial).opacity = 0.08 + Math.sin(state.clock.elapsedTime * 0.5) * 0.02;
   });
 
   return (
     <mesh ref={ref}>
-      <planeGeometry args={[16, 16, 20, 20]} />
-      <meshBasicMaterial color="#c8cdd3" wireframe transparent opacity={0.03} />
+      <planeGeometry args={[20, 20, 24, 24]} />
+      <meshBasicMaterial color="#c8cdd3" wireframe transparent opacity={0.08} />
     </mesh>
   );
 }

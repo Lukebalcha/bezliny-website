@@ -1,9 +1,11 @@
 import { FadeUp } from "@/components/Animations";
 import ServiceCards from "@/components/ServiceCards";
+import { Background3D } from "@/components/Dynamic3D";
 
 export default function ServicesPage() {
   return (
     <>
+      <Background3D />
       <section className="pt-36 pb-24 relative">
         <div className="absolute top-20 right-8 text-[14rem] font-bold text-white/[0.015] font-[family-name:var(--font-space)] select-none pointer-events-none leading-none">S</div>
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
