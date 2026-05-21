@@ -37,48 +37,50 @@ export function DroneTransition({ direction = "left" }: { direction?: "left" | "
       {/* Horizontal scan line */}
       <motion.div
         style={{ width: scanWidth, opacity: scanOpacity }}
-        className="absolute top-1/2 left-0 h-[1px] bg-gradient-to-r from-transparent via-[#c8cdd3]/40 to-transparent"
+        className="absolute top-1/2 left-0 h-[2px] bg-gradient-to-r from-transparent via-white/60 to-transparent"
       />
 
       {/* The drone */}
       <motion.div
         style={{ x: droneX, y: droneY, rotate: droneRotate, scale: droneScale, opacity }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80px] h-[80px] md:w-[120px] md:h-[120px]"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100px] h-[100px] md:w-[160px] md:h-[160px]"
       >
         <svg width="100%" height="100%" viewBox="0 0 80 80" fill="none">
-          <rect x="32" y="36" width="16" height="8" rx="2" fill="white" fillOpacity="0.9" />
-          <line x1="20" y1="20" x2="40" y2="40" stroke="white" strokeOpacity="0.5" strokeWidth="1.5" />
-          <line x1="60" y1="20" x2="40" y2="40" stroke="white" strokeOpacity="0.5" strokeWidth="1.5" />
-          <line x1="20" y1="60" x2="40" y2="40" stroke="white" strokeOpacity="0.5" strokeWidth="1.5" />
-          <line x1="60" y1="60" x2="40" y2="40" stroke="white" strokeOpacity="0.5" strokeWidth="1.5" />
-          <circle cx="20" cy="20" r="8" stroke="white" strokeOpacity="0.35" strokeWidth="1" fill="none">
-            <animateTransform attributeName="transform" type="rotate" from="0 20 20" to="360 20 20" dur="0.4s" repeatCount="indefinite" />
+          <rect x="30" y="35" width="20" height="10" rx="3" fill="white" fillOpacity="1" />
+          <line x1="20" y1="20" x2="40" y2="40" stroke="white" strokeOpacity="0.85" strokeWidth="2" />
+          <line x1="60" y1="20" x2="40" y2="40" stroke="white" strokeOpacity="0.85" strokeWidth="2" />
+          <line x1="20" y1="60" x2="40" y2="40" stroke="white" strokeOpacity="0.85" strokeWidth="2" />
+          <line x1="60" y1="60" x2="40" y2="40" stroke="white" strokeOpacity="0.85" strokeWidth="2" />
+          <circle cx="20" cy="20" r="9" stroke="white" strokeOpacity="0.7" strokeWidth="1.5" fill="none">
+            <animateTransform attributeName="transform" type="rotate" from="0 20 20" to="360 20 20" dur="0.3s" repeatCount="indefinite" />
           </circle>
-          <circle cx="60" cy="20" r="8" stroke="white" strokeOpacity="0.35" strokeWidth="1" fill="none">
-            <animateTransform attributeName="transform" type="rotate" from="0 60 20" to="-360 60 20" dur="0.4s" repeatCount="indefinite" />
+          <circle cx="60" cy="20" r="9" stroke="white" strokeOpacity="0.7" strokeWidth="1.5" fill="none">
+            <animateTransform attributeName="transform" type="rotate" from="0 60 20" to="-360 60 20" dur="0.3s" repeatCount="indefinite" />
           </circle>
-          <circle cx="20" cy="60" r="8" stroke="white" strokeOpacity="0.35" strokeWidth="1" fill="none">
-            <animateTransform attributeName="transform" type="rotate" from="0 20 60" to="360 20 60" dur="0.4s" repeatCount="indefinite" />
+          <circle cx="20" cy="60" r="9" stroke="white" strokeOpacity="0.7" strokeWidth="1.5" fill="none">
+            <animateTransform attributeName="transform" type="rotate" from="0 20 60" to="360 20 60" dur="0.3s" repeatCount="indefinite" />
           </circle>
-          <circle cx="60" cy="60" r="8" stroke="white" strokeOpacity="0.35" strokeWidth="1" fill="none">
-            <animateTransform attributeName="transform" type="rotate" from="0 60 60" to="-360 60 60" dur="0.4s" repeatCount="indefinite" />
+          <circle cx="60" cy="60" r="9" stroke="white" strokeOpacity="0.7" strokeWidth="1.5" fill="none">
+            <animateTransform attributeName="transform" type="rotate" from="0 60 60" to="-360 60 60" dur="0.3s" repeatCount="indefinite" />
           </circle>
-          <circle cx="40" cy="40" r="3" fill="white" fillOpacity="0.7" />
+          <circle cx="40" cy="40" r="4" fill="white" fillOpacity="1" />
+          {/* Glow around center */}
+          <circle cx="40" cy="40" r="8" fill="white" fillOpacity="0.15" />
         </svg>
       </motion.div>
 
       {/* Flight trail behind drone */}
       <motion.div
         style={{ width: trailWidth, opacity: trailOpacity }}
-        className={`absolute top-[calc(50%-0.5px)] h-[1px] ${direction === "left" ? "left-0" : "right-0"}`}
+        className={`absolute top-[calc(50%-1px)] h-[2px] ${direction === "left" ? "left-0" : "right-0"}`}
       >
-        <div className="w-full h-full bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+        <div className="w-full h-full bg-gradient-to-r from-transparent via-white/50 to-transparent" />
       </motion.div>
 
       {/* Bottom edge glow */}
       <motion.div
         style={{ opacity: edgeGlow }}
-        className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#c8cdd3]/30 to-transparent"
+        className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/50 to-transparent"
       />
     </div>
   );
@@ -104,19 +106,19 @@ export function BurstTransition() {
       {/* Expanding ring */}
       <motion.div
         style={{ scale: ringScale, opacity: ringOpacity }}
-        className="absolute w-24 h-24 md:w-32 md:h-32 rounded-full border border-white/30"
+        className="absolute w-28 h-28 md:w-40 md:h-40 rounded-full border-2 border-white/50"
       />
       
       {/* Center point */}
       <motion.div
         style={{ scale: centerScale, opacity: centerOpacity }}
-        className="absolute w-2 h-2 rounded-full bg-white"
+        className="absolute w-3 h-3 rounded-full bg-white shadow-[0_0_20px_rgba(255,255,255,0.8)]"
       />
 
       {/* Horizontal divider line */}
       <motion.div
         style={{ scaleX: lineScale, opacity: lineOpacity }}
-        className="absolute w-full max-w-lg h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent"
+        className="absolute w-full max-w-xl h-[2px] bg-gradient-to-r from-transparent via-white/40 to-transparent"
       />
     </div>
   );
