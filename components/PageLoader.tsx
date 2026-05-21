@@ -16,9 +16,9 @@ export default function PageLoader() {
   // Phase 2: Everything shrinks and zooms into the page
 
   useEffect(() => {
-    const t1 = setTimeout(() => setPhase(1), 5000);  // After 5s show brand
-    const t2 = setTimeout(() => setPhase(2), 7500);  // Certs appear
-    const t3 = setTimeout(() => setLoading(false), 9000); // Shrink away
+    const t1 = setTimeout(() => setPhase(1), 4000);  // After 4s show brand
+    const t2 = setTimeout(() => setPhase(2), 5500);  // Certs appear
+    const t3 = setTimeout(() => setLoading(false), 7000); // Shrink away
 
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, []);
