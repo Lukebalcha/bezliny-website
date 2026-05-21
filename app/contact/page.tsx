@@ -1,29 +1,29 @@
-import { FadeUp } from "@/components/Animations";
 import ContactForm from "@/components/ContactForm";
 import { DroneTransition } from "@/components/ScrollTransitions";
+import { FormingSection, FormingElement } from "@/components/CinematicReveal";
 
 export default function ContactPage() {
   return (
     <>
-      <section className="pt-32 pb-20 relative z-[1]">
+      <FormingSection className="pt-32 pb-20 relative z-[1]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <FadeUp>
+          <FormingElement from="left">
             <span className="text-xs uppercase tracking-[0.3em] text-white/70">Get In Touch</span>
             <h1 className="mt-4 text-5xl md:text-7xl font-bold font-[family-name:var(--font-space)]">Contact</h1>
             <p className="mt-6 text-xl text-white/85 max-w-2xl">
               Ready to transform your maintenance operations? Let&apos;s discuss how our drone technology can work for you.
             </p>
-          </FadeUp>
+          </FormingElement>
         </div>
-      </section>
+      </FormingSection>
 
       <DroneTransition direction="right" />
 
-      <section className="pb-32 relative z-[1]">
+      <FormingSection className="pb-32 relative z-[1]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             {/* Info */}
-            <FadeUp>
+            <FormingElement from="left" delay={0.1}>
               <div className="space-y-8">
                 <div className="p-6 rounded-2xl glass">
                   <h3 className="text-lg font-semibold mb-4">Headquarters</h3>
@@ -49,15 +49,15 @@ export default function ContactPage() {
                   <p className="text-white/85 mt-1">Available 24/7 for emergency deployments</p>
                 </div>
               </div>
-            </FadeUp>
+            </FormingElement>
 
             {/* Form */}
-            <FadeUp delay={0.2}>
+            <FormingElement from="right" delay={0.2}>
               <ContactForm />
-            </FadeUp>
+            </FormingElement>
           </div>
         </div>
-      </section>
+      </FormingSection>
     </>
   );
 }

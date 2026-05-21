@@ -8,6 +8,7 @@ import HorizontalScroll from "@/components/HorizontalScroll";
 import { Section3D, MeshGradient } from "@/components/Dynamic3D";
 import AutoVideo from "@/components/AutoVideo";
 import { DroneTransition, BurstTransition } from "@/components/ScrollTransitions";
+import { FormingSection, FormingElement } from "@/components/CinematicReveal";
 
 export default function Home() {
   return (
@@ -133,26 +134,26 @@ export default function Home() {
 
       {/* Services — with subtle section number */}
       <DroneTransition direction="left" />
-      <section className="py-20 md:py-40 relative">
+      <FormingSection className="py-20 md:py-40 relative">
         <div className="hidden md:block absolute top-32 right-8 text-[12rem] font-bold text-white/[0.015] font-[family-name:var(--font-space)] select-none pointer-events-none leading-none">03</div>
         <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
-          <FadeUp>
+          <FormingElement from="left">
             <div className="max-w-xl mb-12 md:mb-20">
               <span className="text-[11px] uppercase tracking-[0.3em] text-white/70">Solutions</span>
               <h2 className="mt-3 md:mt-4 text-3xl md:text-5xl font-bold font-[family-name:var(--font-space)]">Industrial-Grade Services</h2>
               <p className="mt-4 md:mt-5 text-white/85 leading-relaxed text-sm md:text-base">From skyscrapers to offshore platforms — precision drone operations for every sector.</p>
             </div>
-          </FadeUp>
+          </FormingElement>
           <ServiceCards />
-          <FadeUp delay={0.3}>
+          <FormingElement from="bottom" delay={0.4}>
             <div className="mt-12 md:mt-20 text-center">
               <MagneticButton href="/services" variant="secondary">
                 View All Services
               </MagneticButton>
             </div>
-          </FadeUp>
+          </FormingElement>
         </div>
-      </section>
+      </FormingSection>
 
       {/* Horizontal Scroll Process */}
       <BurstTransition />
@@ -231,31 +232,31 @@ export default function Home() {
 
       {/* Global Presence */}
       <BurstTransition />
-      <section className="py-20 md:py-40 relative">
+      <FormingSection className="py-20 md:py-40 relative">
         <div className="absolute inset-0 border-t border-white/[0.04]" />
         <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8 text-center relative">
-          <FadeUp>
+          <FormingElement from="bottom">
             <span className="text-[11px] uppercase tracking-[0.3em] text-white/70">Global Reach</span>
             <h2 className="mt-3 md:mt-4 text-3xl md:text-5xl font-bold font-[family-name:var(--font-space)]">Operating Worldwide</h2>
             <p className="mt-4 md:mt-5 text-white/85 max-w-2xl mx-auto text-sm md:text-base">From the high-rises of Warsaw to offshore platforms in the North Sea.</p>
-          </FadeUp>
-          <FadeUp delay={0.2}>
-            <div className="mt-12 md:mt-20 grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3">
-              {[
-                { region: "Europe", detail: "HQ — Warsaw, Poland" },
-                { region: "Scandinavia", detail: "Nordic Operations" },
-                { region: "Middle East", detail: "Oil & Gas Sector" },
-                { region: "Asia Pacific", detail: "Expansion 2026" },
-              ].map((loc) => (
-                <div key={loc.region} className="p-5 md:p-8 rounded-xl md:rounded-2xl border border-white/[0.04] hover:border-white/[0.1] transition-all duration-700 group">
+          </FormingElement>
+          <div className="mt-12 md:mt-20 grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3">
+            {[
+              { region: "Europe", detail: "HQ — Warsaw, Poland" },
+              { region: "Scandinavia", detail: "Nordic Operations" },
+              { region: "Middle East", detail: "Oil & Gas Sector" },
+              { region: "Asia Pacific", detail: "Expansion 2026" },
+            ].map((loc, i) => (
+              <FormingElement key={loc.region} from={i < 2 ? "left" : "right"} delay={i * 0.1}>
+                <div className="p-5 md:p-8 rounded-xl md:rounded-2xl border border-white/[0.04] hover:border-white/[0.1] transition-all duration-700 group">
                   <div className="text-sm md:text-lg font-semibold text-white/75 group-hover:text-white transition-colors duration-500">{loc.region}</div>
                   <div className="text-[11px] md:text-sm text-white/70 mt-1 md:mt-2">{loc.detail}</div>
                 </div>
-              ))}
-            </div>
-          </FadeUp>
+              </FormingElement>
+            ))}
+          </div>
         </div>
-      </section>
+      </FormingSection>
 
       {/* CTA */}
       <section className="py-20 md:py-40 relative overflow-hidden">
