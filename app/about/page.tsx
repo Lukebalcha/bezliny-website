@@ -6,7 +6,7 @@ export default function AboutPage() {
       <section className="pt-36 pb-24">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <FadeUp>
-            <span className="text-[11px] uppercase tracking-[0.3em] text-white/25">About Us</span>
+            <span className="text-[11px] uppercase tracking-[0.3em] text-white/40">About Us</span>
             <h1 className="mt-4 text-5xl md:text-7xl font-bold font-[family-name:var(--font-space)]">
               Engineering the Future
             </h1>
@@ -33,18 +33,18 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
             <SlideIn direction="left">
               <div>
-                <span className="text-[11px] uppercase tracking-[0.3em] text-white/25">Our Story</span>
+                <span className="text-[11px] uppercase tracking-[0.3em] text-white/40">Our Story</span>
                 <h2 className="mt-4 text-3xl md:text-4xl font-bold font-[family-name:var(--font-space)]">
                   Born from Innovation
                 </h2>
-                <p className="mt-6 text-white/40 leading-[1.8]">
+                <p className="mt-6 text-white/55 leading-[1.8]">
                   Founded in Warsaw, Poland, Bezliny was built on a simple observation: the world&apos;s 
                   most critical infrastructure still depends on dangerous manual labor for maintenance. 
                   Our founders set out to change this by developing autonomous drone platforms capable 
                   of performing cleaning, inspection, and surface treatment at any height or in any 
                   hazardous environment.
                 </p>
-                <p className="mt-4 text-white/40 leading-[1.8]">
+                <p className="mt-4 text-white/55 leading-[1.8]">
                   Today, we operate across 15+ countries, serving clients in property management, 
                   oil and gas, energy, maritime, and infrastructure sectors. Our patented cleaning 
                   technology uses only filtered water — zero chemicals, zero surface damage.
@@ -63,7 +63,7 @@ export default function AboutPage() {
                 ].map((item) => (
                   <div key={item.year} className="flex items-start gap-4 p-5 rounded-xl border border-white/[0.04] bg-white/[0.01]">
                     <span className="text-[#10b981] font-bold font-[family-name:var(--font-space)] shrink-0">{item.year}</span>
-                    <span className="text-white/50">{item.event}</span>
+                    <span className="text-white/65">{item.event}</span>
                   </div>
                 ))}
               </div>
@@ -77,7 +77,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <FadeUp>
             <div className="text-center mb-20">
-              <span className="text-[11px] uppercase tracking-[0.3em] text-white/25">Values</span>
+              <span className="text-[11px] uppercase tracking-[0.3em] text-white/40">Values</span>
               <h2 className="mt-4 text-4xl md:text-5xl font-bold font-[family-name:var(--font-space)]">What Drives Us</h2>
             </div>
           </FadeUp>

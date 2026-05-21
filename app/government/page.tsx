@@ -13,7 +13,7 @@ export default function GovernmentPage() {
             <h1 className="mt-4 text-5xl md:text-7xl font-bold font-[family-name:var(--font-space)]">
               Government &<br />Public Sector
             </h1>
-            <p className="mt-6 text-xl text-white/50 max-w-3xl">
+            <p className="mt-6 text-xl text-white/65 max-w-3xl">
               Trusted by municipalities, government agencies, and public institutions to maintain 
               critical infrastructure safely, efficiently, and at reduced cost.
             </p>
@@ -68,7 +68,7 @@ export default function GovernmentPage() {
                 ].map((stat) => (
                   <div key={stat.label} className="p-6 rounded-2xl glass text-center">
                     <div className="text-2xl font-bold text-[#10b981] font-[family-name:var(--font-space)]">{stat.value}</div>
-                    <div className="text-sm text-white/50 mt-2">{stat.label}</div>
+                    <div className="text-sm text-white/65 mt-2">{stat.label}</div>
                   </div>
                 ))}
               </div>
@@ -128,7 +128,7 @@ export default function GovernmentPage() {
                     {sector.icon}
                   </div>
                   <h3 className="text-xl font-semibold mb-3 group-hover:text-[#10b981] transition-colors">{sector.title}</h3>
-                  <p className="text-sm text-white/50 leading-relaxed">{sector.desc}</p>
+                  <p className="text-sm text-white/65 leading-relaxed">{sector.desc}</p>
                 </div>
               </FadeUp>
             ))}
@@ -184,7 +184,7 @@ export default function GovernmentPage() {
             <h2 className="text-3xl md:text-5xl font-bold font-[family-name:var(--font-space)]">
               Partner with Bezliny for <span className="text-[#10b981]">Public Sector</span> Projects
             </h2>
-            <p className="mt-6 text-white/50 text-lg max-w-xl mx-auto">
+            <p className="mt-6 text-white/65 text-lg max-w-xl mx-auto">
               Contact our government relations team to discuss procurement, tenders, or pilot programs.
             </p>
             <div className="mt-10">

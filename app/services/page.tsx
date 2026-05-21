@@ -8,7 +8,7 @@ export default function ServicesPage() {
         <div className="absolute top-20 right-8 text-[14rem] font-bold text-white/[0.015] font-[family-name:var(--font-space)] select-none pointer-events-none leading-none">S</div>
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
           <FadeUp>
-            <span className="text-[11px] uppercase tracking-[0.3em] text-white/25">What We Do</span>
+            <span className="text-[11px] uppercase tracking-[0.3em] text-white/40">What We Do</span>
             <h1 className="mt-4 text-5xl md:text-7xl font-bold font-[family-name:var(--font-space)]">Our Services</h1>
             <p className="mt-6 text-xl text-white/35 max-w-2xl">
               Comprehensive drone-based solutions for the most demanding industrial environments. 
@@ -29,7 +29,7 @@ export default function ServicesPage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <FadeUp>
             <div className="text-center mb-20">
-              <span className="text-[11px] uppercase tracking-[0.3em] text-white/25">Process</span>
+              <span className="text-[11px] uppercase tracking-[0.3em] text-white/40">Process</span>
               <h2 className="mt-4 text-4xl md:text-5xl font-bold font-[family-name:var(--font-space)]">How We Work</h2>
             </div>
           </FadeUp>

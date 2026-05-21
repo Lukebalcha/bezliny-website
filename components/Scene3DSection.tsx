@@ -37,7 +37,7 @@ function WaypointNetwork() {
       {nodes.map((pos, i) => (
         <mesh key={i} position={pos} scale={0.04}>
           <sphereGeometry args={[1, 8, 8]} />
-          <meshBasicMaterial color="#10b981" transparent opacity={0.6} />
+          <meshBasicMaterial color="#a0aec0" transparent opacity={0.6} />
         </mesh>
       ))}
       {edges.map(([a, b], i) => (
@@ -48,7 +48,7 @@ function WaypointNetwork() {
               args={[new Float32Array([...nodes[a], ...nodes[b]]), 3]}
             />
           </bufferGeometry>
-          <lineBasicMaterial color="#10b981" transparent opacity={0.08} />
+          <lineBasicMaterial color="#a0aec0" transparent opacity={0.08} />
         </line>
       ))}
     </group>
@@ -89,7 +89,7 @@ function TelemetryStream() {
       </bufferGeometry>
       <pointsMaterial
         size={0.012}
-        color="#10b981"
+        color="#a0aec0"
         transparent
         opacity={0.4}
         sizeAttenuation

@@ -54,10 +54,10 @@ export default function Counter({ end, suffix = "", label }: Props) {
       transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
       className="text-center"
     >
-      <div className="text-4xl md:text-5xl font-bold font-[family-name:var(--font-space)] text-[#10b981]">
+      <div className="text-4xl md:text-5xl font-bold font-[family-name:var(--font-space)] bg-gradient-to-b from-white via-white/90 to-white/60 bg-clip-text text-transparent">
         {count}{suffix}
       </div>
-      <div className="mt-2 text-sm text-white/40 uppercase tracking-wider">{label}</div>
+      <div className="mt-2 text-sm text-white/50 uppercase tracking-wider">{label}</div>
     </motion.div>
   );
 }

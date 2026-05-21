@@ -42,7 +42,7 @@ function FlightPaths() {
             />
           </bufferGeometry>
           <lineBasicMaterial
-            color="#10b981"
+            color="#a0aec0"
             transparent
             opacity={0.12 + i * 0.03}
             blending={THREE.AdditiveBlending}
@@ -88,7 +88,7 @@ function ScanGrid() {
             />
           </bufferGeometry>
           <lineBasicMaterial
-            color={i < 15 ? "#10b981" : "#e2e8f0"}
+            color={i < 15 ? "#a0aec0" : "#e2e8f0"}
             transparent
             opacity={0.04}
           />
@@ -110,7 +110,7 @@ function PropellerHalo({ position, size }: { position: [number, number, number];
   return (
     <mesh ref={ref} position={position}>
       <torusGeometry args={[size, 0.008, 8, 32]} />
-      <meshBasicMaterial color="#10b981" transparent opacity={0.25} />
+      <meshBasicMaterial color="#a0aec0" transparent opacity={0.25} />
     </mesh>
   );
 }
@@ -153,11 +153,11 @@ function DroneShape() {
         {/* Water spray cone below */}
         <mesh position={[0, -0.8, 0]} rotation={[Math.PI, 0, 0]}>
           <coneGeometry args={[0.4, 1.2, 8, 1, true]} />
-          <meshBasicMaterial color="#10b981" transparent opacity={0.06} wireframe />
+          <meshBasicMaterial color="#a0aec0" transparent opacity={0.06} wireframe />
         </mesh>
         
         {/* Glow */}
-        <pointLight color="#10b981" intensity={2} distance={4} decay={2} />
+        <pointLight color="#a0aec0" intensity={2} distance={4} decay={2} />
       </group>
     </Float>
   );
