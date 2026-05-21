@@ -89,7 +89,7 @@ export default function HeroVideo() {
         preload="auto"
         controls={false}
         disablePictureInPicture
-        className="w-full h-full object-cover md:object-cover object-center scale-[0.85] md:scale-100"
+        className="w-full h-full object-contain md:object-cover object-center"
         // @ts-ignore
         webkit-playsinline="true"
         x5-video-player-type="h5"

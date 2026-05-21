@@ -120,7 +120,7 @@ export default function HomeContent() {
             <div className="lg:col-span-5">
               <SlideIn direction="right" delay={0.2}>
                 <div className="relative aspect-[4/3] md:aspect-[4/5] rounded-2xl overflow-hidden">
-                  <AutoVideo src="/assets/drone-hero.mp4" className="w-full h-full object-cover md:scale-100 scale-[0.85] origin-center" />
+                  <AutoVideo src="/assets/drone-hero.mp4" className="w-full h-full object-contain md:object-cover object-center" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#09090b]/70 to-transparent" />
                   <div className="hidden md:block absolute top-4 right-4 w-8 h-8 border-t border-r border-white/10" />
                 </div>
@@ -195,7 +195,7 @@ export default function HomeContent() {
             <div className="lg:col-span-5 order-2 lg:order-1">
               <ScaleIn delay={0.1}>
                 <div className="relative aspect-[3/2] md:aspect-[4/5] rounded-2xl md:rounded-3xl overflow-hidden border border-white/[0.04]">
-                  <AutoVideo src="/assets/drone-hero.mp4" className="w-full h-full object-cover md:scale-100 scale-[0.85] origin-center" />
+                  <AutoVideo src="/assets/drone-hero.mp4" className="w-full h-full object-contain md:object-cover object-center" />
                 </div>
               </ScaleIn>
             </div>
