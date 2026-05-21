@@ -65,7 +65,7 @@ export default function Home() {
           <FadeUp>
             <p className="text-center text-[10px] md:text-[11px] uppercase tracking-[0.3em] text-white/40 mb-8 md:mb-12">Trusted by industry leaders worldwide</p>
             <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-40">
-              {["ISO 9001", "ISO 14001", "CE Certified", "EASA Approved", "NATO Supplier"].map((cert) => (
+              {["ISO 9001", "ISO 14001", "CE Certified", "EASA Approved", "UDT Certified"].map((cert) => (
                 <div key={cert} className="text-xs md:text-sm font-medium text-white/60 tracking-wider uppercase">
                   {cert}
                 </div>
