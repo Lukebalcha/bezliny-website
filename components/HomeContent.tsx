@@ -22,10 +22,10 @@ export default function HomeContent() {
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <HeroVideo />
         <div className="video-overlay absolute inset-0 z-[2]" />
-        <div className="hidden md:block absolute top-8 left-8 w-16 h-16 border-l border-t border-white/10 z-20" />
-        <div className="hidden md:block absolute top-8 right-8 w-16 h-16 border-r border-t border-white/10 z-20" />
-        <div className="hidden md:block absolute bottom-8 left-8 w-16 h-16 border-l border-b border-white/10 z-20" />
-        <div className="hidden md:block absolute bottom-8 right-8 w-16 h-16 border-r border-b border-white/10 z-20" />
+        <div className="hidden md:block absolute top-8 left-8 w-16 h-16 border-l border-t border-white/20 z-20" />
+        <div className="hidden md:block absolute top-8 right-8 w-16 h-16 border-r border-t border-white/20 z-20" />
+        <div className="hidden md:block absolute bottom-8 left-8 w-16 h-16 border-l border-b border-white/20 z-20" />
+        <div className="hidden md:block absolute bottom-8 right-8 w-16 h-16 border-r border-b border-white/20 z-20" />
 
         <div className="relative z-20 max-w-6xl mx-auto px-5 md:px-6 text-center">
           <FadeUp>
