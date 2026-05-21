@@ -1,5 +1,6 @@
 import { FadeUp, SlideIn } from "@/components/Animations";
 import Link from "next/link";
+import AutoVideo from "@/components/AutoVideo";
 
 export default function GovernmentPage() {
   return (
@@ -23,9 +24,7 @@ export default function GovernmentPage() {
 
       {/* Video */}
       <section className="relative h-[40vh] overflow-hidden">
-        <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
-          <source src="/assets/drone-hero.mp4" type="video/mp4" />
-        </video>
+        <AutoVideo src="/assets/drone-hero.mp4" className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 flex items-center justify-center h-full">
           <FadeUp>

@@ -115,6 +115,37 @@ video::-moz-media-controls {
   color: #ffffff;
 }
 
+/* Dashboard input fields */
+.input-field {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input-field:focus {
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.input-field::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.input-field option {
+  background: #0a0a0c;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Leaflet overrides for dark theme */
+.leaflet-container {
+  background: #0a0a0c;
+}
+
 /* Smooth link transitions globally */
 a {
   transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);

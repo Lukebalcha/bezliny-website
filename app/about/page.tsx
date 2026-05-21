@@ -1,4 +1,5 @@
 import { FadeUp, SlideIn } from "@/components/Animations";
+import AutoVideo from "@/components/AutoVideo";
 
 export default function AboutPage() {
   return (
@@ -21,9 +22,7 @@ export default function AboutPage() {
 
       {/* Video */}
       <section className="relative h-[50vh] overflow-hidden">
-        <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
-          <source src="/assets/drone-hero.mp4" type="video/mp4" />
-        </video>
+        <AutoVideo src="/assets/drone-hero.mp4" className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-[#09090b]/50" />
       </section>
 
