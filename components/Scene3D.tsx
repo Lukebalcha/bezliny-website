@@ -1,158 +1,198 @@
 "use client";
 
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Float, MeshDistortMaterial, Environment, MeshTransmissionMaterial } from "@react-three/drei";
-import { EffectComposer, Bloom, ChromaticAberration, Vignette } from "@react-three/postprocessing";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Float } from "@react-three/drei";
 import { useRef, useMemo, useState, useEffect } from "react";
 import * as THREE from "three";
 
-// Mouse tracking for interactive camera
-function MouseCamera() {
-  const { camera } = useThree();
-  const mouse = useRef({ x: 0, y: 0 });
-  const target = useRef({ x: 0, y: 0 });
+// Drone flight path — curved trajectory lines showing drone routes
+function FlightPaths() {
+  const group = useRef<THREE.Group>(null);
 
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      mouse.current.x = (e.clientX / window.innerWidth - 0.5) * 2;
-      mouse.current.y = (e.clientY / window.innerHeight - 0.5) * 2;
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+  const curves = useMemo(() => {
+    return Array.from({ length: 5 }, (_, i) => {
+      const points = [];
+      const offset = (i - 2) * 2.5;
+      for (let j = 0; j <= 50; j++) {
+        const t = j / 50;
+        points.push(new THREE.Vector3(
+          (t - 0.5) * 16,
+          Math.sin(t * Math.PI * 2 + i) * 1.5 + offset * 0.3,
+          Math.cos(t * Math.PI + i * 0.5) * 2 - 3
+        ));
+      }
+      const curve = new THREE.CatmullRomCurve3(points);
+      return curve.getPoints(80);
+    });
   }, []);
 
-  useFrame(() => {
-    target.current.x += (mouse.current.x - target.current.x) * 0.02;
-    target.current.y += (mouse.current.y - target.current.y) * 0.02;
-    camera.position.x = target.current.x * 0.8;
-    camera.position.y = -target.current.y * 0.5;
-    camera.lookAt(0, 0, 0);
-  });
-
-  return null;
-}
-
-// The main centerpiece — a massive morphing metallic sphere with inner glow
-function CinematicOrb() {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const innerRef = useRef<THREE.Mesh>(null);
-
   useFrame((state) => {
-    if (!meshRef.current) return;
-    const t = state.clock.elapsedTime;
-    meshRef.current.rotation.y = t * 0.08;
-    meshRef.current.rotation.x = Math.sin(t * 0.05) * 0.2;
-    meshRef.current.rotation.z = Math.cos(t * 0.03) * 0.1;
-
-    if (innerRef.current) {
-      innerRef.current.rotation.y = -t * 0.12;
-      innerRef.current.rotation.x = Math.cos(t * 0.07) * 0.3;
-    }
+    if (!group.current) return;
+    group.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.05) * 0.1;
   });
 
   return (
-    <group>
-      {/* Outer distorted shell — translucent metallic */}
-      <Float speed={0.8} rotationIntensity={0.1} floatIntensity={0.3}>
-        <mesh ref={meshRef} scale={2.8}>
-          <icosahedronGeometry args={[1, 64]} />
-          <MeshDistortMaterial
-            color="#c0c0c0"
-            metalness={0.95}
-            roughness={0.08}
-            distort={0.35}
-            speed={1.2}
-            transparent
-            opacity={0.7}
-            envMapIntensity={2.5}
-          />
-        </mesh>
-      </Float>
-
-      {/* Inner glowing core — emissive green energy */}
-      <Float speed={1.2} rotationIntensity={0.3} floatIntensity={0.2}>
-        <mesh ref={innerRef} scale={1.4}>
-          <icosahedronGeometry args={[1, 32]} />
-          <meshStandardMaterial
+    <group ref={group}>
+      {curves.map((points, i) => (
+        <line key={i}>
+          <bufferGeometry>
+            <bufferAttribute
+              attach="attributes-position"
+              args={[new Float32Array(points.flatMap(p => [p.x, p.y, p.z])), 3]}
+            />
+          </bufferGeometry>
+          <lineBasicMaterial
             color="#10b981"
-            emissive="#10b981"
-            emissiveIntensity={2.5}
             transparent
-            opacity={0.6}
-            wireframe
+            opacity={0.12 + i * 0.03}
+            blending={THREE.AdditiveBlending}
           />
-        </mesh>
-      </Float>
-
-      {/* Point light inside for volumetric glow */}
-      <pointLight position={[0, 0, 0]} color="#10b981" intensity={8} distance={6} decay={2} />
+        </line>
+      ))}
     </group>
   );
 }
 
-// Orbiting rings — like Saturn rings or tech halos
-function OrbitalRing({ radius, tilt, speed, thickness }: { radius: number; tilt: number; speed: number; thickness: number }) {
+// Scanning grid — represents drone surveying a surface
+function ScanGrid() {
+  const ref = useRef<THREE.Group>(null);
+
+  useFrame(() => {
+    if (!ref.current) return;
+    ref.current.rotation.x = -0.6;
+    ref.current.position.y = -1.5;
+    ref.current.position.z = -2;
+  });
+
+  const lines = useMemo(() => {
+    const result: [THREE.Vector3, THREE.Vector3][] = [];
+    for (let i = 0; i < 15; i++) {
+      const y = (i / 14 - 0.5) * 6;
+      result.push([new THREE.Vector3(-5, y, 0), new THREE.Vector3(5, y, 0)]);
+    }
+    for (let i = 0; i < 15; i++) {
+      const x = (i / 14 - 0.5) * 10;
+      result.push([new THREE.Vector3(x, -3, 0), new THREE.Vector3(x, 3, 0)]);
+    }
+    return result;
+  }, []);
+
+  return (
+    <group ref={ref}>
+      {lines.map((pair, i) => (
+        <line key={i}>
+          <bufferGeometry>
+            <bufferAttribute
+              attach="attributes-position"
+              args={[new Float32Array([...pair[0].toArray(), ...pair[1].toArray()]), 3]}
+            />
+          </bufferGeometry>
+          <lineBasicMaterial
+            color={i < 15 ? "#10b981" : "#e2e8f0"}
+            transparent
+            opacity={0.04}
+          />
+        </line>
+      ))}
+    </group>
+  );
+}
+
+// Drone propeller halos — spinning rings representing drone rotors
+function PropellerHalo({ position, size }: { position: [number, number, number]; size: number }) {
   const ref = useRef<THREE.Mesh>(null);
 
   useFrame((state) => {
     if (!ref.current) return;
-    ref.current.rotation.z = tilt;
-    ref.current.rotation.y = state.clock.elapsedTime * speed;
+    ref.current.rotation.z = state.clock.elapsedTime * 3;
   });
 
   return (
-    <mesh ref={ref}>
-      <torusGeometry args={[radius, thickness, 16, 100]} />
-      <meshStandardMaterial
-        color="#e2e8f0"
-        metalness={0.9}
-        roughness={0.1}
-        transparent
-        opacity={0.3}
-        emissive="#10b981"
-        emissiveIntensity={0.3}
-      />
+    <mesh ref={ref} position={position}>
+      <torusGeometry args={[size, 0.008, 8, 32]} />
+      <meshBasicMaterial color="#10b981" transparent opacity={0.25} />
     </mesh>
   );
 }
 
-// Floating micro particles with depth
-function CosmicParticles() {
-  const count = 1500;
+// Central drone silhouette with 4 propeller halos and water spray
+function DroneShape() {
+  const group = useRef<THREE.Group>(null);
+
+  useFrame((state) => {
+    if (!group.current) return;
+    group.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.3;
+    group.current.rotation.y = state.clock.elapsedTime * 0.1;
+  });
+
+  return (
+    <Float speed={0.8} rotationIntensity={0.05} floatIntensity={0.2}>
+      <group ref={group} position={[0, 0.5, 0]}>
+        {/* Drone body */}
+        <mesh scale={0.15}>
+          <sphereGeometry args={[1, 16, 16]} />
+          <meshBasicMaterial color="#ffffff" transparent opacity={0.8} />
+        </mesh>
+        
+        {/* Arms */}
+        <mesh rotation={[0, 0, Math.PI / 4]}>
+          <boxGeometry args={[2.2, 0.02, 0.02]} />
+          <meshBasicMaterial color="#e2e8f0" transparent opacity={0.2} />
+        </mesh>
+        <mesh rotation={[0, 0, -Math.PI / 4]}>
+          <boxGeometry args={[2.2, 0.02, 0.02]} />
+          <meshBasicMaterial color="#e2e8f0" transparent opacity={0.2} />
+        </mesh>
+        
+        {/* 4 propeller halos */}
+        <PropellerHalo position={[0.8, 0.8, 0]} size={0.35} />
+        <PropellerHalo position={[-0.8, 0.8, 0]} size={0.35} />
+        <PropellerHalo position={[0.8, -0.8, 0]} size={0.35} />
+        <PropellerHalo position={[-0.8, -0.8, 0]} size={0.35} />
+        
+        {/* Water spray cone below */}
+        <mesh position={[0, -0.8, 0]} rotation={[Math.PI, 0, 0]}>
+          <coneGeometry args={[0.4, 1.2, 8, 1, true]} />
+          <meshBasicMaterial color="#10b981" transparent opacity={0.06} wireframe />
+        </mesh>
+        
+        {/* Glow */}
+        <pointLight color="#10b981" intensity={2} distance={4} decay={2} />
+      </group>
+    </Float>
+  );
+}
+
+// Subtle floating particles — like water mist
+function MistParticles() {
+  const count = 200;
   const ref = useRef<THREE.Points>(null);
 
-  const [positions, sizes] = useMemo(() => {
+  const positions = useMemo(() => {
     const pos = new Float32Array(count * 3);
-    const s = new Float32Array(count);
     for (let i = 0; i < count; i++) {
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.acos(2 * Math.random() - 1);
-      const r = 4 + Math.random() * 12;
-      pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-      pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-      pos[i * 3 + 2] = r * Math.cos(phi);
-      s[i] = Math.random() * 1.5 + 0.5;
+      pos[i * 3] = (Math.random() - 0.5) * 14;
+      pos[i * 3 + 1] = (Math.random() - 0.5) * 10;
+      pos[i * 3 + 2] = (Math.random() - 0.5) * 8 - 2;
     }
-    return [pos, s];
+    return pos;
   }, []);
 
   useFrame((state) => {
     if (!ref.current) return;
-    ref.current.rotation.y = state.clock.elapsedTime * 0.015;
-    ref.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.008) * 0.05;
+    ref.current.rotation.y = state.clock.elapsedTime * 0.01;
   });
 
   return (
     <points ref={ref}>
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-        <bufferAttribute attach="attributes-size" args={[sizes, 1]} />
       </bufferGeometry>
       <pointsMaterial
-        size={0.02}
+        size={0.015}
         color="#ffffff"
         transparent
-        opacity={0.5}
+        opacity={0.3}
         sizeAttenuation
         blending={THREE.AdditiveBlending}
       />
@@ -160,102 +200,30 @@ function CosmicParticles() {
   );
 }
 
-// Floating geometric debris
-function FloatingDebris() {
-  const group = useRef<THREE.Group>(null);
-
-  const debris = useMemo(() => {
-    return Array.from({ length: 12 }, (_, i) => ({
-      position: [
-        (Math.random() - 0.5) * 14,
-        (Math.random() - 0.5) * 10,
-        (Math.random() - 0.5) * 10 - 3,
-      ] as [number, number, number],
-      scale: Math.random() * 0.15 + 0.05,
-      speed: Math.random() * 0.5 + 0.2,
-      type: Math.floor(Math.random() * 3),
-    }));
-  }, []);
-
-  useFrame((state) => {
-    if (!group.current) return;
-    group.current.children.forEach((child, i) => {
-      const d = debris[i];
-      child.rotation.x = state.clock.elapsedTime * d.speed;
-      child.rotation.y = state.clock.elapsedTime * d.speed * 0.7;
-      child.position.y = d.position[1] + Math.sin(state.clock.elapsedTime * d.speed + i) * 0.5;
-    });
-  });
-
-  return (
-    <group ref={group}>
-      {debris.map((d, i) => (
-        <mesh key={i} position={d.position} scale={d.scale}>
-          {d.type === 0 && <octahedronGeometry args={[1, 0]} />}
-          {d.type === 1 && <tetrahedronGeometry args={[1, 0]} />}
-          {d.type === 2 && <boxGeometry args={[1, 1, 1]} />}
-          <meshStandardMaterial
-            color="#94a3b8"
-            metalness={0.9}
-            roughness={0.2}
-            emissive="#10b981"
-            emissiveIntensity={0.1}
-          />
-        </mesh>
-      ))}
-    </group>
-  );
-}
-
 export default function Scene3D() {
   const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    setIsMobile(window.innerWidth < 768);
   }, []);
 
   if (!mounted) return null;
+  // No 3D on mobile — video only, keeps it fast and clean
+  if (isMobile) return null;
 
   return (
     <div className="absolute inset-0 z-[1]">
       <Canvas
-        camera={{ position: [0, 0, 7], fov: 55 }}
-        dpr={[1, 2]}
-        gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+        camera={{ position: [0, 0, 6], fov: 50 }}
+        dpr={[1, 1.5]}
+        gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
       >
-        {/* Lighting */}
-        <ambientLight intensity={0.15} />
-        <directionalLight position={[5, 5, 5]} intensity={0.8} color="#ffffff" />
-        <directionalLight position={[-5, -3, -5]} intensity={0.3} color="#10b981" />
-        <spotLight position={[0, 10, 0]} intensity={1} angle={0.3} penumbra={1} color="#e2e8f0" />
-
-        {/* Environment for realistic reflections */}
-        <Environment preset="night" />
-
-        {/* Main 3D elements */}
-        <MouseCamera />
-        <CinematicOrb />
-        <OrbitalRing radius={4.2} tilt={1.2} speed={0.1} thickness={0.015} />
-        <OrbitalRing radius={5.0} tilt={0.8} speed={-0.07} thickness={0.01} />
-        <OrbitalRing radius={3.5} tilt={1.8} speed={0.15} thickness={0.012} />
-        <CosmicParticles />
-        <FloatingDebris />
-
-        {/* Post-processing for cinematic look */}
-        <EffectComposer>
-          <Bloom
-            intensity={1.5}
-            luminanceThreshold={0.2}
-            luminanceSmoothing={0.9}
-            mipmapBlur
-          />
-          <ChromaticAberration
-            offset={new THREE.Vector2(0.0008, 0.0008)}
-            radialModulation={false}
-            modulationOffset={0}
-          />
-          <Vignette offset={0.3} darkness={0.7} />
-        </EffectComposer>
+        <DroneShape />
+        <FlightPaths />
+        <ScanGrid />
+        <MistParticles />
       </Canvas>
     </div>
   );

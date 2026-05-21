@@ -59,6 +59,22 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent z-20" />
       </section>
 
+      {/* Trust Bar — Trusted by industry leaders */}
+      <section className="py-16 relative border-t border-b border-white/[0.03]">
+        <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
+          <FadeUp>
+            <p className="text-center text-[10px] md:text-[11px] uppercase tracking-[0.3em] text-white/25 mb-8 md:mb-12">Trusted by industry leaders worldwide</p>
+            <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-40">
+              {["ISO 9001", "ISO 14001", "CE Certified", "EASA Approved", "NATO Supplier"].map((cert) => (
+                <div key={cert} className="text-xs md:text-sm font-medium text-white/60 tracking-wider uppercase">
+                  {cert}
+                </div>
+              ))}
+            </div>
+          </FadeUp>
+        </div>
+      </section>
+
       {/* Stats — Minimal, impactful */}
       <section className="py-28 relative">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
