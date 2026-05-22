@@ -52,6 +52,20 @@ const services = [
     image: "/services/drone-inspection.jpg",
     status: "ACTIVE",
   },
+  {
+    num: "08",
+    title: "Solar Panel Cleaning",
+    desc: "Restoring peak efficiency — autonomous drone washing without panel damage or downtime.",
+    image: "/services/solar-panel.jpg",
+    status: "ACTIVE",
+  },
+  {
+    num: "09",
+    title: "Vegetation & Tree Management",
+    desc: "Precision spraying, trimming reach, and canopy maintenance — palm trees, hedges, and urban greenery.",
+    image: "/services/vegetation.jpg",
+    status: "AVAILABLE",
+  },
 ];
 
 export default function ServiceCards() {
