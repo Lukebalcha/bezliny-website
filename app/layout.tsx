@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import CursorFollower from "@/components/CursorFollower";
-import PageLoader from "@/components/PageLoader";
 import { LangProvider } from "@/lib/LangContext";
+import PWARegister from "@/components/PWARegister";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -30,13 +27,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#10b981" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <link rel="apple-touch-icon" href="/icon-192.svg" />
+      </head>
       <body className="bg-[#09090b] text-white font-sans antialiased grain">
         <LangProvider>
-          <PageLoader />
-          <CursorFollower />
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
+          <PWARegister />
+          {children}
         </LangProvider>
       </body>
     </html>

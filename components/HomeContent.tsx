@@ -12,6 +12,7 @@ import AutoVideo from "@/components/AutoVideo";
 import { DroneTransition, BurstTransition } from "@/components/ScrollTransitions";
 import { FormingSection, FormingElement } from "@/components/CinematicReveal";
 import { FadeUp, ScaleIn, SlideIn } from "@/components/Animations";
+import DroneServicesReveal from "@/components/DroneServicesReveal";
 
 export default function HomeContent() {
   const { t } = useLang();
@@ -132,6 +133,7 @@ export default function HomeContent() {
 
       {/* Services */}
       <DroneTransition direction="left" />
+      <DroneServicesReveal />
       <FormingSection className="py-20 md:py-40 relative">
         <div className="hidden md:block absolute top-32 right-8 text-[12rem] font-bold text-white/[0.015] font-[family-name:var(--font-space)] select-none pointer-events-none leading-none">03</div>
         <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
