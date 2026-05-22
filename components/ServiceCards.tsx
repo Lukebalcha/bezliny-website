@@ -6,99 +6,123 @@ const services = [
   {
     num: "01",
     title: "High-Rise Façade Cleaning",
-    desc: "Glass, concrete, and cladding — any height, no scaffolding required. Our drones handle buildings up to 200m with autonomous precision.",
+    desc: "Glass, concrete, and cladding — any height, no scaffolding. Autonomous precision up to 200m.",
     image: "/services/facade-cleaning.jpg",
+    status: "ACTIVE",
   },
   {
     num: "02",
     title: "Government & Public Infrastructure",
-    desc: "Partnering with municipal authorities for monument restoration, public building maintenance, and civic infrastructure cleaning across Poland.",
+    desc: "Monument restoration, public buildings, civic infrastructure — partnering with municipal authorities.",
     image: "/services/government.jpg",
+    status: "CONTRACTED",
   },
   {
     num: "03",
     title: "Bridge & Infrastructure",
-    desc: "Cleaning and inspection of girders, decks, and supports without traffic disruption or costly road closures.",
+    desc: "Girders, decks, and supports cleaned without traffic disruption or road closures.",
     image: "/services/bridge.jpg",
+    status: "ACTIVE",
   },
   {
     num: "04",
     title: "Oil & Gas Platforms",
-    desc: "Offshore rigs, flare stacks, and storage tanks — preserving protective coatings in extreme environments without human risk.",
+    desc: "Offshore rigs, flare stacks, storage tanks — preserving coatings in extreme environments.",
     image: "/services/oil-platform.jpg",
+    status: "DEPLOYED",
   },
   {
     num: "05",
     title: "Wind Turbine Cleaning",
-    desc: "Blade cleaning and inspection at height — maximizing energy output and extending turbine lifespan by up to 30%.",
+    desc: "Blade cleaning at height — maximizing energy output, extending lifespan by 30%.",
     image: "/services/wind-turbine.jpg",
+    status: "ACTIVE",
   },
   {
     num: "06",
     title: "Ship & Vessel Cleaning",
-    desc: "Hull and superstructure maintenance above the waterline — in port or at sea, zero dock time wasted.",
+    desc: "Hull and superstructure maintenance above the waterline — zero dock time wasted.",
     image: "/services/ship.jpg",
+    status: "AVAILABLE",
   },
   {
     num: "07",
     title: "Industrial Inspection",
-    desc: "Visual and thermal inspection of structures, pipelines, and equipment — detecting issues before they become failures.",
-    image: "/services/industrial.jpg",
+    desc: "Visual and thermal inspection — detecting failures before they happen.",
+    image: "/services/drone-inspection.jpg",
+    status: "ACTIVE",
   },
 ];
 
 export default function ServiceCards() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
       {services.map((service, i) => (
         <motion.div
           key={service.num}
           initial={{ opacity: 0, y: 40, scale: 0.95 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.8, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-          whileHover={{ y: -8, transition: { duration: 0.3, ease: "easeOut" } }}
-          className="group relative rounded-2xl border border-white/[0.06] bg-[#0c0c0e] hover:border-cyan-500/20 transition-all duration-500 overflow-hidden"
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{ duration: 0.7, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+          whileHover={{ y: -6, transition: { duration: 0.3 } }}
+          className="group relative rounded-xl border border-white/[0.06] bg-[#0a0a0c] hover:border-cyan-500/30 transition-all duration-500 overflow-hidden"
         >
-          {/* Image with Ken Burns motion effect */}
-          <div className="relative h-52 md:h-56 overflow-hidden">
+          {/* Drone camera feed style image */}
+          <div className="relative h-48 md:h-52 overflow-hidden">
             <div
-              className="absolute inset-0 bg-cover bg-center transition-transform duration-[8000ms] ease-linear group-hover:scale-125"
+              className="absolute inset-0 bg-cover bg-center transition-transform duration-[6000ms] ease-linear group-hover:scale-110"
               style={{ backgroundImage: `url(${service.image})` }}
             />
-            {/* Cinematic overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c0e] via-[#0c0c0e]/50 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+            {/* Film grain overlay */}
+            <div className="absolute inset-0 opacity-[0.04] mix-blend-overlay" style={{
+              backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'0.5\'/%3E%3C/svg%3E")',
+            }} />
+            {/* Gradient overlays */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-[#0a0a0c]/30 to-cyan-900/5" />
             
-            {/* Service number badge */}
-            <div className="absolute top-4 right-4 z-10">
-              <span className="text-[10px] text-cyan-400/60 font-mono bg-black/50 backdrop-blur-sm px-2.5 py-1 rounded-full border border-cyan-500/10">
-                {service.num}
+            {/* HUD corners */}
+            <div className="absolute top-3 left-3 w-4 h-4 border-t border-l border-cyan-400/30" />
+            <div className="absolute top-3 right-3 w-4 h-4 border-t border-r border-cyan-400/30" />
+            <div className="absolute bottom-3 left-3 w-4 h-4 border-b border-l border-cyan-400/30" />
+            <div className="absolute bottom-3 right-3 w-4 h-4 border-b border-r border-cyan-400/30" />
+
+            {/* Status badge */}
+            <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
+              <span className="text-[8px] md:text-[9px] text-green-400/80 font-mono uppercase tracking-wider">
+                {service.status}
               </span>
             </div>
 
-            {/* Scan line animation on hover */}
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none overflow-hidden">
+            {/* Service number */}
+            <div className="absolute bottom-3 left-3 z-10">
+              <span className="text-[9px] text-cyan-400/50 font-mono">
+                SECTOR {service.num}
+              </span>
+            </div>
+
+            {/* Scan line on hover */}
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
               <motion.div
-                className="absolute left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent"
+                className="absolute left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent"
                 animate={{ top: ["0%", "100%"] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
               />
             </div>
           </div>
 
           {/* Content */}
-          <div className="relative p-5 md:p-6">
-            <h3 className="text-base md:text-lg font-semibold mb-2 text-white/90 group-hover:text-cyan-50 transition-colors duration-300">
+          <div className="relative p-4 md:p-5">
+            <h3 className="text-sm md:text-base font-semibold mb-1.5 text-white/90 group-hover:text-cyan-50 transition-colors duration-300 font-[family-name:var(--font-space)]">
               {service.title}
             </h3>
-            <p className="text-[13px] text-white/55 leading-relaxed group-hover:text-white/70 transition-colors duration-500">
+            <p className="text-[12px] md:text-[13px] text-white/50 leading-relaxed group-hover:text-white/65 transition-colors duration-500">
               {service.desc}
             </p>
           </div>
 
-          {/* Bottom glow on hover */}
-          <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          {/* Bottom glow line */}
+          <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         </motion.div>
       ))}
     </div>
