@@ -128,17 +128,17 @@ export default function PageLoader() {
             </AnimatePresence>
           </div>
 
-          {/* Corner accents — appear immediately for cinematic framing */}
-          <motion.div className="absolute top-6 left-6 w-16 h-16 border-l-2 border-t-2 border-white/[0.08] z-20"
+          {/* Corner accents — appear immediately for cinematic framing (hidden on mobile) */}
+          <motion.div className="hidden md:block absolute top-6 left-6 w-16 h-16 border-l-2 border-t-2 border-white/[0.08] z-20"
             initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5, duration: 1.2, ease: [0.16, 1, 0.3, 1] }} />
-          <motion.div className="absolute top-6 right-6 w-16 h-16 border-r-2 border-t-2 border-white/[0.08] z-20"
+          <motion.div className="hidden md:block absolute top-6 right-6 w-16 h-16 border-r-2 border-t-2 border-white/[0.08] z-20"
             initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.7, duration: 1.2, ease: [0.16, 1, 0.3, 1] }} />
-          <motion.div className="absolute bottom-6 left-6 w-16 h-16 border-l-2 border-b-2 border-white/[0.08] z-20"
+          <motion.div className="hidden md:block absolute bottom-6 left-6 w-16 h-16 border-l-2 border-b-2 border-white/[0.08] z-20"
             initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.9, duration: 1.2, ease: [0.16, 1, 0.3, 1] }} />
-          <motion.div className="absolute bottom-6 right-6 w-16 h-16 border-r-2 border-b-2 border-white/[0.08] z-20"
+          <motion.div className="hidden md:block absolute bottom-6 right-6 w-16 h-16 border-r-2 border-b-2 border-white/[0.08] z-20"
             initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1.1, duration: 1.2, ease: [0.16, 1, 0.3, 1] }} />
         </motion.div>
