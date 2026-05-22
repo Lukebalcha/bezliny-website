@@ -80,8 +80,8 @@ export default function HomeContent() {
       <section className="py-16 md:py-24 relative">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4">
-            <Counter end={15} suffix="+" label={t.stats.countries} />
-            <Counter end={500} suffix="+" label={t.stats.projects} />
+            <Counter end={9} suffix="+" label={t.stats.countries} />
+            <Counter end={50} suffix="+" label={t.stats.projects} />
             <Counter end={99} suffix="%" label={t.stats.safety} />
             <Counter end={60} suffix="%" label={t.stats.cost} />
           </div>

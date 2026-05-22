@@ -57,11 +57,11 @@ export default function HorizontalScroll({ items }: { items: HorizontalItem[] })
   return (
     <div ref={containerRef} className="relative" style={{ height: `${items.length * 50}vh` }}>
       <div className="sticky top-0 h-screen flex items-center overflow-hidden">
-        <div className="absolute top-1/2 -translate-y-1/2 left-[10vw] z-10">
+        <div className="absolute top-[12vh] left-[10vw] z-10">
           <span className="text-[11px] uppercase tracking-[0.3em] text-white/20">Process</span>
           <h2 className="mt-2 text-2xl font-bold font-[family-name:var(--font-space)] text-white/90">How We Deliver</h2>
         </div>
-        <motion.div style={{ x }} className="flex gap-6 pl-[10vw] pt-20">
+        <motion.div style={{ x }} className="flex gap-6 pl-[10vw] mt-[18vh]">
           {items.map((item) => (
             <div
               key={item.num}

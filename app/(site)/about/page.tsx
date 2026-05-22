@@ -44,8 +44,8 @@ export default function AboutPage() {
                   hazardous environment.
                 </p>
                 <p className="mt-4 text-white/80 leading-[1.8]">
-                  Today, we operate across 15+ countries, serving clients in property management, 
-                  oil and gas, energy, maritime, and infrastructure sectors. Our patented cleaning 
+                  Today, we operate across multiple markets, serving clients in property management, 
+                  oil and gas, energy, maritime, and infrastructure sectors. Our cleaning 
                   technology uses only filtered water — zero chemicals, zero surface damage.
                 </p>
               </div>
@@ -57,8 +57,8 @@ export default function AboutPage() {
                   { year: "2021", event: "First commercial facade cleaning operation" },
                   { year: "2022", event: "Expanded to Scandinavian markets" },
                   { year: "2023", event: "Oil & Gas sector entry — North Sea operations" },
-                  { year: "2024", event: "15+ countries, 500+ projects completed" },
-                  { year: "2025", event: "Next-gen autonomous platform launch" },
+                  { year: "2024", event: "Expanding into energy and maritime sectors" },
+                  { year: "2025", event: "Next-gen autonomous platform development" },
                 ].map((item) => (
                   <div key={item.year} className="flex items-start gap-4 p-5 rounded-xl border border-white/[0.04] bg-white/[0.01]">
                     <span className="text-[#c8cdd3] font-bold font-[family-name:var(--font-space)] shrink-0">{item.year}</span>

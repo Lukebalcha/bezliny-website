@@ -16,8 +16,8 @@
   },
   "trust": { "label": "Trusted & Certified" },
   "stats": {
-    "countries": "Countries",
-    "projects": "Projects Delivered",
+    "countries": "Markets Targeted",
+    "projects": "Service Sectors",
     "safety": "Safety Record",
     "cost": "Cost Reduction"
   },

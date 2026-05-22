@@ -16,8 +16,8 @@
   },
   "trust": { "label": "Zaufane i certyfikowane" },
   "stats": {
-    "countries": "Krajów",
-    "projects": "Zrealizowanych projektów",
+    "countries": "Rynki docelowe",
+    "projects": "Sektory usługowe",
     "safety": "Bezpieczeństwo",
     "cost": "Redukcja kosztów"
   },
