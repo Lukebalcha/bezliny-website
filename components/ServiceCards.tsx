@@ -70,7 +70,7 @@ export default function ServiceCards() {
           {/* Service image */}
           <div className="relative h-48 md:h-52 overflow-hidden">
             <div
-              className="absolute inset-0 bg-cover bg-center transition-transform duration-[6000ms] ease-linear group-hover:scale-110"
+              className="absolute inset-0 bg-cover bg-center transition-transform duration-[6000ms] ease-linear group-hover:scale-110 [image-rendering:auto]"
               style={{ backgroundImage: `url(${service.image})` }}
             />
             {/* Gradient overlays */}
