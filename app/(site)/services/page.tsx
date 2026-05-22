@@ -1,6 +1,7 @@
 "use client";
 
 import ServiceCards from "@/components/ServiceCards";
+import DroneServicesReveal from "@/components/DroneServicesReveal";
 import { DroneTransition, BurstTransition } from "@/components/ScrollTransitions";
 import { FormingSection, FormingElement } from "@/components/CinematicReveal";
 import { useLang } from "@/lib/LangContext";
@@ -21,6 +22,7 @@ export default function ServicesPage() {
         </div>
       </FormingSection>
 
+      <DroneServicesReveal />
       <DroneTransition direction="left" />
 
       <FormingSection className="pb-36 relative z-[1]">
