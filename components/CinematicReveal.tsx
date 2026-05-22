@@ -50,15 +50,13 @@ export function FormingSection({ children, className = "" }: { children: ReactNo
     offset: ["start end", "center center"],
   });
 
-  const blur = useTransform(scrollYProgress, [0, 0.6, 1], [8, 2, 0]);
-  const opacity = useTransform(scrollYProgress, [0, 0.4, 1], [0, 0.5, 1]);
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.92, 0.97, 1]);
-  const y = useTransform(scrollYProgress, [0, 1], [60, 0]);
+  const opacity = useTransform(scrollYProgress, [0, 0.3, 1], [0, 0.8, 1]);
+  const y = useTransform(scrollYProgress, [0, 1], [30, 0]);
 
   return (
     <motion.div
       ref={ref}
-      style={{ opacity, scale, y, filter: useTransform(blur, (v) => `blur(${v}px)`) }}
+      style={{ opacity, y }}
       className={className}
     >
       {children}
@@ -98,15 +96,13 @@ export function FormingElement({
         x: dir.x, 
         y: dir.y, 
         rotate: dir.rotate,
-        filter: "blur(6px)",
-        scale: 0.9
+        scale: 0.95
       }}
       animate={isInView ? { 
         opacity: 1, 
         x: 0, 
         y: 0, 
         rotate: 0,
-        filter: "blur(0px)",
         scale: 1
       } : {}}
       transition={{ 

@@ -60,25 +60,21 @@ export default function ServiceCards() {
       {services.map((service, i) => (
         <motion.div
           key={service.num}
-          initial={{ opacity: 0, y: 40, scale: 0.95 }}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          viewport={{ once: true, amount: 0.15 }}
-          transition={{ duration: 0.7, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{ duration: 0.5, delay: i * 0.06, ease: [0.16, 1, 0.3, 1] }}
           whileHover={{ y: -6, transition: { duration: 0.3 } }}
           className="group relative rounded-xl border border-white/[0.06] bg-[#0a0a0c] hover:border-cyan-500/30 transition-all duration-500 overflow-hidden"
         >
-          {/* Drone camera feed style image */}
+          {/* Service image */}
           <div className="relative h-48 md:h-52 overflow-hidden">
             <div
               className="absolute inset-0 bg-cover bg-center transition-transform duration-[6000ms] ease-linear group-hover:scale-110"
               style={{ backgroundImage: `url(${service.image})` }}
             />
-            {/* Film grain overlay */}
-            <div className="absolute inset-0 opacity-[0.04] mix-blend-overlay" style={{
-              backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'0.5\'/%3E%3C/svg%3E")',
-            }} />
             {/* Gradient overlays */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-[#0a0a0c]/30 to-cyan-900/5" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-[#0a0a0c]/30 to-transparent" />
             
             {/* HUD corners */}
             <div className="absolute top-3 left-3 w-4 h-4 border-t border-l border-cyan-400/30" />

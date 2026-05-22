@@ -11,14 +11,14 @@ const certifications = ["PANSA Registered", "ULC Certified", "CE Certified", "EA
 export default function PageLoader() {
   const [loading, setLoading] = useState(true);
   const [phase, setPhase] = useState(0);
-  // Phase 0: Pure 3D drone (5 seconds — dramatic, cinematic)
-  // Phase 1: Brand + certs fade in over the drone
-  // Phase 2: Everything shrinks and zooms into the page
+  // Phase 0: Pure 3D drone (2 seconds — fast, impactful)
+  // Phase 1: Brand + text fade in (slow, readable — 2 seconds)
+  // Phase 2: Certs appear (hold for reading — 2.5 seconds)
 
   useEffect(() => {
-    const t1 = setTimeout(() => setPhase(1), 4000);  // After 4s show brand
-    const t2 = setTimeout(() => setPhase(2), 5500);  // Certs appear
-    const t3 = setTimeout(() => setLoading(false), 7000); // Shrink away
+    const t1 = setTimeout(() => setPhase(1), 2000);  // After 2s show brand (faster drone)
+    const t2 = setTimeout(() => setPhase(2), 4000);  // Certs appear (slow, readable)
+    const t3 = setTimeout(() => setLoading(false), 6500); // Give time to read, then exit
 
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, []);
