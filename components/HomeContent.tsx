@@ -87,14 +87,11 @@ export default function HomeContent() {
       {/* Client Logos */}
       <ClientLogos />
 
-      {/* Live Operations */}
-      <LiveOpsCounter />
-
       {/* Stats */}
       <section className="py-16 md:py-24 relative">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4">
-            <Counter end={9} suffix="+" label={t.stats.countries} />
+            <Counter end={90} suffix="+" label={t.stats.countries} />
             <Counter end={50} suffix="+" label={t.stats.projects} />
             <Counter end={99} suffix="%" label={t.stats.safety} />
             <Counter end={60} suffix="%" label={t.stats.cost} />
@@ -261,6 +258,9 @@ export default function HomeContent() {
 
       {/* Press */}
       <PressSection />
+
+      {/* Operational Capability */}
+      <LiveOpsCounter />
 
       {/* Enterprise CTA */}
       <section className="py-20 md:py-40 relative overflow-hidden">

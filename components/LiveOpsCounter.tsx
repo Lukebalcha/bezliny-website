@@ -28,18 +28,18 @@ export default function LiveOpsCounter() {
   }, []);
 
   const ops = locale === "pl" ? [
-    { value: 4, label: "Drony we flocie", suffix: "" },
-    { value: 12, label: "Klientów obsłużonych", suffix: "+" },
-    { value: 24, label: "Czas odpowiedzi", suffix: "h" },
+    { value: 150, label: "Metrów zasięgu", suffix: "m" },
+    { value: 24, label: "Czas reakcji", suffix: "h" },
     { value: 100, label: "Bez chemii", suffix: "%" },
+    { value: 365, label: "Dni operacyjnych rocznie", suffix: "" },
   ] : [
-    { value: 4, label: "Drones in Fleet", suffix: "" },
-    { value: 12, label: "Clients Served", suffix: "+" },
+    { value: 150, label: "Operational Altitude", suffix: "m" },
     { value: 24, label: "Hour Response Time", suffix: "h" },
     { value: 100, label: "Chemical-Free", suffix: "%" },
+    { value: 365, label: "Days Operational/Year", suffix: "" },
   ];
 
-  const statusLabel = locale === "pl" ? "Status operacyjny" : "Live Operations";
+  const statusLabel = locale === "pl" ? "Zdolność operacyjna" : "Operational Capability";
 
   return (
     <section className="py-12 md:py-16 relative border-t border-b border-white/[0.03]">
