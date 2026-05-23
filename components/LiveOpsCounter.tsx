@@ -29,12 +29,12 @@ export default function LiveOpsCounter() {
 
   const ops = locale === "pl" ? [
     { value: 4, label: "Drony we flocie", suffix: "" },
-    { value: 9, label: "Sektory usługowe", suffix: "" },
+    { value: 12, label: "Klientów obsłużonych", suffix: "+" },
     { value: 24, label: "Czas odpowiedzi", suffix: "h" },
     { value: 100, label: "Bez chemii", suffix: "%" },
   ] : [
     { value: 4, label: "Drones in Fleet", suffix: "" },
-    { value: 9, label: "Service Sectors", suffix: "" },
+    { value: 12, label: "Clients Served", suffix: "+" },
     { value: 24, label: "Hour Response Time", suffix: "h" },
     { value: 100, label: "Chemical-Free", suffix: "%" },
   ];
