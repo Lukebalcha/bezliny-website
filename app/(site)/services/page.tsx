@@ -23,7 +23,7 @@ export default function ServicesPage() {
       </FormingSection>
 
       <DroneServicesReveal />
-      <DroneTransition direction="left" />
+      <DroneTransition />
 
       <FormingSection className="pb-36 relative z-[1]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">

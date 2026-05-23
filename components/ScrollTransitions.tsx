@@ -260,8 +260,8 @@ export function PerformanceTransition() {
 
           {/* Title */}
           <motion.g style={{ opacity: useTransform(scrollYProgress, [0.3, 0.5, 0.8, 0.9], [0, 0.7, 0.7, 0]) }}>
-            <text x="400" y="35" textAnchor="middle" fill="white" fillOpacity="0.4" fontSize="9" letterSpacing="5">PERFORMANCE METRICS</text>
-            <text x="400" y="380" textAnchor="middle" fill="white" fillOpacity="0.25" fontSize="8" letterSpacing="3">REAL-TIME MONITORING ACTIVE</text>
+            <text x="400" y="35" textAnchor="middle" fill="white" fillOpacity="0.4" fontSize="9" letterSpacing="5">WHY INDUSTRY LEADERS CHOOSE US</text>
+            <text x="400" y="380" textAnchor="middle" fill="white" fillOpacity="0.25" fontSize="8" letterSpacing="3">VERIFIED OPERATIONAL DATA</text>
           </motion.g>
         </svg>
       </motion.div>
