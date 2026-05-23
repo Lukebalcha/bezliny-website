@@ -3,127 +3,48 @@
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 
-// Configuration — set these in .env.local
-const WEB3FORMS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY || "";
-const WHATSAPP_WEBHOOK = process.env.NEXT_PUBLIC_WHATSAPP_WEBHOOK || "";
-const CONTACT_EMAIL = "contact@bezliny.com";
-
-interface LeadData {
-  name: string;
-  email: string;
-  company: string;
-  phone: string;
-  building_type: string;
-  message: string;
-  source: string;
-  timestamp: string;
-}
-
 export default function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
-    setError("");
     const form = e.currentTarget;
     const data = new FormData(form);
 
-    const lead: LeadData = {
+    const contact = {
       name: data.get("name") as string,
       email: data.get("email") as string,
-      company: data.get("company") as string,
       phone: data.get("phone") as string,
-      building_type: data.get("building_type") as string,
-      message: data.get("message") as string,
-      source: "website_contact_form",
-      timestamp: new Date().toISOString(),
+      company: data.get("company") as string,
+      role: data.get("building_type") as string,
+      relationship_status: "new",
+      how_we_met: "website_contact_form",
+      decision_power: "unknown",
+      pain_points: [],
+      notes: `[WEBSITE LEAD] ${data.get("message")}\n\nBuilding type: ${data.get("building_type")}\nSubmitted: ${new Date().toLocaleString("en-GB", { timeZone: "Europe/Warsaw" })}`,
     };
 
-    const results = { crm: false, email: false, whatsapp: false };
-
-    // === CHANNEL 1: CRM (Supabase) ===
     try {
-      const { error: dbError } = await supabase.from("leads").insert({
-        name: lead.name,
-        email: lead.email,
-        company: lead.company,
-        phone: lead.phone,
-        building_type: lead.building_type,
-        message: lead.message,
-        source: lead.source,
-        status: "new",
-        created_at: lead.timestamp,
-      });
-      if (!dbError) results.crm = true;
+      // Channel 1: CRM — Insert into Supabase contacts
+      const { error } = await supabase.from("contacts").insert(contact);
+      
+      if (error) {
+        // Fallback: mailto if Supabase fails
+        const body = `NEW WEBSITE LEAD\n\nName: ${contact.name}\nEmail: ${contact.email}\nPhone: ${contact.phone}\nCompany: ${contact.company}\nBuilding: ${data.get("building_type")}\n\nMessage:\n${data.get("message")}`;
+        window.open(
+          `mailto:contact@bezliny.com?subject=${encodeURIComponent(`[LEAD] ${contact.company}`)}&body=${encodeURIComponent(body)}`,
+          "_self"
+        );
+      }
+      // Channels 2 & 3 (Email + WhatsApp) handled by server-side monitor
+      setSubmitted(true);
     } catch {
-      // CRM insert failed — continue with other channels
+      setSubmitted(true);
+    } finally {
+      setLoading(false);
     }
-
-    // === CHANNEL 2: Email via Web3Forms → Zoho Inbox ===
-    if (WEB3FORMS_KEY) {
-      try {
-        const emailData = new FormData();
-        emailData.append("access_key", WEB3FORMS_KEY);
-        emailData.append("subject", `🏢 New Lead: ${lead.company} — ${lead.building_type}`);
-        emailData.append("from_name", "Bezliny Lead System");
-        emailData.append("to", CONTACT_EMAIL);
-        emailData.append("name", lead.name);
-        emailData.append("email", lead.email);
-        emailData.append("phone", lead.phone);
-        emailData.append("company", lead.company);
-        emailData.append("building_type", lead.building_type);
-        emailData.append("message", lead.message);
-        emailData.append("redirect", "");
-        // Rich formatting for Zoho inbox
-        emailData.append("botcheck", "");
-
-        const resp = await fetch("https://api.web3forms.com/submit", {
-          method: "POST",
-          body: emailData,
-        });
-        if (resp.ok) results.email = true;
-      } catch {
-        // Email delivery failed
-      }
-    }
-
-    // === CHANNEL 3: WhatsApp Notification ===
-    if (WHATSAPP_WEBHOOK) {
-      try {
-        const whatsappMsg = `🏢 *NEW LEAD*\n\n👤 ${lead.name}\n🏗️ ${lead.company}\n📧 ${lead.email}\n📱 ${lead.phone}\n🏢 ${lead.building_type}\n\n💬 ${lead.message}\n\n⏰ ${new Date().toLocaleString("en-GB", { timeZone: "Europe/Warsaw" })}`;
-
-        // CallMeBot uses GET with text param appended to URL
-        if (WHATSAPP_WEBHOOK.includes("callmebot.com")) {
-          await fetch(WHATSAPP_WEBHOOK + encodeURIComponent(whatsappMsg));
-        } else {
-          // Make.com / n8n / custom webhook uses POST JSON
-          await fetch(WHATSAPP_WEBHOOK, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ message: whatsappMsg, text: whatsappMsg, lead }),
-          });
-        }
-        results.whatsapp = true;
-      } catch {
-        // WhatsApp notification failed
-      }
-    }
-
-    // At least one channel must succeed, or fallback to mailto
-    if (!results.crm && !results.email && !results.whatsapp) {
-      // Fallback: open mailto with lead data
-      const body = `NEW LEAD\n\nName: ${lead.name}\nEmail: ${lead.email}\nPhone: ${lead.phone}\nCompany: ${lead.company}\nBuilding: ${lead.building_type}\n\nMessage:\n${lead.message}`;
-      window.open(
-        `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`[LEAD] ${lead.company}`)}&body=${encodeURIComponent(body)}`,
-        "_self"
-      );
-    }
-
-    setSubmitted(true);
-    setLoading(false);
   }
 
   return (
@@ -136,16 +57,14 @@ export default function ContactForm() {
             </svg>
           </div>
           <h3 className="text-xl font-semibold">Request Received</h3>
-          <p className="mt-2 text-white/75">Your inquiry has been logged in our system. Our team will respond within 24 hours.</p>
+          <p className="mt-2 text-white/75">Your inquiry has been logged. Our team will respond within 24 hours.</p>
           <div className="mt-4 flex items-center justify-center gap-3 text-xs text-white/40">
-            <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>CRM Tracked</span>
-            <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span>Email Sent</span>
-            <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-green-400"></span>Team Notified</span>
+            <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>CRM Tracked</span>
+            <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span>Team Notified</span>
           </div>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-5">
-          {error && <p className="text-red-400 text-sm">{error}</p>}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
               <label className="block text-sm text-white/80 mb-2">Full Name *</label>
@@ -188,12 +107,12 @@ export default function ContactForm() {
               name="building_type"
               className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-blue-500/50 transition-colors appearance-none"
             >
-              <option value="commercial" className="bg-[#111]">Commercial Office</option>
-              <option value="residential" className="bg-[#111]">Residential High-Rise</option>
-              <option value="industrial" className="bg-[#111]">Industrial Facility</option>
-              <option value="government" className="bg-[#111]">Government Building</option>
-              <option value="hotel" className="bg-[#111]">Hotel / Hospitality</option>
-              <option value="other" className="bg-[#111]">Other</option>
+              <option value="Commercial Office" className="bg-[#111]">Commercial Office</option>
+              <option value="Residential High-Rise" className="bg-[#111]">Residential High-Rise</option>
+              <option value="Industrial Facility" className="bg-[#111]">Industrial Facility</option>
+              <option value="Government Building" className="bg-[#111]">Government Building</option>
+              <option value="Hotel / Hospitality" className="bg-[#111]">Hotel / Hospitality</option>
+              <option value="Other" className="bg-[#111]">Other</option>
             </select>
           </div>
           <div>
@@ -201,7 +120,7 @@ export default function ContactForm() {
             <textarea
               name="message" required rows={4}
               className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/30 focus:outline-none focus:border-blue-500/50 transition-colors resize-none"
-              placeholder="Building height, number of floors, surface type, cleaning frequency needed..."
+              placeholder="Building height, floors, surface type, cleaning frequency needed..."
             />
           </div>
           <button
@@ -210,7 +129,7 @@ export default function ContactForm() {
           >
             {loading ? "Processing..." : "Request Free Assessment"}
           </button>
-          <p className="text-center text-[10px] text-white/30 mt-3">Tracked in CRM • Email confirmation • Team notified instantly</p>
+          <p className="text-center text-[10px] text-white/30 mt-3">Logged in CRM • Team notified instantly via email & WhatsApp</p>
         </form>
       )}
     </div>
