@@ -13,6 +13,15 @@ import { DroneTransition, BurstTransition } from "@/components/ScrollTransitions
 import { FormingSection, FormingElement } from "@/components/CinematicReveal";
 import { FadeUp, ScaleIn, SlideIn } from "@/components/Animations";
 import DroneServicesReveal from "@/components/DroneServicesReveal";
+import ClientLogos from "@/components/ClientLogos";
+import LiveOpsCounter from "@/components/LiveOpsCounter";
+import GlobalMap from "@/components/GlobalMap";
+import CaseStudies from "@/components/CaseStudies";
+import Certifications from "@/components/Certifications";
+import TechStack from "@/components/TechStack";
+import Partners from "@/components/Partners";
+import Testimonials from "@/components/Testimonials";
+import PressSection from "@/components/PressSection";
 
 export default function HomeContent() {
   const { t } = useLang();
@@ -75,6 +84,12 @@ export default function HomeContent() {
           </div>
         </div>
       </section>
+
+      {/* Client Logos */}
+      <ClientLogos />
+
+      {/* Live Operations */}
+      <LiveOpsCounter />
 
       {/* Stats */}
       <section className="py-16 md:py-24 relative">
@@ -230,35 +245,28 @@ export default function HomeContent() {
         </div>
       </section>
 
-      {/* Global Presence */}
-      <BurstTransition />
-      <FormingSection className="py-20 md:py-40 relative">
-        <div className="absolute inset-0 border-t border-white/[0.04]" />
-        <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8 text-center relative">
-          <FormingElement from="bottom">
-            <span className="text-[11px] uppercase tracking-[0.3em] text-white/70">{t.global.label}</span>
-            <h2 className="mt-3 md:mt-4 text-3xl md:text-5xl font-bold font-[family-name:var(--font-space)]">{t.global.title}</h2>
-            <p className="mt-4 md:mt-5 text-white/85 max-w-2xl mx-auto text-sm md:text-base">{t.global.subtitle}</p>
-          </FormingElement>
-          <div className="mt-12 md:mt-20 grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3">
-            {[
-              { region: t.global.europe, detail: t.global.europeDetail },
-              { region: t.global.scandinavia, detail: t.global.scandinaviaDetail },
-              { region: t.global.middleeast, detail: t.global.middleeastDetail },
-              { region: t.global.asia, detail: t.global.asiaDetail },
-            ].map((loc, i) => (
-              <FormingElement key={loc.region} from={i < 2 ? "left" : "right"} delay={i * 0.1}>
-                <div className="p-5 md:p-8 rounded-xl md:rounded-2xl border border-white/[0.04] hover:border-white/[0.1] transition-all duration-700 group">
-                  <div className="text-sm md:text-lg font-semibold text-white/75 group-hover:text-white transition-colors duration-500">{loc.region}</div>
-                  <div className="text-[11px] md:text-sm text-white/70 mt-1 md:mt-2">{loc.detail}</div>
-                </div>
-              </FormingElement>
-            ))}
-          </div>
-        </div>
-      </FormingSection>
+      {/* Global Map */}
+      <GlobalMap />
 
-      {/* CTA */}
+      {/* Case Studies */}
+      <CaseStudies />
+
+      {/* Technology Stack */}
+      <TechStack />
+
+      {/* Testimonials */}
+      <Testimonials />
+
+      {/* Certifications */}
+      <Certifications />
+
+      {/* Partners */}
+      <Partners />
+
+      {/* Press */}
+      <PressSection />
+
+      {/* Enterprise CTA */}
       <section className="py-20 md:py-40 relative overflow-hidden">
         <MeshGradient />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#c8cdd3]/[0.015] to-transparent" />
@@ -274,11 +282,15 @@ export default function HomeContent() {
             className="mt-5 md:mt-8 text-white/85 text-sm md:text-lg max-w-xl mx-auto"
           />
           <FadeUp delay={0.7}>
-            <div className="mt-10 md:mt-14">
+            <div className="mt-10 md:mt-14 flex flex-col sm:flex-row gap-4 justify-center">
               <MagneticButton href="/contact" variant="primary">
-                {t.cta.button}
+                Request Assessment
+              </MagneticButton>
+              <MagneticButton href="/services" variant="secondary">
+                Schedule Demo
               </MagneticButton>
             </div>
+            <p className="mt-6 text-[10px] text-white/30 uppercase tracking-wider">Enterprise inquiries • 24h response guaranteed</p>
           </FadeUp>
         </div>
       </section>
