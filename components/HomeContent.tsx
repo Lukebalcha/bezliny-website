@@ -291,190 +291,245 @@ export default function HomeContent() {
         </div>
       </section>
 
-      {/* Alaa */}
-      <section className="py-20 relative overflow-hidden bg-[#030308]">
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <svg className="w-full max-w-5xl h-96" viewBox="0 0 1000 400" preserveAspectRatio="xMidYMid meet">
-            {/* Flower 1 — left, blooming rose */}
-            <g transform="translate(100, 320)">
-              <path d="M0 0 Q-3 -20 0 -50" fill="none" stroke="#2d5a27" strokeWidth="2" />
-              <path d="M-2 -30 Q-15 -35 -20 -28" fill="none" stroke="#2d5a27" strokeWidth="1.5" />
-              <ellipse cx="-20" cy="-28" rx="8" ry="5" fill="#3a7a33" />
-              {[0, 60, 120, 180, 240, 300].map((angle, i) => (
-                <ellipse key={`f1-${i}`} cx="0" cy="-62" rx="7" ry="16" fill="#e63946" fillOpacity={0.85}
-                  transform={`rotate(${angle} 0 -50)`}>
-                  <animateTransform attributeName="transform" type="rotate"
-                    values={`${angle} 0 -50;${angle + 5} 0 -50;${angle} 0 -50`} dur="4s" repeatCount="indefinite" />
-                </ellipse>
-              ))}
-              <circle cx="0" cy="-50" r="5" fill="#ffd700" />
-            </g>
+      {/* Alaa — Cinematic Horse Riding Animation (auto-play loop) */}
+      <section className="py-10 relative overflow-hidden bg-[#030308] h-[50vh] md:h-[60vh]">
+        <svg className="w-full h-full" viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <linearGradient id="sunsetSky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#1a0a2e" />
+              <stop offset="40%" stopColor="#2d1b4e" />
+              <stop offset="70%" stopColor="#4a2040" />
+              <stop offset="100%" stopColor="#1a3020" />
+            </linearGradient>
+            <linearGradient id="horseBrown" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#8B4513" />
+              <stop offset="50%" stopColor="#6B3410" />
+              <stop offset="100%" stopColor="#5C2E0A" />
+            </linearGradient>
+            <radialGradient id="sunGlow" cx="80%" cy="30%" r="30%">
+              <stop offset="0%" stopColor="#ff8c00" stopOpacity="0.3" />
+              <stop offset="100%" stopColor="#ff8c00" stopOpacity="0" />
+            </radialGradient>
+            <linearGradient id="groundGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#2a4a20" />
+              <stop offset="100%" stopColor="#1a3015" />
+            </linearGradient>
+          </defs>
 
-            {/* === GIRL ON HORSE — realistic proportions, 5'3" rider === */}
-            <g transform="translate(500, 80)">
-              {/* === HORSE — detailed anatomy, muscular === */}
-              {/* Horse body — barrel chest, powerful */}
-              <ellipse cx="0" cy="180" rx="90" ry="55" fill="#8B4513" stroke="#5C2E0A" strokeWidth="0.8" />
-              {/* Hindquarters — muscular curve */}
-              <ellipse cx="-70" cy="175" rx="50" ry="50" fill="#7A3B10" stroke="#5C2E0A" strokeWidth="0.5" />
-              {/* Shoulder */}
-              <ellipse cx="65" cy="170" rx="40" ry="45" fill="#8B4513" stroke="#5C2E0A" strokeWidth="0.5" />
-              {/* Neck — arched, powerful */}
-              <path d="M85 145 Q100 100 95 60 Q90 40 75 30" fill="#7A3B10" stroke="#5C2E0A" strokeWidth="1" />
-              <path d="M65 155 Q75 110 72 65 Q68 45 55 35" fill="#8B4513" stroke="#5C2E0A" strokeWidth="0.5" />
-              {/* Head — refined, alert */}
-              <path d="M75 30 Q85 15 80 5 Q75 -5 65 0 Q55 5 55 20 Q58 30 65 35 Z" fill="#7A3B10" stroke="#5C2E0A" strokeWidth="0.8" />
-              {/* Ear */}
-              <path d="M72 -2 Q74 -12 70 -15 Q68 -12 70 -2" fill="#6B3410" stroke="#5C2E0A" strokeWidth="0.5" />
-              <path d="M78 0 Q80 -10 77 -13 Q75 -10 76 0" fill="#6B3410" stroke="#5C2E0A" strokeWidth="0.5" />
-              {/* Eye */}
-              <ellipse cx="72" cy="12" rx="4" ry="3.5" fill="#1a0a00" />
-              <circle cx="73" cy="11" r="1" fill="#fff" fillOpacity="0.4" />
-              {/* Nostril */}
-              <ellipse cx="76" cy="22" rx="3" ry="2.5" fill="#3a1a0a" />
-              {/* Mouth line */}
-              <path d="M65 25 Q70 27 78 25" fill="none" stroke="#3a1a0a" strokeWidth="0.8" />
-              {/* Mane — flowing */}
-              <path d="M80 20 Q90 40 85 60 Q82 80 88 100 Q85 120 82 140" fill="none" stroke="#1a0a00" strokeWidth="3" />
-              <path d="M75 15 Q85 35 80 55 Q78 75 82 95 Q80 115 78 135" fill="none" stroke="#2a1500" strokeWidth="2" />
-              <path d="M70 18 Q78 38 74 58 Q72 78 76 98" fill="none" stroke="#3a2000" strokeWidth="1.5" />
-              
-              {/* Front legs */}
-              {/* Front-right leg */}
-              <path d="M80 210 L82 250 Q83 265 82 280 L80 300" fill="none" stroke="#7A3B10" strokeWidth="10" strokeLinecap="round" />
-              <rect x="75" y="295" width="12" height="8" fill="#1a0a00" rx="3" /> {/* Hoof */}
-              {/* Front-left leg (slightly back) */}
-              <path d="M55 215 L53 255 Q52 268 53 282 L55 302" fill="none" stroke="#6B3410" strokeWidth="9" strokeLinecap="round" />
-              <rect x="50" y="297" width="11" height="8" fill="#1a0a00" rx="3" />
-              {/* Back legs */}
-              {/* Back-right leg */}
-              <path d="M-40 220 L-38 250 Q-35 270 -38 285 L-40 305" fill="none" stroke="#7A3B10" strokeWidth="10" strokeLinecap="round" />
-              <rect x="-45" y="300" width="12" height="8" fill="#1a0a00" rx="3" />
-              {/* Back-left leg */}
-              <path d="M-60 218 L-62 248 Q-63 268 -62 283 L-60 303" fill="none" stroke="#6B3410" strokeWidth="9" strokeLinecap="round" />
-              <rect x="-65" y="298" width="11" height="8" fill="#1a0a00" rx="3" />
-              
-              {/* Tail — flowing */}
-              <path d="M-115 165 Q-135 175 -140 200 Q-138 230 -130 260" fill="none" stroke="#1a0a00" strokeWidth="4" />
-              <path d="M-112 168 Q-130 180 -135 205 Q-133 235 -125 260" fill="none" stroke="#2a1500" strokeWidth="3" />
-              <path d="M-110 170 Q-125 185 -130 210 Q-128 238 -122 258" fill="none" stroke="#3a2000" strokeWidth="2" />
-              
-              {/* Saddle */}
-              <path d="M-20 140 Q0 125 30 130 Q50 135 55 145 Q50 155 30 158 Q0 160 -20 155 Z" fill="#2a1500" stroke="#1a0a00" strokeWidth="1" />
-              <path d="M-15 142 Q0 130 25 133 Q45 137 50 145" fill="none" stroke="#3a2000" strokeWidth="1.5" />
-              {/* Saddle pad */}
-              <path d="M-30 148 Q0 138 40 142 Q60 146 65 155 Q55 165 30 168 Q-5 170 -30 162 Z" fill="#1a3050" stroke="#0f2040" strokeWidth="0.5" />
-              {/* Stirrup */}
-              <path d="M40 155 L42 190 Q42 195 38 195 L35 195 Q32 195 32 190 L34 175" fill="none" stroke="#888" strokeWidth="1.5" />
-              <path d="M-10 158 L-12 192 Q-12 197 -8 197 L-5 197 Q-2 197 -2 192 L-4 178" fill="none" stroke="#888" strokeWidth="1.5" />
-              {/* Bridle & reins */}
-              <path d="M70 18 L72 25 L68 30" fill="none" stroke="#2a1500" strokeWidth="1.5" />
-              <path d="M68 30 Q50 50 35 80 Q25 100 20 120" fill="none" stroke="#2a1500" strokeWidth="1.2" />
-              <path d="M75 20 Q85 30 80 40 Q65 55 50 85 Q40 105 35 125" fill="none" stroke="#2a1500" strokeWidth="1.2" />
+          {/* Sky */}
+          <rect x="0" y="0" width="1200" height="500" fill="url(#sunsetSky)" />
+          <rect x="0" y="0" width="1200" height="500" fill="url(#sunGlow)" />
+          
+          {/* Moon */}
+          <circle cx="950" cy="120" r="40" fill="#ffd700" fillOpacity="0.15" />
+          <circle cx="950" cy="120" r="30" fill="#ffaa00" fillOpacity="0.1" />
+          
+          {/* Stars twinkling */}
+          {[{x:100,y:60},{x:250,y:90},{x:400,y:50},{x:550,y:80},{x:700,y:45},{x:850,y:70},{x:1050,y:55},{x:150,y:130},{x:350,y:110}].map((s, i) => (
+            <circle key={`star-${i}`} cx={s.x} cy={s.y} r="1.5" fill="#fff" fillOpacity="0.6">
+              <animate attributeName="fillOpacity" values="0.6;0.1;0.6" dur={`${2 + i * 0.3}s`} repeatCount="indefinite" />
+            </circle>
+          ))}
 
-              {/* === RIDER — Alaa, 5'3" proportions, realistic === */}
-              <g transform="translate(10, 50)">
-                {/* Legs — in riding position, boots in stirrups */}
-                <path d="M20 95 Q25 110 28 125 Q30 135 32 145" fill="none" stroke="#1a1a2e" strokeWidth="7" strokeLinecap="round" />
-                <path d="M-5 98 Q-8 112 -10 127 Q-12 137 -14 147" fill="none" stroke="#1a1a2e" strokeWidth="7" strokeLinecap="round" />
-                {/* Riding boots */}
-                <rect x="27" y="140" width="10" height="14" fill="#1a0a00" rx="2" />
-                <rect x="-18" y="142" width="10" height="14" fill="#1a0a00" rx="2" />
-                
-                {/* Torso — fitted riding jacket */}
-                <path d="M-5 30 Q-8 50 -5 75 Q0 90 5 95 L25 95 Q30 90 33 75 Q36 50 33 30 Z" fill="#1a1a3a" stroke="#2a2a5a" strokeWidth="0.5" />
-                {/* Jacket collar */}
-                <path d="M5 30 Q14 25 23 30" fill="#2a2a5a" stroke="#1a1a3a" strokeWidth="0.5" />
-                {/* Buttons */}
-                <circle cx="14" cy="45" r="1.5" fill="#888" />
-                <circle cx="14" cy="55" r="1.5" fill="#888" />
-                <circle cx="14" cy="65" r="1.5" fill="#888" />
-                
-                {/* Arms — holding reins */}
-                <path d="M-2 38 Q-10 50 -8 65 Q-6 75 0 80" fill="none" stroke="#1a1a3a" strokeWidth="5" strokeLinecap="round" />
-                <path d="M30 38 Q38 50 36 65 Q34 75 28 80" fill="none" stroke="#1a1a3a" strokeWidth="5" strokeLinecap="round" />
-                {/* Hands — holding reins */}
-                <ellipse cx="0" cy="82" rx="4" ry="3.5" fill="url(#skinTone)" />
-                <ellipse cx="28" cy="82" rx="4" ry="3.5" fill="url(#skinTone)" />
-                
-                {/* Neck */}
-                <path d="M10 22 L10 30 M18 22 L18 30" fill="none" stroke="url(#skinTone)" strokeWidth="4" />
-                
-                {/* Head — feminine, detailed */}
-                <ellipse cx="14" cy="10" rx="12" ry="14" fill="url(#skinTone)" />
-                {/* Eyes — expressive */}
-                <ellipse cx="9" cy="8" rx="2.5" ry="2" fill="#2a1a0a" />
-                <circle cx="9.5" cy="7.5" r="0.8" fill="#fff" fillOpacity="0.5" />
-                <ellipse cx="19" cy="8" rx="2.5" ry="2" fill="#2a1a0a" />
-                <circle cx="19.5" cy="7.5" r="0.8" fill="#fff" fillOpacity="0.5" />
-                {/* Eyelashes */}
-                <path d="M6 6 Q5 5 4 5" fill="none" stroke="#1a0a00" strokeWidth="0.5" />
-                <path d="M22 6 Q23 5 24 5" fill="none" stroke="#1a0a00" strokeWidth="0.5" />
-                {/* Eyebrows — arched */}
-                <path d="M6 3 Q9 1 12 3" fill="none" stroke="#2a1500" strokeWidth="1" />
-                <path d="M16 3 Q19 1 22 3" fill="none" stroke="#2a1500" strokeWidth="1" />
-                {/* Nose */}
-                <path d="M13 10 Q14 13 13 14" fill="none" stroke="#a07050" strokeWidth="0.8" />
-                {/* Smile */}
-                <path d="M9 17 Q14 20 19 17" fill="none" stroke="#8a5040" strokeWidth="1" />
-                {/* Blush */}
-                <circle cx="7" cy="14" r="3" fill="#e89090" fillOpacity="0.2" />
-                <circle cx="21" cy="14" r="3" fill="#e89090" fillOpacity="0.2" />
-                
-                {/* Riding helmet */}
-                <path d="M1 2 Q2 -10 14 -12 Q26 -10 27 2 Q25 4 14 5 Q3 4 1 2 Z" fill="#1a1a2e" stroke="#333" strokeWidth="0.8" />
-                <path d="M0 3 Q14 6 28 3" fill="none" stroke="#444" strokeWidth="1.5" />
-                {/* Helmet velvet cover */}
-                <path d="M5 -8 Q14 -14 23 -8" fill="none" stroke="#2a2a4e" strokeWidth="0.5" />
-                
-                {/* Hair — flowing out from under helmet */}
-                <path d="M2 5 Q-5 15 -8 30 Q-10 45 -6 55" fill="none" stroke="#1a0a00" strokeWidth="2.5" />
-                <path d="M3 6 Q-3 18 -5 32 Q-7 45 -4 52" fill="none" stroke="#2a1500" strokeWidth="2" />
-                <path d="M26 5 Q32 15 34 28 Q35 40 33 48" fill="none" stroke="#1a0a00" strokeWidth="2.5" />
-                <path d="M25 6 Q30 17 31 30 Q32 40 30 46" fill="none" stroke="#2a1500" strokeWidth="2" />
+          {/* Distant hills — scrolling parallax */}
+          <path d="M-200 350 Q0 300 200 340 Q400 300 600 330 Q800 290 1000 320 Q1200 300 1400 340 L1400 500 L-200 500 Z" fill="#0f2010" fillOpacity="0.6">
+            <animateTransform attributeName="transform" type="translate" values="0,0;-200,0;0,0" dur="30s" repeatCount="indefinite" />
+          </path>
+
+          {/* Mid-ground trees — scrolling faster */}
+          <g>
+            <animateTransform attributeName="transform" type="translate" values="0,0;-400,0;0,0" dur="15s" repeatCount="indefinite" />
+            {[0, 200, 450, 700, 950, 1200, 1450].map((tx, i) => (
+              <g key={`tree-${i}`} transform={`translate(${tx}, 330)`}>
+                <rect x="-3" y="0" width="6" height="40" fill="#2a1a00" />
+                <ellipse cx="0" cy="-10" rx="20" ry="25" fill="#1a3a15" fillOpacity="0.7" />
               </g>
-            </g>
+            ))}
+          </g>
 
-            {/* Flower 2 — center-right, lily */}
-            <g transform="translate(750, 330)">
-              <path d="M0 0 Q2 -25 0 -55" fill="none" stroke="#2d5a27" strokeWidth="2" />
-              <path d="M1 -35 Q12 -40 18 -33" fill="none" stroke="#2d5a27" strokeWidth="1.5" />
-              <ellipse cx="18" cy="-33" rx="8" ry="5" fill="#3a7a33" />
-              {[0, 72, 144, 216, 288].map((angle, i) => (
-                <ellipse key={`f2-${i}`} cx="0" cy="-67" rx="9" ry="20" fill="#fff0f5" fillOpacity={0.9}
-                  transform={`rotate(${angle} 0 -55)`}>
-                  <animateTransform attributeName="transform" type="rotate"
-                    values={`${angle} 0 -55;${angle + 3} 0 -55;${angle} 0 -55`} dur="5s" repeatCount="indefinite" />
+          {/* Ground */}
+          <rect x="0" y="380" width="1200" height="120" fill="url(#groundGrad)" />
+          {/* Grass scrolling fast */}
+          <g>
+            <animateTransform attributeName="transform" type="translate" values="0,0;-90,0;0,0" dur="0.8s" repeatCount="indefinite" />
+            {Array.from({length: 30}, (_, i) => (
+              <line key={`grass-${i}`} x1={i * 45} y1="382" x2={i * 45 - 5} y2="372" stroke="#3a5a25" strokeWidth="1.5" strokeOpacity="0.5" />
+            ))}
+          </g>
+
+          {/* Dust cloud behind horse */}
+          {Array.from({length: 15}, (_, i) => (
+            <circle key={`dust-${i}`} r={2 + i * 0.5} fill="#8B7355" fillOpacity="0.25">
+              <animate attributeName="cx" values={`${420 - i * 18};${320 - i * 22};${420 - i * 18}`} dur={`${1.5 + i * 0.2}s`} repeatCount="indefinite" />
+              <animate attributeName="cy" values={`${375 + (i % 3) * 5};${368 + (i % 4) * 4};${375 + (i % 3) * 5}`} dur={`${1 + i * 0.15}s`} repeatCount="indefinite" />
+              <animate attributeName="fillOpacity" values="0.25;0.03;0.25" dur={`${1.5 + i * 0.1}s`} repeatCount="indefinite" />
+            </circle>
+          ))}
+
+          {/* === HORSE + RIDER — galloping animation === */}
+          <g>
+            {/* Whole unit bouncing (gallop rhythm) */}
+            <animateTransform attributeName="transform" type="translate" values="500,180;500,168;500,180;500,172;500,180" dur="0.7s" repeatCount="indefinite" />
+            
+            {/* Horse body */}
+            <ellipse cx="0" cy="120" rx="80" ry="45" fill="url(#horseBrown)" stroke="#4a2508" strokeWidth="0.8" />
+            <ellipse cx="55" cy="110" rx="35" ry="40" fill="#7A3B10" />
+            <ellipse cx="-60" cy="115" rx="42" ry="42" fill="#6B3410" />
+            
+            {/* Neck */}
+            <path d="M70 90 Q85 55 80 25 Q75 10 65 5" fill="#7A3B10" stroke="#5C2E0A" strokeWidth="1" />
+            <path d="M55 100 Q65 60 62 30 Q58 15 50 10" fill="#8B4513" />
+            
+            {/* Head — bobbing */}
+            <g>
+              <animateTransform attributeName="transform" type="rotate" values="-5,65,5;8,65,5;-5,65,5" dur="0.7s" repeatCount="indefinite" />
+              <path d="M65 5 Q75 -10 72 -20 Q68 -28 58 -25 Q48 -20 48 -5 Q50 5 58 10 Z" fill="#6B3410" stroke="#5C2E0A" strokeWidth="0.8" />
+              <path d="M62 -25 Q63 -35 60 -37 Q58 -33 59 -25" fill="#5C2E0A" />
+              <path d="M68 -23 Q70 -33 67 -35 Q65 -31 66 -23" fill="#5C2E0A" />
+              <ellipse cx="63" cy="-12" rx="3.5" ry="3" fill="#1a0a00" />
+              <circle cx="64" cy="-13" r="1" fill="#fff" fillOpacity="0.3" />
+              <ellipse cx="67" cy="-2" rx="3" ry="2.5" fill="#3a1500">
+                <animate attributeName="rx" values="3;4.5;3" dur="0.7s" repeatCount="indefinite" />
+              </ellipse>
+              <path d="M55 -15 L60 -5 L55 5" fill="none" stroke="#2a1500" strokeWidth="1.5" />
+            </g>
+            
+            {/* Mane — flowing wild */}
+            <path fill="none" stroke="#1a0a00" strokeWidth="4" strokeLinecap="round">
+              <animate attributeName="d" values="M72 0 Q82 18 76 38 Q72 58 78 78;M72 0 Q88 22 80 42 Q70 62 76 82;M72 0 Q82 18 76 38 Q72 58 78 78" dur="0.7s" repeatCount="indefinite" />
+            </path>
+            <path fill="none" stroke="#2a1500" strokeWidth="2.5" strokeLinecap="round">
+              <animate attributeName="d" values="M68 -5 Q76 12 73 32 Q70 52 75 72;M68 -5 Q82 16 76 36 Q68 56 73 74;M68 -5 Q76 12 73 32 Q70 52 75 72" dur="0.7s" repeatCount="indefinite" />
+            </path>
+            
+            {/* LEGS — full gallop cycle */}
+            {/* Front-right */}
+            <path fill="none" stroke="#7A3B10" strokeWidth="9" strokeLinecap="round">
+              <animate attributeName="d" values="M65 155 L78 178 L82 200;M65 155 L88 168 L105 170;M65 155 L70 188 L62 202;M65 155 L78 178 L82 200" dur="0.7s" repeatCount="indefinite" />
+            </path>
+            <ellipse rx="6" ry="4" fill="#1a0a00">
+              <animate attributeName="cx" values="82;105;62;82" dur="0.7s" repeatCount="indefinite" />
+              <animate attributeName="cy" values="204;174;206;204" dur="0.7s" repeatCount="indefinite" />
+            </ellipse>
+            {/* Front-left */}
+            <path fill="none" stroke="#6B3410" strokeWidth="8" strokeLinecap="round">
+              <animate attributeName="d" values="M55 158 L62 185 L56 202;M55 158 L42 172 L30 175;M55 158 L68 178 L78 195;M55 158 L62 185 L56 202" dur="0.7s" repeatCount="indefinite" begin="0.175s" />
+            </path>
+            <ellipse rx="5" ry="4" fill="#1a0a00">
+              <animate attributeName="cx" values="56;30;78;56" dur="0.7s" repeatCount="indefinite" begin="0.175s" />
+              <animate attributeName="cy" values="206;179;199;206" dur="0.7s" repeatCount="indefinite" begin="0.175s" />
+            </ellipse>
+            {/* Back-right */}
+            <path fill="none" stroke="#7A3B10" strokeWidth="9" strokeLinecap="round">
+              <animate attributeName="d" values="M-35 155 L-28 180 L-22 202;M-35 155 L-52 168 L-68 172;M-35 155 L-22 185 L-18 202;M-35 155 L-28 180 L-22 202" dur="0.7s" repeatCount="indefinite" begin="0.35s" />
+            </path>
+            <ellipse rx="6" ry="4" fill="#1a0a00">
+              <animate attributeName="cx" values="-22;-68;-18;-22" dur="0.7s" repeatCount="indefinite" begin="0.35s" />
+              <animate attributeName="cy" values="206;176;206;206" dur="0.7s" repeatCount="indefinite" begin="0.35s" />
+            </ellipse>
+            {/* Back-left */}
+            <path fill="none" stroke="#6B3410" strokeWidth="8" strokeLinecap="round">
+              <animate attributeName="d" values="M-50 158 L-55 183 L-52 202;M-50 158 L-38 172 L-28 178;M-50 158 L-62 180 L-66 200;M-50 158 L-55 183 L-52 202" dur="0.7s" repeatCount="indefinite" begin="0.525s" />
+            </path>
+            <ellipse rx="5" ry="4" fill="#1a0a00">
+              <animate attributeName="cx" values="-52;-28;-66;-52" dur="0.7s" repeatCount="indefinite" begin="0.525s" />
+              <animate attributeName="cy" values="206;182;204;206" dur="0.7s" repeatCount="indefinite" begin="0.525s" />
+            </ellipse>
+            
+            {/* Tail — dramatic flow */}
+            <path fill="none" stroke="#1a0a00" strokeWidth="5" strokeLinecap="round">
+              <animate attributeName="d" values="M-95 105 Q-122 108 -138 130 Q-148 162 -132 192;M-95 105 Q-132 98 -155 118 Q-162 152 -142 188;M-95 105 Q-118 115 -132 138 Q-142 168 -128 198;M-95 105 Q-122 108 -138 130 Q-148 162 -132 192" dur="0.7s" repeatCount="indefinite" />
+            </path>
+            <path fill="none" stroke="#2a1500" strokeWidth="3" strokeLinecap="round">
+              <animate attributeName="d" values="M-92 108 Q-118 112 -132 135 Q-142 165 -128 195;M-92 108 Q-128 102 -148 122 Q-158 155 -138 190;M-92 108 Q-112 118 -128 140 Q-138 170 -122 198;M-92 108 Q-118 112 -132 135 Q-142 165 -128 195" dur="0.7s" repeatCount="indefinite" />
+            </path>
+            
+            {/* Saddle */}
+            <path d="M-15 85 Q5 75 25 78 Q40 82 42 90 Q38 98 20 100 Q0 102 -15 97 Z" fill="#2a1500" stroke="#1a0a00" strokeWidth="1" />
+            
+            {/* === RIDER — Alaa bouncing with gallop === */}
+            <g>
+              <animateTransform attributeName="transform" type="translate" values="0,0;0,-10;0,0;0,-6;0,0" dur="0.7s" repeatCount="indefinite" />
+              
+              {/* Legs in stirrups */}
+              <path d="M20 92 Q25 106 28 118" fill="none" stroke="#1a1a2e" strokeWidth="6" strokeLinecap="round" />
+              <path d="M-5 95 Q-8 108 -10 120" fill="none" stroke="#1a1a2e" strokeWidth="6" strokeLinecap="round" />
+              <rect x="24" y="116" width="9" height="12" fill="#1a0a00" rx="2" />
+              <rect x="-14" y="118" width="9" height="12" fill="#1a0a00" rx="2" />
+              
+              {/* Torso */}
+              <path d="M-3 18 Q-5 38 -3 58 Q0 72 5 78 L25 78 Q30 72 32 58 Q34 38 32 18 Z" fill="#1a1a3a" stroke="#2a2a5a" strokeWidth="0.5" />
+              <circle cx="14" cy="32" r="1.2" fill="#888" />
+              <circle cx="14" cy="42" r="1.2" fill="#888" />
+              <circle cx="14" cy="52" r="1.2" fill="#888" />
+              
+              {/* Arms — bouncing with rhythm */}
+              <path fill="none" stroke="#1a1a3a" strokeWidth="5" strokeLinecap="round">
+                <animate attributeName="d" values="M0 26 Q-8 38 -5 52 Q-3 60 2 63;M0 26 Q-12 35 -9 48 Q-6 56 0 59;M0 26 Q-8 38 -5 52 Q-3 60 2 63" dur="0.7s" repeatCount="indefinite" />
+              </path>
+              <path fill="none" stroke="#1a1a3a" strokeWidth="5" strokeLinecap="round">
+                <animate attributeName="d" values="M28 26 Q36 38 34 52 Q32 60 27 63;M28 26 Q40 35 37 48 Q34 56 29 59;M28 26 Q36 38 34 52 Q32 60 27 63" dur="0.7s" repeatCount="indefinite" />
+              </path>
+              
+              {/* Hands + reins */}
+              <ellipse cx="2" cy="65" rx="3.5" ry="3" fill="#c49464" />
+              <ellipse cx="27" cy="65" rx="3.5" ry="3" fill="#c49464" />
+              <path d="M2 65 Q20 48 45 18" fill="none" stroke="#2a1500" strokeWidth="1.2" />
+              <path d="M27 65 Q35 43 50 13" fill="none" stroke="#2a1500" strokeWidth="1.2" />
+              
+              {/* Neck */}
+              <rect x="9" y="10" width="10" height="10" fill="#c49464" rx="3" />
+              
+              {/* Head */}
+              <ellipse cx="14" cy="0" rx="11" ry="13" fill="#c49464" />
+              <ellipse cx="9" cy="-2" rx="2.2" ry="1.8" fill="#2a1a0a" />
+              <circle cx="9.5" cy="-2.5" r="0.7" fill="#fff" fillOpacity="0.4" />
+              <ellipse cx="19" cy="-2" rx="2.2" ry="1.8" fill="#2a1a0a" />
+              <circle cx="19.5" cy="-2.5" r="0.7" fill="#fff" fillOpacity="0.4" />
+              <path d="M6 -6 Q9 -8 12 -6" fill="none" stroke="#2a1500" strokeWidth="0.8" />
+              <path d="M16 -6 Q19 -8 22 -6" fill="none" stroke="#2a1500" strokeWidth="0.8" />
+              <path d="M13 1 Q14 3 13 4" fill="none" stroke="#a07050" strokeWidth="0.7" />
+              <path d="M9 7 Q14 10 19 7" fill="none" stroke="#8a5040" strokeWidth="0.8" />
+              <circle cx="7" cy="3" r="2.5" fill="#e89090" fillOpacity="0.15" />
+              <circle cx="21" cy="3" r="2.5" fill="#e89090" fillOpacity="0.15" />
+              
+              {/* Helmet */}
+              <path d="M2 -9 Q3 -18 14 -20 Q25 -18 26 -9 Q24 -7 14 -6 Q4 -7 2 -9 Z" fill="#1a1a2e" stroke="#333" strokeWidth="0.7" />
+              
+              {/* Hair flowing wildly in wind */}
+              <path fill="none" stroke="#1a0a00" strokeWidth="3" strokeLinecap="round">
+                <animate attributeName="d" values="M3 -5 Q-8 8 -14 25 Q-18 42 -12 55;M3 -5 Q-12 5 -20 20 Q-24 38 -18 52;M3 -5 Q-8 8 -14 25 Q-18 42 -12 55" dur="0.7s" repeatCount="indefinite" />
+              </path>
+              <path fill="none" stroke="#2a1500" strokeWidth="2" strokeLinecap="round">
+                <animate attributeName="d" values="M4 -4 Q-5 10 -10 28 Q-13 44 -8 54;M4 -4 Q-9 7 -16 22 Q-19 40 -14 50;M4 -4 Q-5 10 -10 28 Q-13 44 -8 54" dur="0.7s" repeatCount="indefinite" />
+              </path>
+              <path fill="none" stroke="#1a0a00" strokeWidth="3" strokeLinecap="round">
+                <animate attributeName="d" values="M25 -5 Q34 6 38 22 Q40 38 36 50;M25 -5 Q38 4 42 18 Q44 35 40 48;M25 -5 Q34 6 38 22 Q40 38 36 50" dur="0.7s" repeatCount="indefinite" />
+              </path>
+              <path fill="none" stroke="#2a1500" strokeWidth="2" strokeLinecap="round">
+                <animate attributeName="d" values="M24 -4 Q32 8 35 24 Q37 40 34 50;M24 -4 Q36 5 39 20 Q41 36 37 48;M24 -4 Q32 8 35 24 Q37 40 34 50" dur="0.7s" repeatCount="indefinite" />
+              </path>
+            </g>
+          </g>
+
+          {/* Flowers along the ground */}
+          {[{x:80,c:"#e63946"},{x:200,c:"#ff69b4"},{x:1000,c:"#fbbf24"},{x:1100,c:"#e63946"},{x:150,c:"#fff0f5"}].map((f, i) => (
+            <g key={`flower-${i}`} transform={`translate(${f.x}, 375)`}>
+              <line x1="0" y1="0" x2="0" y2="-20" stroke="#2d5a27" strokeWidth="1.5" />
+              {[0, 72, 144, 216, 288].map((a, j) => (
+                <ellipse key={`fp-${i}-${j}`} cx="0" cy="-28" rx="4" ry="10" fill={f.c} fillOpacity="0.8" transform={`rotate(${a} 0 -20)`}>
+                  <animateTransform attributeName="transform" type="rotate" values={`${a} 0 -20;${a+3} 0 -20;${a} 0 -20`} dur="4s" repeatCount="indefinite" />
                 </ellipse>
               ))}
-              <circle cx="0" cy="-55" r="5" fill="#ff69b4" />
+              <circle cx="0" cy="-20" r="3" fill="#ffd700" />
             </g>
+          ))}
 
-            {/* Flower 3 — far right, sunflower */}
-            <g transform="translate(900, 310)">
-              <path d="M0 0 Q2 -30 0 -65" fill="none" stroke="#2d5a27" strokeWidth="2.5" />
-              <path d="M-1 -40 Q-14 -45 -18 -38" fill="none" stroke="#2d5a27" strokeWidth="1.5" />
-              <ellipse cx="-18" cy="-38" rx="8" ry="5" fill="#3a7a33" />
-              {Array.from({length: 12}, (_, i) => (
-                <ellipse key={`f3-${i}`} cx="0" cy="-78" rx="5" ry="14" fill="#fbbf24" fillOpacity={0.9}
-                  transform={`rotate(${i * 30} 0 -65)`}>
-                  <animateTransform attributeName="transform" type="rotate"
-                    values={`${i*30} 0 -65;${i*30 + 2} 0 -65;${i*30} 0 -65`} dur="6s" repeatCount="indefinite" />
-                </ellipse>
-              ))}
-              <circle cx="0" cy="-65" r="10" fill="#78350f" />
-              <circle cx="0" cy="-65" r="7" fill="#92400e" />
-            </g>
-
-            {/* Ground grass */}
-            <path d="M0 350 Q250 340 500 350 Q750 340 1000 350 L1000 400 L0 400 Z" fill="#1a3a15" fillOpacity="0.3" />
-          </svg>
-        </div>
-        <div className="relative text-center pt-72">
-          <p className="text-2xl md:text-4xl font-bold text-white/90 font-[family-name:var(--font-space)]">
+          {/* Text */}
+          <text x="600" y="470" textAnchor="middle" fill="white" fillOpacity="0.85" fontSize="24" fontFamily="serif" letterSpacing="3">
             Alaa is Adorable 🌸
-          </p>
-        </div>
+          </text>
+        </svg>
       </section>
     </>
   );
