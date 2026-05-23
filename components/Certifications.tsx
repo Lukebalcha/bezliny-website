@@ -17,25 +17,67 @@ export default function Certifications() {
   return (
     <section className="py-16 md:py-24 relative border-t border-white/[0.03]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="text-center mb-10 md:mb-14">
-          <span className="text-[10px] uppercase tracking-[0.3em] text-white/30">Compliance</span>
-          <h2 className="mt-3 text-2xl md:text-4xl font-bold font-[family-name:var(--font-space)]">Certifications & Standards</h2>
-        </div>
+        <motion.div
+          className="text-center mb-10 md:mb-14"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+        >
+          <motion.span
+            className="text-[10px] uppercase tracking-[0.3em] text-white/30 inline-block"
+            initial={{ letterSpacing: "0.6em", opacity: 0 }}
+            whileInView={{ letterSpacing: "0.3em", opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          >
+            Compliance
+          </motion.span>
+          <motion.h2
+            className="mt-3 text-2xl md:text-4xl font-bold font-[family-name:var(--font-space)]"
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.15, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          >
+            Certifications & Standards
+          </motion.h2>
+        </motion.div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
           {certs.map((cert, i) => (
             <motion.div
               key={cert.name}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, scale: 0.9, rotateY: -10 }}
+              whileInView={{ opacity: 1, scale: 1, rotateY: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.05, duration: 0.5 }}
-              className="p-4 md:p-6 rounded-xl border border-white/[0.04] hover:border-white/[0.1] bg-white/[0.01] hover:bg-white/[0.02] transition-all duration-500 text-center group"
+              transition={{ delay: i * 0.06, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              whileHover={{ scale: 1.03, borderColor: "rgba(34,211,238,0.15)" }}
+              className="relative p-4 md:p-6 rounded-xl border border-white/[0.04] bg-white/[0.01] text-center group overflow-hidden"
             >
-              <div className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-3 rounded-lg bg-white/[0.03] border border-white/[0.06] flex items-center justify-center">
-                <svg className="w-5 h-5 md:w-6 md:h-6 text-white/40 group-hover:text-cyan-400/60 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
+              {/* Animated top line */}
+              <motion.div
+                className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.06 + 0.4, duration: 0.8 }}
+              />
+              
+              {/* Shield shape using borders */}
+              <div className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-3 relative">
+                <motion.div
+                  className="absolute inset-0 rounded-lg border border-white/[0.08] group-hover:border-cyan-400/30 transition-colors duration-700"
+                  whileHover={{ rotate: 3 }}
+                />
+                <motion.div
+                  className="absolute inset-[3px] rounded-md border border-white/[0.04] group-hover:border-cyan-400/15 transition-colors duration-700"
+                  whileHover={{ rotate: -2 }}
+                />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-[9px] font-mono text-white/30 group-hover:text-cyan-400/60 transition-colors duration-500">✓</span>
+                </div>
               </div>
+              
               <h4 className="text-xs md:text-sm font-semibold text-white/80">{cert.name}</h4>
               <p className="text-[10px] md:text-xs text-white/40 mt-1">{cert.desc}</p>
             </motion.div>

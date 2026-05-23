@@ -40,8 +40,8 @@ export default function Footer() {
             <ul className="space-y-3 text-sm text-white/70">
               <li>Warsaw, Poland</li>
               <li>
-                <a href="mailto:cooperation@gmail.com" className="hover:text-white transition-colors duration-500">
-                  cooperation@gmail.com
+                <a href="mailto:contact@bezliny.com" className="hover:text-white transition-colors duration-500">
+                  contact@bezliny.com
                 </a>
               </li>
               <li>

@@ -16,11 +16,9 @@ import DroneServicesReveal from "@/components/DroneServicesReveal";
 import ClientLogos from "@/components/ClientLogos";
 import LiveOpsCounter from "@/components/LiveOpsCounter";
 import GlobalMap from "@/components/GlobalMap";
-import CaseStudies from "@/components/CaseStudies";
 import Certifications from "@/components/Certifications";
 import TechStack from "@/components/TechStack";
 import Partners from "@/components/Partners";
-import Testimonials from "@/components/Testimonials";
 import PressSection from "@/components/PressSection";
 
 export default function HomeContent() {
@@ -248,14 +246,8 @@ export default function HomeContent() {
       {/* Global Map */}
       <GlobalMap />
 
-      {/* Case Studies */}
-      <CaseStudies />
-
       {/* Technology Stack */}
       <TechStack />
-
-      {/* Testimonials */}
-      <Testimonials />
 
       {/* Certifications */}
       <Certifications />

@@ -37,8 +37,8 @@ export default function ContactPage() {
                 <div className="p-6 rounded-2xl glass">
                   <h3 className="text-lg font-semibold mb-4">{t.contactPage.directContact}</h3>
                   <div className="space-y-3">
-                    <a href="mailto:cooperation@gmail.com" className="block text-white/85 hover:text-white transition-colors">
-                      cooperation@gmail.com
+                    <a href="mailto:contact@bezliny.com" className="block text-white/85 hover:text-white transition-colors">
+                      contact@bezliny.com
                     </a>
                     <a href="tel:+48579366868" className="block text-white/85 hover:text-white transition-colors">
                       +48 579 366 868
