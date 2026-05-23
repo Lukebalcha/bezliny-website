@@ -28,10 +28,19 @@ export default function ContactForm() {
 
     try {
       // Channel 1: CRM — Insert into Supabase contacts
-      const { error } = await supabase.from("contacts").insert(contact);
-      
-      if (error) {
-        // Fallback: mailto if Supabase fails
+      if (supabase) {
+        const { error } = await supabase.from("contacts").insert(contact);
+        
+        if (error) {
+          // Fallback: mailto if Supabase fails
+          const body = `NEW WEBSITE LEAD\n\nName: ${contact.name}\nEmail: ${contact.email}\nPhone: ${contact.phone}\nCompany: ${contact.company}\nBuilding: ${data.get("building_type")}\n\nMessage:\n${data.get("message")}`;
+          window.open(
+            `mailto:contact@bezliny.com?subject=${encodeURIComponent(`[LEAD] ${contact.company}`)}&body=${encodeURIComponent(body)}`,
+            "_self"
+          );
+        }
+      } else {
+        // No Supabase configured — fallback to mailto
         const body = `NEW WEBSITE LEAD\n\nName: ${contact.name}\nEmail: ${contact.email}\nPhone: ${contact.phone}\nCompany: ${contact.company}\nBuilding: ${data.get("building_type")}\n\nMessage:\n${data.get("message")}`;
         window.open(
           `mailto:contact@bezliny.com?subject=${encodeURIComponent(`[LEAD] ${contact.company}`)}&body=${encodeURIComponent(body)}`,
