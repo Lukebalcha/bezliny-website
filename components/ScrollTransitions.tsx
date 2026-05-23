@@ -86,7 +86,7 @@ export function DroneTransition({ direction = "left" }: { direction?: "left" | "
   );
 }
 
-// Cinematic industrial 3D burst — complex geometric structure that assembles on scroll
+// Industrial cleaning drone schematic — complex blueprint that assembles on scroll
 export function BurstTransition() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -94,113 +94,297 @@ export function BurstTransition() {
     offset: ["start end", "end start"],
   });
 
-  const masterOpacity = useTransform(scrollYProgress, [0.05, 0.2, 0.8, 0.95], [0, 1, 1, 0]);
-  const outerRotate = useTransform(scrollYProgress, [0, 1], [0, 180]);
-  const innerRotate = useTransform(scrollYProgress, [0, 1], [0, -270]);
-  const microRotate = useTransform(scrollYProgress, [0, 1], [0, 360]);
-  const coreScale = useTransform(scrollYProgress, [0.1, 0.35, 0.65, 0.9], [0, 1.2, 1.2, 0]);
-  const ringExpand = useTransform(scrollYProgress, [0.15, 0.4, 0.6, 0.85], [0.3, 1, 1, 1.8]);
-  const ringFade = useTransform(scrollYProgress, [0.15, 0.35, 0.65, 0.85], [0, 0.8, 0.8, 0]);
-  const particleSpread = useTransform(scrollYProgress, [0.2, 0.5, 0.8], [0, 1, 2]);
-  const beamLength = useTransform(scrollYProgress, [0.1, 0.4, 0.6, 0.9], ["0%", "100%", "100%", "0%"]);
-  const shimmer = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 0]);
+  // Master timings
+  const masterOpacity = useTransform(scrollYProgress, [0.05, 0.15, 0.85, 0.95], [0, 1, 1, 0]);
+  const assembleProgress = useTransform(scrollYProgress, [0.1, 0.5], [0, 1]);
+  const dataFlicker = useTransform(scrollYProgress, [0.3, 0.4, 0.5, 0.6, 0.7], [0, 1, 0.7, 1, 0.5]);
+  
+  // Drone arms extend outward
+  const armExtend = useTransform(scrollYProgress, [0.1, 0.35], [0, 1]);
+  const armRotate = useTransform(scrollYProgress, [0.2, 0.6], [0, 15]);
+  
+  // Nozzle system deploys
+  const nozzleDrop = useTransform(scrollYProgress, [0.25, 0.5], [0, 1]);
+  const sprayActive = useTransform(scrollYProgress, [0.4, 0.55, 0.8], [0, 1, 0.6]);
+  
+  // Tether cable extends down
+  const tetherLength = useTransform(scrollYProgress, [0.15, 0.45], ["0%", "100%"]);
+  const tetherOpacity = useTransform(scrollYProgress, [0.15, 0.25, 0.75, 0.9], [0, 0.6, 0.6, 0]);
+  
+  // Propeller spin  
+  const propSpin = useTransform(scrollYProgress, [0, 1], [0, 1440]);
+  
+  // HUD data readouts
+  const hudOpacity = useTransform(scrollYProgress, [0.3, 0.4, 0.8, 0.9], [0, 1, 1, 0]);
+  
+  // Pressure system
+  const pressureFill = useTransform(scrollYProgress, [0.3, 0.6], ["0%", "87%"]);
+  
+  // Scan line
+  const scanY = useTransform(scrollYProgress, [0.1, 0.9], ["0%", "100%"]);
+  const scanOpacity = useTransform(scrollYProgress, [0.1, 0.2, 0.8, 0.9], [0, 0.4, 0.4, 0]);
 
   return (
-    <div ref={ref} className="relative h-[30vh] md:h-[40vh] overflow-hidden flex items-center justify-center">
-      {/* Deep radial glow */}
+    <div ref={ref} className="relative h-[45vh] md:h-[55vh] overflow-hidden flex items-center justify-center">
+      {/* Background: industrial grid */}
+      <motion.div style={{ opacity: masterOpacity }} className="absolute inset-0">
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: `linear-gradient(to right, rgba(34,211,238,0.5) 1px, transparent 1px), linear-gradient(to bottom, rgba(34,211,238,0.5) 1px, transparent 1px)`,
+          backgroundSize: "40px 40px",
+        }} />
+      </motion.div>
+
+      {/* Vertical scan line */}
       <motion.div
-        style={{ opacity: shimmer, background: "radial-gradient(ellipse, rgba(34,211,238,0.06) 0%, rgba(139,92,246,0.03) 30%, transparent 70%)" }}
-        className="absolute w-[600px] h-[600px] rounded-full"
+        style={{ top: scanY, opacity: scanOpacity }}
+        className="absolute left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent"
       />
 
-      {/* Outer hexagonal structure — rotates slowly */}
-      <motion.div style={{ rotate: outerRotate, scale: ringExpand, opacity: ringFade }} className="absolute">
-        <svg width="320" height="320" viewBox="0 0 320 320" fill="none" className="md:w-[420px] md:h-[420px]">
-          {/* Hexagon 1 */}
-          <polygon points="160,20 280,80 280,200 160,260 40,200 40,80" stroke="rgba(255,255,255,0.15)" strokeWidth="0.5" fill="none" />
-          {/* Hexagon 2 — offset */}
-          <polygon points="160,50 250,95 250,185 160,230 70,185 70,95" stroke="rgba(34,211,238,0.2)" strokeWidth="0.5" fill="none" strokeDasharray="4 8" />
-          {/* Hexagon 3 — inner */}
-          <polygon points="160,80 220,110 220,170 160,200 100,170 100,110" stroke="rgba(255,255,255,0.25)" strokeWidth="0.8" fill="none" />
-          {/* Vertices nodes */}
-          {[[160,20],[280,80],[280,200],[160,260],[40,200],[40,80]].map(([cx,cy], i) => (
-            <circle key={i} cx={cx} cy={cy} r="2.5" fill="rgba(34,211,238,0.6)">
-              <animate attributeName="r" values="2;3.5;2" dur={`${1.5 + i * 0.2}s`} repeatCount="indefinite" />
+      {/* Main SVG — Industrial Drone Blueprint */}
+      <motion.div style={{ opacity: masterOpacity }} className="absolute inset-0 flex items-center justify-center">
+        <svg viewBox="0 0 800 500" className="w-full max-w-4xl h-auto px-4" fill="none">
+          {/* ===== MAIN DRONE BODY (center fuselage) ===== */}
+          <motion.g style={{ opacity: assembleProgress }}>
+            {/* Core body — heavy industrial chassis */}
+            <rect x="340" y="210" width="120" height="60" rx="8" stroke="rgba(255,255,255,0.4)" strokeWidth="1.5" fill="rgba(255,255,255,0.02)" />
+            <rect x="355" y="220" width="90" height="40" rx="4" stroke="rgba(34,211,238,0.3)" strokeWidth="0.8" fill="rgba(34,211,238,0.02)" />
+            {/* Tank indicators */}
+            <rect x="362" y="228" width="12" height="24" rx="2" stroke="rgba(34,211,238,0.4)" strokeWidth="0.6">
+              <animate attributeName="stroke-opacity" values="0.3;0.7;0.3" dur="2s" repeatCount="indefinite" />
+            </rect>
+            <rect x="380" y="228" width="12" height="24" rx="2" stroke="rgba(34,211,238,0.4)" strokeWidth="0.6">
+              <animate attributeName="stroke-opacity" values="0.4;0.8;0.4" dur="1.8s" repeatCount="indefinite" />
+            </rect>
+            {/* Motor controller board */}
+            <rect x="400" y="225" width="35" height="30" rx="2" stroke="rgba(139,92,246,0.3)" strokeWidth="0.5" />
+            {/* Circuit traces */}
+            <path d="M405 230 h5 v8 h10 v-4 h8" stroke="rgba(139,92,246,0.25)" strokeWidth="0.4" />
+            <path d="M405 240 h8 v5 h12" stroke="rgba(139,92,246,0.2)" strokeWidth="0.4" />
+            <path d="M405 248 h4 v-3 h15" stroke="rgba(139,92,246,0.2)" strokeWidth="0.4" />
+            {/* Status LEDs */}
+            <circle cx="408" cy="233" r="1.5" fill="rgba(52,211,153,0.8)">
+              <animate attributeName="opacity" values="0.4;1;0.4" dur="1.2s" repeatCount="indefinite" />
             </circle>
-          ))}
-          {/* Cross connection lines */}
-          <line x1="40" y1="80" x2="280" y2="200" stroke="rgba(255,255,255,0.06)" strokeWidth="0.3" />
-          <line x1="280" y1="80" x2="40" y2="200" stroke="rgba(255,255,255,0.06)" strokeWidth="0.3" />
-          <line x1="160" y1="20" x2="160" y2="260" stroke="rgba(34,211,238,0.08)" strokeWidth="0.3" />
-        </svg>
-      </motion.div>
+            <circle cx="413" cy="233" r="1.5" fill="rgba(34,211,238,0.7)">
+              <animate attributeName="opacity" values="0.6;1;0.6" dur="0.8s" repeatCount="indefinite" />
+            </circle>
+          </motion.g>
 
-      {/* Inner rotating triangle structure */}
-      <motion.div style={{ rotate: innerRotate, scale: coreScale, opacity: ringFade }} className="absolute">
-        <svg width="180" height="180" viewBox="0 0 180 180" fill="none" className="md:w-[240px] md:h-[240px]">
-          {/* Triangle 1 */}
-          <polygon points="90,15 165,140 15,140" stroke="rgba(139,92,246,0.3)" strokeWidth="0.8" fill="none" />
-          {/* Triangle 2 — inverted */}
-          <polygon points="90,155 15,40 165,40" stroke="rgba(34,211,238,0.35)" strokeWidth="0.8" fill="none" />
-          {/* Inner diamond */}
-          <polygon points="90,45 135,90 90,135 45,90" stroke="rgba(255,255,255,0.3)" strokeWidth="0.6" fill="rgba(255,255,255,0.02)" />
-          {/* Radial spokes */}
-          {[0, 60, 120, 180, 240, 300].map((angle, i) => {
-            const rad = (angle * Math.PI) / 180;
-            const x1 = 90 + Math.cos(rad) * 25;
-            const y1 = 90 + Math.sin(rad) * 25;
-            const x2 = 90 + Math.cos(rad) * 70;
-            const y2 = 90 + Math.sin(rad) * 70;
-            return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="rgba(34,211,238,0.15)" strokeWidth="0.4" />;
-          })}
-        </svg>
-      </motion.div>
+          {/* ===== FOUR PROPELLER ARMS (extending outward) ===== */}
+          {/* Top-Left Arm */}
+          <motion.g style={{ opacity: armExtend, rotate: armRotate, transformOrigin: "400px 240px" }}>
+            <motion.line x1="340" y1="215" x2="240" y2="140" stroke="rgba(255,255,255,0.5)" strokeWidth="2" style={{ pathLength: armExtend }} />
+            <rect x="225" y="125" width="30" height="6" rx="3" stroke="rgba(255,255,255,0.3)" strokeWidth="0.8" transform="rotate(-30 240 128)" />
+            {/* Motor housing */}
+            <circle cx="240" cy="140" r="18" stroke="rgba(255,255,255,0.3)" strokeWidth="1" fill="rgba(255,255,255,0.01)" />
+            <circle cx="240" cy="140" r="12" stroke="rgba(34,211,238,0.3)" strokeWidth="0.5" />
+            {/* Spinning propeller */}
+            <motion.g style={{ rotate: propSpin, transformOrigin: "240px 140px" }}>
+              <ellipse cx="240" cy="140" rx="28" ry="4" stroke="rgba(255,255,255,0.15)" strokeWidth="0.8" fill="rgba(255,255,255,0.03)" />
+              <ellipse cx="240" cy="140" rx="4" ry="28" stroke="rgba(255,255,255,0.15)" strokeWidth="0.8" fill="rgba(255,255,255,0.03)" />
+            </motion.g>
+          </motion.g>
 
-      {/* Micro rotating ring — fastest */}
-      <motion.div style={{ rotate: microRotate, scale: coreScale, opacity: ringFade }} className="absolute">
-        <svg width="100" height="100" viewBox="0 0 100 100" fill="none" className="md:w-[130px] md:h-[130px]">
-          <circle cx="50" cy="50" r="35" stroke="rgba(255,255,255,0.2)" strokeWidth="0.5" fill="none" strokeDasharray="3 6" />
-          <circle cx="50" cy="50" r="25" stroke="rgba(34,211,238,0.3)" strokeWidth="0.6" fill="none" />
-          {/* Orbiting particles */}
-          {[0, 90, 180, 270].map((angle, i) => {
-            const rad = (angle * Math.PI) / 180;
-            const cx = 50 + Math.cos(rad) * 35;
-            const cy = 50 + Math.sin(rad) * 35;
-            return (
-              <circle key={i} cx={cx} cy={cy} r="1.5" fill="white" fillOpacity="0.7">
-                <animate attributeName="opacity" values="0.3;1;0.3" dur={`${0.8 + i * 0.2}s`} repeatCount="indefinite" />
+          {/* Top-Right Arm */}
+          <motion.g style={{ opacity: armExtend, rotate: armRotate, transformOrigin: "400px 240px" }}>
+            <motion.line x1="460" y1="215" x2="560" y2="140" stroke="rgba(255,255,255,0.5)" strokeWidth="2" style={{ pathLength: armExtend }} />
+            <circle cx="560" cy="140" r="18" stroke="rgba(255,255,255,0.3)" strokeWidth="1" fill="rgba(255,255,255,0.01)" />
+            <circle cx="560" cy="140" r="12" stroke="rgba(34,211,238,0.3)" strokeWidth="0.5" />
+            <motion.g style={{ rotate: propSpin, transformOrigin: "560px 140px" }}>
+              <ellipse cx="560" cy="140" rx="28" ry="4" stroke="rgba(255,255,255,0.15)" strokeWidth="0.8" fill="rgba(255,255,255,0.03)" />
+              <ellipse cx="560" cy="140" rx="4" ry="28" stroke="rgba(255,255,255,0.15)" strokeWidth="0.8" fill="rgba(255,255,255,0.03)" />
+            </motion.g>
+          </motion.g>
+
+          {/* Bottom-Left Arm */}
+          <motion.g style={{ opacity: armExtend }}>
+            <motion.line x1="340" y1="265" x2="240" y2="340" stroke="rgba(255,255,255,0.5)" strokeWidth="2" style={{ pathLength: armExtend }} />
+            <circle cx="240" cy="340" r="18" stroke="rgba(255,255,255,0.3)" strokeWidth="1" fill="rgba(255,255,255,0.01)" />
+            <circle cx="240" cy="340" r="12" stroke="rgba(34,211,238,0.3)" strokeWidth="0.5" />
+            <motion.g style={{ rotate: propSpin, transformOrigin: "240px 340px" }}>
+              <ellipse cx="240" cy="340" rx="28" ry="4" stroke="rgba(255,255,255,0.15)" strokeWidth="0.8" fill="rgba(255,255,255,0.03)" />
+              <ellipse cx="240" cy="340" rx="4" ry="28" stroke="rgba(255,255,255,0.15)" strokeWidth="0.8" fill="rgba(255,255,255,0.03)" />
+            </motion.g>
+          </motion.g>
+
+          {/* Bottom-Right Arm */}
+          <motion.g style={{ opacity: armExtend }}>
+            <motion.line x1="460" y1="265" x2="560" y2="340" stroke="rgba(255,255,255,0.5)" strokeWidth="2" style={{ pathLength: armExtend }} />
+            <circle cx="560" cy="340" r="18" stroke="rgba(255,255,255,0.3)" strokeWidth="1" fill="rgba(255,255,255,0.01)" />
+            <circle cx="560" cy="340" r="12" stroke="rgba(34,211,238,0.3)" strokeWidth="0.5" />
+            <motion.g style={{ rotate: propSpin, transformOrigin: "560px 340px" }}>
+              <ellipse cx="560" cy="340" rx="28" ry="4" stroke="rgba(255,255,255,0.15)" strokeWidth="0.8" fill="rgba(255,255,255,0.03)" />
+              <ellipse cx="560" cy="340" rx="4" ry="28" stroke="rgba(255,255,255,0.15)" strokeWidth="0.8" fill="rgba(255,255,255,0.03)" />
+            </motion.g>
+          </motion.g>
+
+          {/* ===== NOZZLE SYSTEM (deploys below body) ===== */}
+          <motion.g style={{ opacity: nozzleDrop }}>
+            {/* Main pipe */}
+            <line x1="370" y1="270" x2="370" y2="310" stroke="rgba(34,211,238,0.5)" strokeWidth="1.5" />
+            <line x1="400" y1="270" x2="400" y2="320" stroke="rgba(34,211,238,0.5)" strokeWidth="1.5" />
+            <line x1="430" y1="270" x2="430" y2="310" stroke="rgba(34,211,238,0.5)" strokeWidth="1.5" />
+            {/* Nozzle heads */}
+            <circle cx="370" cy="315" r="5" stroke="rgba(34,211,238,0.6)" strokeWidth="1" fill="rgba(34,211,238,0.1)" />
+            <circle cx="400" cy="325" r="6" stroke="rgba(34,211,238,0.7)" strokeWidth="1.2" fill="rgba(34,211,238,0.1)" />
+            <circle cx="430" cy="315" r="5" stroke="rgba(34,211,238,0.6)" strokeWidth="1" fill="rgba(34,211,238,0.1)" />
+            {/* Cross pipe connecting nozzles */}
+            <path d="M370 295 h60" stroke="rgba(34,211,238,0.3)" strokeWidth="0.8" />
+            {/* Valve indicators */}
+            <rect x="383" y="292" width="4" height="6" fill="rgba(34,211,238,0.4)" rx="1">
+              <animate attributeName="fill-opacity" values="0.3;0.8;0.3" dur="1.5s" repeatCount="indefinite" />
+            </rect>
+            <rect x="413" y="292" width="4" height="6" fill="rgba(34,211,238,0.4)" rx="1">
+              <animate attributeName="fill-opacity" values="0.5;0.9;0.5" dur="1.3s" repeatCount="indefinite" />
+            </rect>
+          </motion.g>
+
+          {/* ===== SPRAY PARTICLES (active cleaning) ===== */}
+          <motion.g style={{ opacity: sprayActive }}>
+            {/* Left nozzle spray */}
+            <line x1="367" y1="320" x2="360" y2="370" stroke="rgba(34,211,238,0.2)" strokeWidth="0.5" strokeDasharray="2 3" />
+            <line x1="370" y1="320" x2="370" y2="375" stroke="rgba(34,211,238,0.3)" strokeWidth="0.5" strokeDasharray="2 4" />
+            <line x1="373" y1="320" x2="380" y2="368" stroke="rgba(34,211,238,0.2)" strokeWidth="0.5" strokeDasharray="2 3" />
+            {/* Center nozzle spray (strongest) */}
+            <line x1="395" y1="331" x2="388" y2="390" stroke="rgba(34,211,238,0.3)" strokeWidth="0.6" strokeDasharray="3 4" />
+            <line x1="400" y1="331" x2="400" y2="395" stroke="rgba(34,211,238,0.4)" strokeWidth="0.7" strokeDasharray="3 5" />
+            <line x1="405" y1="331" x2="412" y2="390" stroke="rgba(34,211,238,0.3)" strokeWidth="0.6" strokeDasharray="3 4" />
+            {/* Right nozzle spray */}
+            <line x1="427" y1="320" x2="420" y2="370" stroke="rgba(34,211,238,0.2)" strokeWidth="0.5" strokeDasharray="2 3" />
+            <line x1="430" y1="320" x2="430" y2="375" stroke="rgba(34,211,238,0.3)" strokeWidth="0.5" strokeDasharray="2 4" />
+            <line x1="433" y1="320" x2="440" y2="368" stroke="rgba(34,211,238,0.2)" strokeWidth="0.5" strokeDasharray="2 3" />
+            {/* Mist particles */}
+            {[355,365,375,385,395,405,415,425,435,445].map((x, i) => (
+              <circle key={`mist-${i}`} cx={x} cy={360 + (i%3)*12} r="1" fill="rgba(34,211,238,0.3)">
+                <animate attributeName="cy" values={`${355+i*3};${380+i*2};${355+i*3}`} dur={`${1.5+i*0.2}s`} repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.2;0.6;0.2" dur={`${1.2+i*0.15}s`} repeatCount="indefinite" />
               </circle>
-            );
-          })}
+            ))}
+          </motion.g>
+
+          {/* ===== TETHER CABLE (power + water line) ===== */}
+          <motion.g style={{ opacity: tetherOpacity }}>
+            <motion.line x1="400" y1="270" x2="400" y2="480" stroke="rgba(255,255,255,0.2)" strokeWidth="1.5" strokeDasharray="6 4" style={{ pathLength: assembleProgress }} />
+            <motion.line x1="403" y1="270" x2="403" y2="480" stroke="rgba(34,211,238,0.15)" strokeWidth="0.8" strokeDasharray="3 6" style={{ pathLength: assembleProgress }} />
+            {/* Ground station indicator */}
+            <rect x="385" y="465" width="30" height="12" rx="2" stroke="rgba(255,255,255,0.2)" strokeWidth="0.8" fill="rgba(255,255,255,0.02)" />
+            <text x="400" y="474" textAnchor="middle" fill="rgba(255,255,255,0.25)" fontSize="5" fontFamily="monospace">GND</text>
+          </motion.g>
+
+          {/* ===== HUD DATA READOUTS ===== */}
+          <motion.g style={{ opacity: hudOpacity }}>
+            {/* Left panel — altitude + pressure */}
+            <rect x="60" y="150" width="120" height="180" rx="4" stroke="rgba(34,211,238,0.15)" strokeWidth="0.5" fill="rgba(34,211,238,0.01)" />
+            <text x="70" y="168" fill="rgba(34,211,238,0.6)" fontSize="7" fontFamily="monospace">SYSTEM STATUS</text>
+            <line x1="70" y1="174" x2="170" y2="174" stroke="rgba(34,211,238,0.2)" strokeWidth="0.3" />
+            
+            <text x="70" y="190" fill="rgba(255,255,255,0.4)" fontSize="6" fontFamily="monospace">ALT</text>
+            <text x="120" y="190" fill="rgba(34,211,238,0.7)" fontSize="6" fontFamily="monospace">
+              <animate attributeName="textContent" values="087.2m;087.4m;087.1m;087.3m" dur="2s" repeatCount="indefinite" />
+              087.2m
+            </text>
+            
+            <text x="70" y="205" fill="rgba(255,255,255,0.4)" fontSize="6" fontFamily="monospace">PSI</text>
+            <text x="120" y="205" fill="rgba(52,211,153,0.7)" fontSize="6" fontFamily="monospace">142 BAR</text>
+            
+            <text x="70" y="220" fill="rgba(255,255,255,0.4)" fontSize="6" fontFamily="monospace">FLOW</text>
+            <text x="120" y="220" fill="rgba(34,211,238,0.7)" fontSize="6" fontFamily="monospace">12.4 L/m</text>
+            
+            <text x="70" y="235" fill="rgba(255,255,255,0.4)" fontSize="6" fontFamily="monospace">WIND</text>
+            <text x="120" y="235" fill="rgba(255,255,255,0.5)" fontSize="6" fontFamily="monospace">3.2 m/s</text>
+            
+            <text x="70" y="250" fill="rgba(255,255,255,0.4)" fontSize="6" fontFamily="monospace">BATT</text>
+            <text x="120" y="250" fill="rgba(52,211,153,0.7)" fontSize="6" fontFamily="monospace">∞ TETHERED</text>
+            
+            <text x="70" y="270" fill="rgba(255,255,255,0.4)" fontSize="6" fontFamily="monospace">NOZZLE</text>
+            <text x="120" y="270" fill="rgba(34,211,238,0.7)" fontSize="6" fontFamily="monospace">TRIPLE</text>
+            
+            <text x="70" y="285" fill="rgba(255,255,255,0.4)" fontSize="6" fontFamily="monospace">MODE</text>
+            <text x="120" y="285" fill="rgba(52,211,153,0.8)" fontSize="6" fontFamily="monospace">CLEANING</text>
+            
+            {/* Pressure gauge */}
+            <text x="70" y="305" fill="rgba(255,255,255,0.3)" fontSize="5" fontFamily="monospace">PRESSURE</text>
+            <rect x="70" y="310" width="100" height="4" rx="2" stroke="rgba(255,255,255,0.1)" strokeWidth="0.5" fill="none" />
+            <motion.rect x="70" y="310" width="87" height="4" rx="2" fill="rgba(34,211,238,0.4)" style={{ width: pressureFill }} />
+          </motion.g>
+
+          {/* Right panel — mission data */}
+          <motion.g style={{ opacity: hudOpacity }}>
+            <rect x="620" y="150" width="120" height="160" rx="4" stroke="rgba(34,211,238,0.15)" strokeWidth="0.5" fill="rgba(34,211,238,0.01)" />
+            <text x="630" y="168" fill="rgba(34,211,238,0.6)" fontSize="7" fontFamily="monospace">MISSION DATA</text>
+            <line x1="630" y1="174" x2="730" y2="174" stroke="rgba(34,211,238,0.2)" strokeWidth="0.3" />
+            
+            <text x="630" y="190" fill="rgba(255,255,255,0.4)" fontSize="6" fontFamily="monospace">AREA</text>
+            <text x="690" y="190" fill="rgba(255,255,255,0.6)" fontSize="6" fontFamily="monospace">2,400 m²</text>
+            
+            <text x="630" y="205" fill="rgba(255,255,255,0.4)" fontSize="6" fontFamily="monospace">DONE</text>
+            <text x="690" y="205" fill="rgba(52,211,153,0.7)" fontSize="6" fontFamily="monospace">67%</text>
+            
+            <text x="630" y="220" fill="rgba(255,255,255,0.4)" fontSize="6" fontFamily="monospace">TIME</text>
+            <text x="690" y="220" fill="rgba(255,255,255,0.5)" fontSize="6" fontFamily="monospace">01:24:18</text>
+            
+            <text x="630" y="235" fill="rgba(255,255,255,0.4)" fontSize="6" fontFamily="monospace">ETA</text>
+            <text x="690" y="235" fill="rgba(34,211,238,0.6)" fontSize="6" fontFamily="monospace">00:42:06</text>
+            
+            <text x="630" y="250" fill="rgba(255,255,255,0.4)" fontSize="6" fontFamily="monospace">PASSES</text>
+            <text x="690" y="250" fill="rgba(255,255,255,0.5)" fontSize="6" fontFamily="monospace">3 of 4</text>
+            
+            <text x="630" y="265" fill="rgba(255,255,255,0.4)" fontSize="6" fontFamily="monospace">CHEM</text>
+            <text x="690" y="265" fill="rgba(52,211,153,0.8)" fontSize="6" fontFamily="monospace">NONE</text>
+            
+            <text x="630" y="280" fill="rgba(255,255,255,0.4)" fontSize="6" fontFamily="monospace">GPS</text>
+            <text x="690" y="280" fill="rgba(34,211,238,0.6)" fontSize="6" fontFamily="monospace">52.2°N</text>
+            
+            <text x="630" y="295" fill="rgba(255,255,255,0.4)" fontSize="6" fontFamily="monospace">SAT</text>
+            <text x="690" y="295" fill="rgba(52,211,153,0.6)" fontSize="6" fontFamily="monospace">14 LOCKED</text>
+          </motion.g>
+
+          {/* ===== DIMENSION LINES (engineering blueprint style) ===== */}
+          <motion.g style={{ opacity: useTransform(scrollYProgress, [0.3, 0.5, 0.8, 0.95], [0, 0.4, 0.4, 0]) }}>
+            {/* Wingspan dimension */}
+            <line x1="210" y1="100" x2="590" y2="100" stroke="rgba(255,255,255,0.15)" strokeWidth="0.3" strokeDasharray="2 2" />
+            <line x1="210" y1="95" x2="210" y2="105" stroke="rgba(255,255,255,0.2)" strokeWidth="0.3" />
+            <line x1="590" y1="95" x2="590" y2="105" stroke="rgba(255,255,255,0.2)" strokeWidth="0.3" />
+            <text x="400" y="97" textAnchor="middle" fill="rgba(255,255,255,0.25)" fontSize="6" fontFamily="monospace">2.4m WINGSPAN</text>
+            
+            {/* Height dimension */}
+            <line x1="190" y1="130" x2="190" y2="380" stroke="rgba(255,255,255,0.15)" strokeWidth="0.3" strokeDasharray="2 2" />
+            <line x1="185" y1="130" x2="195" y2="130" stroke="rgba(255,255,255,0.2)" strokeWidth="0.3" />
+            <line x1="185" y1="380" x2="195" y2="380" stroke="rgba(255,255,255,0.2)" strokeWidth="0.3" />
+            <text x="183" y="260" textAnchor="middle" fill="rgba(255,255,255,0.25)" fontSize="5" fontFamily="monospace" transform="rotate(-90 183 260)">1.8m HEIGHT</text>
+            
+            {/* Nozzle spread */}
+            <line x1="365" y1="340" x2="435" y2="340" stroke="rgba(34,211,238,0.2)" strokeWidth="0.3" />
+            <text x="400" y="348" textAnchor="middle" fill="rgba(34,211,238,0.3)" fontSize="5" fontFamily="monospace">TRIPLE NOZZLE 0.6m</text>
+          </motion.g>
+
+          {/* ===== SIGNAL/DATA TRANSMISSION INDICATORS ===== */}
+          <motion.g style={{ opacity: dataFlicker }}>
+            {/* WiFi-like signal arcs from drone */}
+            <path d="M440 200 Q 460 190 460 180" stroke="rgba(52,211,153,0.3)" strokeWidth="0.5" fill="none" />
+            <path d="M445 195 Q 470 182 470 170" stroke="rgba(52,211,153,0.2)" strokeWidth="0.5" fill="none" />
+            <path d="M450 190 Q 480 175 480 162" stroke="rgba(52,211,153,0.15)" strokeWidth="0.5" fill="none" />
+          </motion.g>
         </svg>
       </motion.div>
 
-      {/* Core energy point */}
-      <motion.div style={{ scale: coreScale, opacity: masterOpacity }} className="absolute">
-        <div className="w-4 h-4 rounded-full bg-white shadow-[0_0_30px_rgba(255,255,255,0.9),0_0_60px_rgba(34,211,238,0.5),0_0_100px_rgba(139,92,246,0.3)]" />
+      {/* Corner frame markers (technical drawing style) */}
+      <motion.div style={{ opacity: masterOpacity }} className="absolute inset-6 md:inset-10 pointer-events-none">
+        <div className="absolute top-0 left-0 w-6 h-6 border-t border-l border-white/10" />
+        <div className="absolute top-0 right-0 w-6 h-6 border-t border-r border-white/10" />
+        <div className="absolute bottom-0 left-0 w-6 h-6 border-b border-l border-white/10" />
+        <div className="absolute bottom-0 right-0 w-6 h-6 border-b border-r border-white/10" />
       </motion.div>
 
-      {/* Horizontal energy beams */}
-      <motion.div style={{ width: beamLength, opacity: ringFade }} className="absolute h-[1px] bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent" />
-      <motion.div style={{ width: beamLength, opacity: shimmer }} className="absolute h-[1px] mt-1 bg-gradient-to-r from-transparent via-purple-400/20 to-transparent" />
+      {/* Top-left technical label */}
+      <motion.div style={{ opacity: hudOpacity }} className="absolute top-4 left-4 md:top-8 md:left-12">
+        <span className="text-[8px] md:text-[9px] font-mono text-cyan-400/40 tracking-wider">JTC-10 INDUSTRIAL CLEANING DRONE — TECHNICAL SCHEMATIC</span>
+      </motion.div>
 
-      {/* Floating particles */}
-      {[...Array(12)].map((_, i) => {
-        const angle = (i * 30 * Math.PI) / 180;
-        const baseR = 80 + (i % 3) * 40;
-        return (
-          <motion.div
-            key={i}
-            style={{
-              x: useTransform(particleSpread, (s) => Math.cos(angle + s * 0.5) * baseR),
-              y: useTransform(particleSpread, (s) => Math.sin(angle + s * 0.3) * baseR * 0.6),
-              opacity: ringFade,
-              scale: useTransform(scrollYProgress, [0.2, 0.5, 0.8], [0, 1, 0]),
-            }}
-            className="absolute w-1 h-1 rounded-full bg-white/40"
-          />
-        );
-      })}
+      {/* Bottom-right version label */}
+      <motion.div style={{ opacity: hudOpacity }} className="absolute bottom-4 right-4 md:bottom-8 md:right-12">
+        <span className="text-[7px] md:text-[8px] font-mono text-white/20 tracking-wider">REV 4.2 | BEZLINY AEROSPACE DIVISION</span>
+      </motion.div>
     </div>
   );
 }
