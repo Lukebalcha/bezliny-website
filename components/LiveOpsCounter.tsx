@@ -26,10 +26,10 @@ export default function LiveOpsCounter() {
   }, []);
 
   const ops = [
-    { value: 12, label: "Drones Deployed", suffix: "" },
-    { value: 847, label: "Operations Completed", suffix: "+" },
-    { value: 24, label: "Cities Covered", suffix: "" },
-    { value: 99.7, label: "Uptime", suffix: "%" },
+    { value: 4, label: "Drones in Fleet", suffix: "" },
+    { value: 9, label: "Service Sectors", suffix: "" },
+    { value: 24, label: "Hour Response Time", suffix: "h" },
+    { value: 100, label: "Chemical-Free", suffix: "%" },
   ];
 
   return (

@@ -4,23 +4,23 @@ import { motion } from "framer-motion";
 
 const pressItems = [
   {
-    source: "Tech Crunch",
-    title: "How Drone Cleaning Is Disrupting a $50B Industry",
+    source: "Industry",
+    title: "Global Façade Cleaning Market Projected to Reach $50B by 2030",
     date: "2025",
   },
   {
-    source: "Bloomberg",
-    title: "The Autonomous Maintenance Revolution in Europe",
+    source: "EU Policy",
+    title: "European Green Deal Drives Demand for Chemical-Free Maintenance",
     date: "2025",
   },
   {
-    source: "Reuters",
-    title: "Warsaw Startup Targets Global Infrastructure Cleaning Market",
+    source: "Aviation",
+    title: "EASA Expands Commercial Drone Operations Framework Across EU",
     date: "2024",
   },
   {
-    source: "Wired",
-    title: "AI-Powered Drones: The Future of Building Maintenance",
+    source: "Energy",
+    title: "Wind Turbine Fleet Maintenance Costs Reduced 40% with Autonomous Systems",
     date: "2024",
   },
 ];
@@ -52,7 +52,7 @@ export default function PressSection() {
               viewport={{ once: true }}
               transition={{ delay: 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             >
-              In The News
+              Industry Insights
             </motion.h2>
           </div>
         </motion.div>

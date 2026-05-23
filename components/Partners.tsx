@@ -3,8 +3,8 @@
 import { motion } from "framer-motion";
 
 const partners = [
-  "DJI Enterprise", "Aerones", "Kärcher", "Wingtra",
-  "Pix4D", "DroneDeploy", "Microsoft Azure", "AWS IoT",
+  "DJI Enterprise", "Kärcher", "Pix4D", "DroneDeploy",
+  "Aerones", "Wingtra", "Litchi", "DroneShield",
 ];
 
 export default function Partners() {

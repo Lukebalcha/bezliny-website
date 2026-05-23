@@ -49,6 +49,11 @@ export default function Footer() {
                   +48 579 366 868
                 </a>
               </li>
+              <li>
+                <a href="https://wa.me/48579366868" target="_blank" rel="noopener noreferrer" className="hover:text-[#25D366] transition-colors duration-500">
+                  WhatsApp
+                </a>
+              </li>
             </ul>
           </div>
         </div>
