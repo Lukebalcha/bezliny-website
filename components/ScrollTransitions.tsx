@@ -3,8 +3,10 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
-// TRANSITION 1: Intelligent Pipeline — shows connected system nodes with data flow
-// Communicates: "This is a precision-engineered process, not random cleaning"
+// TRANSITION 1: Cinematic 4D Window Perspective
+// Story: Customer POV through apartment window → rope cleaners appear (invasive) 
+// → panic/curtains close → drone swoops in (private, efficient) → crystal clear view
+// Psychology: Why drones are superior — privacy, dignity, no human intrusion
 export function DroneTransition() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -12,123 +14,287 @@ export function DroneTransition() {
     offset: ["start end", "end start"],
   });
 
-  const masterOpacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0]);
-  const lineProgress = useTransform(scrollYProgress, [0.1, 0.7], [0, 100]);
-  const node1 = useTransform(scrollYProgress, [0.1, 0.25], [0, 1]);
-  const node2 = useTransform(scrollYProgress, [0.2, 0.35], [0, 1]);
-  const node3 = useTransform(scrollYProgress, [0.3, 0.45], [0, 1]);
-  const node4 = useTransform(scrollYProgress, [0.4, 0.55], [0, 1]);
-  const node5 = useTransform(scrollYProgress, [0.5, 0.65], [0, 1]);
-  const pulseOpacity = useTransform(scrollYProgress, [0.3, 0.5, 0.7], [0, 0.8, 0]);
-  const dataFlow = useTransform(scrollYProgress, [0.15, 0.85], [0, 5]);
-
-  const stages = [
-    { label: "SCAN", sub: "3D Mapping", icon: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" },
-    { label: "ANALYZE", sub: "AI Processing", icon: "M21 3H3v18h18V3zm-2 16H5V5h14v14zM7 7h4v4H7zm6 0h4v4h-4zm-6 6h4v4H7zm6 0h4v4h-4z" },
-    { label: "PLAN", sub: "Path Routing", icon: "M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z" },
-    { label: "EXECUTE", sub: "Precision Clean", icon: "M19.35 10.04A7.49 7.49 0 0012 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 000 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z" },
-    { label: "VERIFY", sub: "Quality Check", icon: "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" },
-  ];
+  // Scene progression (0→1 as user scrolls)
+  const masterOpacity = useTransform(scrollYProgress, [0, 0.08, 0.92, 1], [0, 1, 1, 0]);
+  
+  // Phase 1: Window frame appears, city visible (0.0 - 0.25)
+  const windowOpacity = useTransform(scrollYProgress, [0.05, 0.15], [0, 1]);
+  const cityOpacity = useTransform(scrollYProgress, [0.08, 0.2], [0, 1]);
+  
+  // Phase 2: Rope cleaners descend (0.2 - 0.4)
+  const ropeY = useTransform(scrollYProgress, [0.18, 0.35], [-200, 60]);
+  const ropeOpacity = useTransform(scrollYProgress, [0.18, 0.25, 0.45, 0.5], [0, 1, 1, 0]);
+  const ropeSwing = useTransform(scrollYProgress, [0.25, 0.3, 0.35, 0.4], [-3, 2, -2, 1]);
+  
+  // Phase 3: Discomfort — red tint, curtains close (0.35 - 0.55)
+  const discomfortOpacity = useTransform(scrollYProgress, [0.33, 0.4, 0.5, 0.55], [0, 0.4, 0.4, 0]);
+  const curtainLeft = useTransform(scrollYProgress, [0.38, 0.52], [-50, 48]);
+  const curtainRight = useTransform(scrollYProgress, [0.38, 0.52], [100, 52]);
+  
+  // Phase 4: Transition flash (0.5 - 0.6)
+  const flashOpacity = useTransform(scrollYProgress, [0.52, 0.55, 0.58], [0, 1, 0]);
+  
+  // Phase 5: Drone arrives, curtains open, clean view (0.55 - 0.85)
+  const curtainOpenLeft = useTransform(scrollYProgress, [0.58, 0.7], [48, -50]);
+  const curtainOpenRight = useTransform(scrollYProgress, [0.58, 0.7], [52, 100]);
+  const droneX = useTransform(scrollYProgress, [0.55, 0.68, 0.8], [120, 50, 40]);
+  const droneY = useTransform(scrollYProgress, [0.55, 0.65, 0.75], [-50, 45, 50]);
+  const droneOpacity = useTransform(scrollYProgress, [0.55, 0.62, 0.88, 0.95], [0, 1, 1, 0]);
+  const droneScale = useTransform(scrollYProgress, [0.55, 0.7, 0.85], [0.3, 1, 1.1]);
+  const sprayOpacity = useTransform(scrollYProgress, [0.68, 0.73, 0.85, 0.9], [0, 0.8, 0.8, 0]);
+  const cleanGlow = useTransform(scrollYProgress, [0.7, 0.85], [0, 1]);
+  
+  // Text reveals
+  const oldWayText = useTransform(scrollYProgress, [0.25, 0.32, 0.42, 0.48], [0, 1, 1, 0]);
+  const newWayText = useTransform(scrollYProgress, [0.7, 0.78, 0.88, 0.95], [0, 1, 1, 0]);
 
   return (
-    <div ref={ref} className="relative h-[35vh] md:h-[45vh] overflow-hidden bg-gradient-to-b from-[#09090b] via-[#0a0a0f] to-[#09090b]">
+    <div ref={ref} className="relative h-[80vh] md:h-[100vh] overflow-hidden bg-[#09090b]">
       <motion.div style={{ opacity: masterOpacity }} className="absolute inset-0 flex items-center justify-center">
-        {/* Background grid pattern */}
-        <div className="absolute inset-0 opacity-[0.03]" style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px)`,
-          backgroundSize: '40px 40px'
-        }} />
-
-        {/* Main pipeline SVG */}
-        <svg className="w-full max-w-5xl h-full" viewBox="0 0 1000 300" preserveAspectRatio="xMidYMid meet">
+        
+        <svg className="w-full h-full max-w-6xl" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet">
           <defs>
-            <linearGradient id="pipeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#3b82f6" stopOpacity="0" />
-              <stop offset="20%" stopColor="#3b82f6" stopOpacity="0.6" />
-              <stop offset="50%" stopColor="#60a5fa" stopOpacity="0.9" />
-              <stop offset="80%" stopColor="#3b82f6" stopOpacity="0.6" />
+            <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#1a1a2e" />
+              <stop offset="100%" stopColor="#16213e" />
+            </linearGradient>
+            <linearGradient id="glassGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#1e3a5f" stopOpacity="0.1" />
+              <stop offset="100%" stopColor="#0a1628" stopOpacity="0.3" />
+            </linearGradient>
+            <linearGradient id="curtainGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="#2a1a1a" />
+              <stop offset="50%" stopColor="#3d2222" />
+              <stop offset="100%" stopColor="#2a1a1a" />
+            </linearGradient>
+            <linearGradient id="sprayGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#60a5fa" stopOpacity="0.8" />
               <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
             </linearGradient>
-            <filter id="nodeGlow">
-              <feGaussianBlur stdDeviation="3" result="blur" />
+            <filter id="glow4d">
+              <feGaussianBlur stdDeviation="4" result="blur" />
               <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
             </filter>
-            <filter id="strongGlow">
-              <feGaussianBlur stdDeviation="6" result="blur" />
+            <filter id="softGlow">
+              <feGaussianBlur stdDeviation="8" result="blur" />
               <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
             </filter>
+            <clipPath id="windowClip">
+              <rect x="150" y="50" width="700" height="500" rx="8" />
+            </clipPath>
           </defs>
 
-          {/* Main connection line */}
-          <motion.line
-            x1="100" y1="150" x2="900" y2="150"
-            stroke="url(#pipeGradient)" strokeWidth="1.5"
-            strokeDasharray="1000"
-            style={{ strokeDashoffset: useTransform(lineProgress, (v) => 1000 - v * 10) }}
-          />
-
-          {/* Secondary parallel lines */}
-          <motion.line x1="100" y1="145" x2="900" y2="145" stroke="#3b82f6" strokeOpacity="0.15" strokeWidth="0.5"
-            strokeDasharray="4 8" style={{ opacity: useTransform(scrollYProgress, [0.2, 0.4], [0, 1]) }} />
-          <motion.line x1="100" y1="155" x2="900" y2="155" stroke="#3b82f6" strokeOpacity="0.15" strokeWidth="0.5"
-            strokeDasharray="4 8" style={{ opacity: useTransform(scrollYProgress, [0.2, 0.4], [0, 1]) }} />
-
-          {/* Data packets traveling along the line */}
-          {[0, 1, 2, 3, 4, 5, 6].map((i) => (
-            <motion.circle key={`packet-${i}`} cy="150" r="2.5" fill="#60a5fa" filter="url(#nodeGlow)"
-              style={{
-                cx: useTransform(dataFlow, (v) => 100 + ((v * 160 + i * 115) % 800)),
-                opacity: useTransform(scrollYProgress, [0.15, 0.25, 0.8, 0.9], [0, 0.8, 0.8, 0])
-              }}
-            />
-          ))}
-
-          {/* Pipeline nodes */}
-          {stages.map((stage, i) => {
-            const cx = 140 + i * 180;
-            const nodeOpacity = [node1, node2, node3, node4, node5][i];
-            return (
-              <motion.g key={stage.label} style={{ opacity: nodeOpacity }}>
-                {/* Node outer ring */}
-                <motion.circle cx={cx} cy={150} r="32" fill="none" stroke="#3b82f6" strokeWidth="1"
-                  strokeDasharray="4 3" filter="url(#nodeGlow)">
-                  <animateTransform attributeName="transform" type="rotate"
-                    from={`0 ${cx} 150`} to={`${i % 2 === 0 ? 360 : -360} ${cx} 150`} dur={`${8 + i * 2}s`} repeatCount="indefinite" />
-                </motion.circle>
-                {/* Node inner circle */}
-                <circle cx={cx} cy={150} r="22" fill="#09090b" stroke="#60a5fa" strokeWidth="1.5" />
-                {/* Node core glow */}
-                <circle cx={cx} cy={150} r="14" fill="#3b82f6" fillOpacity="0.1" />
-                <circle cx={cx} cy={150} r="6" fill="#60a5fa" fillOpacity="0.6" />
-                {/* Pulse ring */}
-                <motion.circle cx={cx} cy={150} r="22" fill="none" stroke="#60a5fa" strokeWidth="0.5"
-                  style={{ opacity: pulseOpacity, r: useTransform(scrollYProgress, [0.3, 0.7], [22, 40]) }} />
-                {/* Stage label */}
-                <text x={cx} y={195} textAnchor="middle" fill="white" fillOpacity="0.9" fontSize="10" fontWeight="600" letterSpacing="2">{stage.label}</text>
-                <text x={cx} y={210} textAnchor="middle" fill="white" fillOpacity="0.4" fontSize="8" letterSpacing="1">{stage.sub}</text>
-                {/* Connection dots between nodes */}
-                {i < 4 && (
-                  <>
-                    <circle cx={cx + 60} cy={150} r="1.5" fill="#3b82f6" fillOpacity="0.5" />
-                    <circle cx={cx + 90} cy={150} r="1" fill="#3b82f6" fillOpacity="0.3" />
-                    <circle cx={cx + 120} cy={150} r="1.5" fill="#3b82f6" fillOpacity="0.5" />
-                  </>
-                )}
-              </motion.g>
-            );
-          })}
-
-          {/* Top data readout */}
-          <motion.g style={{ opacity: useTransform(scrollYProgress, [0.3, 0.5, 0.8, 0.9], [0, 0.7, 0.7, 0]) }}>
-            <text x="500" y="80" textAnchor="middle" fill="#60a5fa" fillOpacity="0.5" fontSize="9" letterSpacing="4">AUTONOMOUS CLEANING PIPELINE v3.2</text>
-            <line x1="200" y1="90" x2="800" y2="90" stroke="#3b82f6" strokeOpacity="0.1" strokeWidth="0.5" />
+          {/* === THE WINDOW FRAME (customer's perspective, looking out) === */}
+          <motion.g style={{ opacity: windowOpacity }}>
+            {/* Room darkness around window */}
+            <rect x="0" y="0" width="1000" height="600" fill="#050508" />
+            
+            {/* Window opening */}
+            <rect x="150" y="50" width="700" height="500" fill="url(#skyGrad)" rx="4" />
+            
+            {/* Window frame (thick, architectural) */}
+            <rect x="145" y="45" width="710" height="510" fill="none" stroke="#333" strokeWidth="8" rx="6" />
+            {/* Window cross bars */}
+            <rect x="495" y="45" width="6" height="510" fill="#333" />
+            <rect x="145" y="295" width="710" height="6" fill="#333" />
+            
+            {/* Window sill */}
+            <rect x="130" y="550" width="740" height="20" fill="#222" rx="3" />
+            
+            {/* Glass reflection lines */}
+            <line x1="180" y1="80" x2="220" y2="280" stroke="white" strokeOpacity="0.03" strokeWidth="30" />
+            <line x1="650" y1="60" x2="700" y2="200" stroke="white" strokeOpacity="0.02" strokeWidth="20" />
           </motion.g>
 
-          {/* Bottom status indicators */}
-          <motion.g style={{ opacity: useTransform(scrollYProgress, [0.4, 0.6, 0.8, 0.9], [0, 0.6, 0.6, 0]) }}>
-            <text x="200" y="260" textAnchor="middle" fill="#22c55e" fillOpacity="0.6" fontSize="8" letterSpacing="2">● SYSTEM ACTIVE</text>
-            <text x="500" y="260" textAnchor="middle" fill="white" fillOpacity="0.3" fontSize="8" letterSpacing="2">LATENCY: 12ms</text>
-            <text x="800" y="260" textAnchor="middle" fill="#60a5fa" fillOpacity="0.5" fontSize="8" letterSpacing="2">ACCURACY: 99.7%</text>
+          {/* === CITY SKYLINE (visible through window) === */}
+          <motion.g style={{ opacity: cityOpacity }} clipPath="url(#windowClip)">
+            {/* Distant buildings */}
+            <rect x="160" y="200" width="60" height="350" fill="#1a1a2e" stroke="#2a2a4e" strokeWidth="0.5" />
+            <rect x="230" y="150" width="80" height="400" fill="#151530" stroke="#252550" strokeWidth="0.5" />
+            <rect x="320" y="180" width="55" height="370" fill="#1c1c35" stroke="#2c2c55" strokeWidth="0.5" />
+            <rect x="520" y="130" width="90" height="420" fill="#141428" stroke="#242448" strokeWidth="0.5" />
+            <rect x="620" y="170" width="65" height="380" fill="#1a1a30" stroke="#2a2a50" strokeWidth="0.5" />
+            <rect x="700" y="190" width="70" height="360" fill="#181830" stroke="#282850" strokeWidth="0.5" />
+            <rect x="780" y="220" width="55" height="330" fill="#1c1c38" stroke="#2c2c58" strokeWidth="0.5" />
+            
+            {/* Building windows (small lit rectangles) */}
+            {[180, 250, 540, 640, 720].map((bx, bi) => 
+              [0, 1, 2, 3, 4, 5, 6, 7].map((floor) => (
+                <rect key={`bw-${bi}-${floor}`} x={bx + 8} y={220 + floor * 40} width="12" height="16" 
+                  fill="#ffd700" fillOpacity={Math.random() > 0.5 ? 0.15 : 0.05} rx="1" />
+              ))
+            )}
+          </motion.g>
+
+          {/* === ROPE CLEANERS (the old invasive way) === */}
+          <motion.g style={{ opacity: ropeOpacity }} clipPath="url(#windowClip)">
+            <motion.g style={{ y: ropeY, rotate: ropeSwing, transformOrigin: "500px 0px" }}>
+              {/* Ropes from above */}
+              <line x1="380" y1="-200" x2="380" y2="180" stroke="#666" strokeWidth="2" />
+              <line x1="600" y1="-200" x2="600" y2="160" stroke="#666" strokeWidth="2" />
+              
+              {/* Worker 1 — hanging on rope, too close to window */}
+              <g transform="translate(360, 140)">
+                {/* Body harness */}
+                <rect x="0" y="20" width="30" height="50" fill="#ff6b35" rx="4" />
+                {/* Head with helmet */}
+                <circle cx="15" cy="10" r="12" fill="#ffcc80" />
+                <path d="M3 8 Q15 -2 27 8" fill="#ff8c00" />
+                {/* Arms reaching toward window */}
+                <line x1="5" y1="35" x2="-15" y2="50" stroke="#ffcc80" strokeWidth="4" strokeLinecap="round" />
+                <line x1="25" y1="35" x2="45" y2="45" stroke="#ffcc80" strokeWidth="4" strokeLinecap="round" />
+                {/* Squeegee */}
+                <rect x="40" y="40" width="30" height="4" fill="#ccc" rx="2" />
+                {/* Legs */}
+                <line x1="8" y1="70" x2="5" y2="100" stroke="#334" strokeWidth="5" strokeLinecap="round" />
+                <line x1="22" y1="70" x2="25" y2="100" stroke="#334" strokeWidth="5" strokeLinecap="round" />
+              </g>
+              
+              {/* Worker 2 — peering in */}
+              <g transform="translate(570, 120)">
+                <rect x="0" y="20" width="30" height="50" fill="#ff6b35" rx="4" />
+                <circle cx="15" cy="10" r="12" fill="#ffcc80" />
+                <path d="M3 8 Q15 -2 27 8" fill="#ff8c00" />
+                <line x1="5" y1="35" x2="-10" y2="55" stroke="#ffcc80" strokeWidth="4" strokeLinecap="round" />
+                <line x1="25" y1="35" x2="40" y2="30" stroke="#ffcc80" strokeWidth="4" strokeLinecap="round" />
+                <line x1="8" y1="70" x2="3" y2="100" stroke="#334" strokeWidth="5" strokeLinecap="round" />
+                <line x1="22" y1="70" x2="27" y2="100" stroke="#334" strokeWidth="5" strokeLinecap="round" />
+              </g>
+            </motion.g>
+          </motion.g>
+
+          {/* === DISCOMFORT OVERLAY (red tint = invasion of privacy) === */}
+          <motion.rect x="150" y="50" width="700" height="500" fill="#ff0000"
+            style={{ opacity: discomfortOpacity }} />
+
+          {/* === CURTAINS CLOSING (customer's reaction) === */}
+          <motion.g style={{ opacity: useTransform(scrollYProgress, [0.35, 0.4, 0.68, 0.72], [0, 1, 1, 0]) }}>
+            {/* Left curtain */}
+            <motion.g style={{ x: useTransform(scrollYProgress, (v) => {
+              if (v < 0.52) return -50 + (v - 0.38) * (98 / 0.14);
+              return 48 + (v - 0.58) * (-98 / 0.12);
+            }) }}>
+              <rect x="150" y="50" width="200" height="500" fill="url(#curtainGrad)" />
+              {/* Curtain folds */}
+              <line x1="200" y1="50" x2="200" y2="550" stroke="#1a0a0a" strokeWidth="1" strokeOpacity="0.5" />
+              <line x1="250" y1="50" x2="250" y2="550" stroke="#4a2020" strokeWidth="1" strokeOpacity="0.3" />
+              <line x1="300" y1="50" x2="300" y2="550" stroke="#1a0a0a" strokeWidth="1" strokeOpacity="0.5" />
+            </motion.g>
+            {/* Right curtain */}
+            <motion.g style={{ x: useTransform(scrollYProgress, (v) => {
+              if (v < 0.52) return 100 - (v - 0.38) * (48 / 0.14);
+              return 52 - (v - 0.58) * (-48 / 0.12);
+            }) }}>
+              <rect x="550" y="50" width="200" height="500" fill="url(#curtainGrad)" />
+              <line x1="600" y1="50" x2="600" y2="550" stroke="#1a0a0a" strokeWidth="1" strokeOpacity="0.5" />
+              <line x1="650" y1="50" x2="650" y2="550" stroke="#4a2020" strokeWidth="1" strokeOpacity="0.3" />
+              <line x1="700" y1="50" x2="700" y2="550" stroke="#1a0a0a" strokeWidth="1" strokeOpacity="0.5" />
+            </motion.g>
+          </motion.g>
+
+          {/* === TRANSITION FLASH === */}
+          <motion.rect x="0" y="0" width="1000" height="600" fill="white"
+            style={{ opacity: flashOpacity }} />
+
+          {/* === DRONE ARRIVES (the new way — private, efficient) === */}
+          <motion.g style={{ opacity: droneOpacity }} clipPath="url(#windowClip)">
+            <motion.g style={{ 
+              x: useTransform(scrollYProgress, [0.55, 0.68, 0.8], [300, 0, -20]),
+              y: useTransform(scrollYProgress, [0.55, 0.65, 0.75], [-150, -10, 0]),
+              scale: droneScale,
+              transformOrigin: "500px 300px"
+            }}>
+              {/* Drone body — industrial, large, detailed */}
+              <g transform="translate(420, 230)">
+                {/* Main chassis */}
+                <rect x="20" y="30" width="120" height="40" rx="8" fill="#1a1a2e" stroke="#60a5fa" strokeWidth="1.5" />
+                {/* Core housing */}
+                <rect x="40" y="25" width="80" height="50" rx="6" fill="#0f1729" stroke="#3b82f6" strokeWidth="1" />
+                
+                {/* Propeller arms */}
+                <line x1="30" y1="50" x2="-30" y2="10" stroke="#60a5fa" strokeWidth="2.5" />
+                <line x1="130" y1="50" x2="190" y2="10" stroke="#60a5fa" strokeWidth="2.5" />
+                <line x1="30" y1="50" x2="-30" y2="90" stroke="#60a5fa" strokeWidth="2.5" />
+                <line x1="130" y1="50" x2="190" y2="90" stroke="#60a5fa" strokeWidth="2.5" />
+                
+                {/* Propellers (spinning) */}
+                <circle cx="-30" cy="10" r="20" fill="none" stroke="#60a5fa" strokeWidth="1" strokeOpacity="0.6">
+                  <animateTransform attributeName="transform" type="rotate" from="0 -30 10" to="360 -30 10" dur="0.15s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="190" cy="10" r="20" fill="none" stroke="#60a5fa" strokeWidth="1" strokeOpacity="0.6">
+                  <animateTransform attributeName="transform" type="rotate" from="0 190 10" to="-360 190 10" dur="0.15s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="-30" cy="90" r="20" fill="none" stroke="#60a5fa" strokeWidth="1" strokeOpacity="0.6">
+                  <animateTransform attributeName="transform" type="rotate" from="0 -30 90" to="360 -30 90" dur="0.15s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="190" cy="90" r="20" fill="none" stroke="#60a5fa" strokeWidth="1" strokeOpacity="0.6">
+                  <animateTransform attributeName="transform" type="rotate" from="0 190 90" to="-360 190 90" dur="0.15s" repeatCount="indefinite" />
+                </circle>
+                
+                {/* NOZZLE SYSTEM (front — the cleaning nose) */}
+                <g transform="translate(140, 40)">
+                  {/* Triple nozzle housing */}
+                  <rect x="0" y="-5" width="40" height="20" rx="4" fill="#1a2744" stroke="#3b82f6" strokeWidth="1" />
+                  {/* Individual nozzles */}
+                  <circle cx="45" cy="0" r="4" fill="#09090b" stroke="#60a5fa" strokeWidth="1.5" />
+                  <circle cx="45" cy="10" r="3" fill="#09090b" stroke="#60a5fa" strokeWidth="1" />
+                  <circle cx="50" cy="5" r="3.5" fill="#09090b" stroke="#93c5fd" strokeWidth="1" />
+                </g>
+                
+                {/* Status LEDs */}
+                <circle cx="50" cy="40" r="3" fill="#22c55e">
+                  <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="65" cy="40" r="2" fill="#3b82f6">
+                  <animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="80" cy="40" r="3" fill="#22c55e">
+                  <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite" begin="0.5s" />
+                </circle>
+
+                {/* Tether cable going up */}
+                <path d="M80 25 Q80 -20 75 -60 Q70 -100 80 -150" fill="none" stroke="#666" strokeWidth="1.5" strokeDasharray="4 2" />
+              </g>
+            </motion.g>
+
+            {/* Spray particles (cleaning in action) */}
+            <motion.g style={{ opacity: sprayOpacity }}>
+              {[0,1,2,3,4,5,6,7,8,9,10,11].map((i) => (
+                <circle key={`spray-${i}`} r={1.5 + Math.random() * 2}
+                  cx={610 + Math.random() * 80} cy={260 + Math.random() * 60}
+                  fill="#60a5fa" fillOpacity={0.3 + Math.random() * 0.4}>
+                  <animate attributeName="cx" values={`${610 + i * 7};${640 + i * 8};${610 + i * 7}`} dur={`${1 + Math.random()}s`} repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0.6;0.2;0.6" dur={`${0.8 + Math.random()}s`} repeatCount="indefinite" />
+                </circle>
+              ))}
+              {/* Water mist fan */}
+              <path d="M600 270 Q650 250 700 270 Q680 300 620 300 Z" fill="#60a5fa" fillOpacity="0.08" />
+            </motion.g>
+          </motion.g>
+
+          {/* === CLEAN GLOW (result — crystal clear window) === */}
+          <motion.rect x="150" y="50" width="700" height="500" fill="#60a5fa" rx="4"
+            style={{ opacity: useTransform(cleanGlow, (v) => v * 0.05) }} />
+
+          {/* === TEXT OVERLAYS === */}
+          {/* "The Old Way" text */}
+          <motion.g style={{ opacity: oldWayText }}>
+            <text x="500" y="540" textAnchor="middle" fill="#ff6b35" fillOpacity="0.8" fontSize="11" letterSpacing="6" fontWeight="600">THE OLD WAY</text>
+            <text x="500" y="560" textAnchor="middle" fill="white" fillOpacity="0.4" fontSize="8" letterSpacing="3">INVASIVE • UNCOMFORTABLE • NO PRIVACY</text>
+          </motion.g>
+
+          {/* "The Bezliny Way" text */}
+          <motion.g style={{ opacity: newWayText }}>
+            <text x="500" y="540" textAnchor="middle" fill="#60a5fa" fillOpacity="0.9" fontSize="11" letterSpacing="6" fontWeight="600">THE BEZLINY WAY</text>
+            <text x="500" y="560" textAnchor="middle" fill="white" fillOpacity="0.5" fontSize="8" letterSpacing="3">AUTONOMOUS • PRIVATE • PRECISION CLEAN</text>
+          </motion.g>
+
+          {/* 4th dimension depth lines (nano-tech aesthetic) */}
+          <motion.g style={{ opacity: useTransform(scrollYProgress, [0.6, 0.7, 0.85, 0.92], [0, 0.3, 0.3, 0]) }}>
+            {[0,1,2,3,4,5].map((i) => (
+              <line key={`depth-${i}`} x1={200 + i * 120} y1="55" x2={250 + i * 100} y2="545"
+                stroke="#3b82f6" strokeOpacity="0.08" strokeWidth="0.5" strokeDasharray="2 6" />
+            ))}
           </motion.g>
         </svg>
       </motion.div>
