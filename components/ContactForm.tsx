@@ -1,15 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { supabase } from "@/lib/supabase";
+
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://zpwxoommugmtrwtqlxyq.supabase.co";
+const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "sb_publishable_N36ANIjfi0619K-0ZI4lBA_SWepReOL";
 
 export default function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
+    setError("");
     const form = e.currentTarget;
     const data = new FormData(form);
 
@@ -27,31 +31,27 @@ export default function ContactForm() {
     };
 
     try {
-      // Channel 1: CRM — Insert into Supabase contacts
-      if (supabase) {
-        const { error } = await supabase.from("contacts").insert(contact);
-        
-        if (error) {
-          // Fallback: mailto if Supabase fails
-          const body = `NEW WEBSITE LEAD\n\nName: ${contact.name}\nEmail: ${contact.email}\nPhone: ${contact.phone}\nCompany: ${contact.company}\nBuilding: ${data.get("building_type")}\n\nMessage:\n${data.get("message")}`;
-          window.open(
-            `mailto:contact@bezliny.com?subject=${encodeURIComponent(`[LEAD] ${contact.company}`)}&body=${encodeURIComponent(body)}`,
-            "_self"
-          );
-        }
-      } else {
-        // No Supabase configured — fallback to mailto
-        const body = `NEW WEBSITE LEAD\n\nName: ${contact.name}\nEmail: ${contact.email}\nPhone: ${contact.phone}\nCompany: ${contact.company}\nBuilding: ${data.get("building_type")}\n\nMessage:\n${data.get("message")}`;
-        window.open(
-          `mailto:contact@bezliny.com?subject=${encodeURIComponent(`[LEAD] ${contact.company}`)}&body=${encodeURIComponent(body)}`,
-          "_self"
-        );
+      // Direct REST API call to Supabase (no SDK needed)
+      const resp = await fetch(`${SUPABASE_URL}/rest/v1/contacts`, {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": `Bearer ${SUPABASE_KEY}`,
+          "Content-Type": "application/json",
+          "Prefer": "return=minimal",
+        },
+        body: JSON.stringify(contact),
+      });
+
+      if (!resp.ok) {
+        throw new Error(`Status ${resp.status}`);
       }
-      // Channels 2 & 3 (Email + WhatsApp) handled by server-side monitor
+
+      // Success — notifier daemon handles email + push notifications
       setSubmitted(true);
-    } catch {
-      setSubmitted(true);
-    } finally {
+    } catch (err) {
+      console.error("Form submission error:", err);
+      setError("Submission failed. Please try again or call us at +48 579 366 868.");
       setLoading(false);
     }
   }
@@ -74,6 +74,11 @@ export default function ContactForm() {
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-5">
+          {error && (
+            <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+              {error}
+            </div>
+          )}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
               <label className="block text-sm text-white/80 mb-2">Full Name *</label>
@@ -138,7 +143,7 @@ export default function ContactForm() {
           >
             {loading ? "Processing..." : "Request Free Assessment"}
           </button>
-          <p className="text-center text-[10px] text-white/30 mt-3">Logged in CRM • Team notified instantly via email & WhatsApp</p>
+          <p className="text-center text-[10px] text-white/30 mt-3">Logged in CRM • Team notified instantly via email & push</p>
         </form>
       )}
     </div>
