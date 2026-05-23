@@ -2,8 +2,9 @@
 
 import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
 import { useRef } from "react";
+import { useLang } from "@/lib/LangContext";
 
-const techStack = [
+const techStackEn = [
   { name: "GPS-RTK", desc: "Centimeter-level precision navigation", delay: 0 },
   { name: "AI Vision", desc: "Real-time surface analysis & path planning", delay: 0.08 },
   { name: "Thermal Imaging", desc: "Defect detection & heat mapping", delay: 0.16 },
@@ -14,7 +15,18 @@ const techStack = [
   { name: "Analytics", desc: "Post-mission reports & surface health data", delay: 0.56 },
 ];
 
-function TechCard({ tech, index }: { tech: typeof techStack[0]; index: number }) {
+const techStackPl = [
+  { name: "GPS-RTK", desc: "Nawigacja z precyzją centymetrową", delay: 0 },
+  { name: "AI Vision", desc: "Analiza powierzchni w czasie rzeczywistym", delay: 0.08 },
+  { name: "Termowizja", desc: "Wykrywanie defektów i mapowanie ciepła", delay: 0.16 },
+  { name: "LiDAR", desc: "Skanowanie 3D i unikanie kolizji", delay: 0.24 },
+  { name: "System Hydro", desc: "Czyszczenie czystą wodą przy 150+ bar", delay: 0.32 },
+  { name: "Smart Battery", desc: "System wymiany bez przestojów", delay: 0.4 },
+  { name: "Cloud Fleet", desc: "Zdalny monitoring i kontrola misji", delay: 0.48 },
+  { name: "Analityka", desc: "Raporty i dane o stanie powierzchni", delay: 0.56 },
+];
+
+function TechCard({ tech, index }: { tech: typeof techStackEn[0]; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -76,6 +88,12 @@ function TechCard({ tech, index }: { tech: typeof techStack[0]; index: number })
 }
 
 export default function TechStack() {
+  const { locale } = useLang();
+  const techStack = locale === "pl" ? techStackPl : techStackEn;
+  const label = locale === "pl" ? "Technologia" : "Technology";
+  const title = locale === "pl" ? "Zintegrowana Platforma" : "Integrated Platform";
+  const desc = locale === "pl" ? "Każda misja zasilana naszym autorskim stosem technologicznym" : "Every mission powered by our proprietary technology stack";
+
   return (
     <section className="py-20 md:py-32 relative" style={{ perspective: "1200px" }}>
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/[0.01] to-transparent" />
@@ -94,7 +112,7 @@ export default function TechStack() {
             viewport={{ once: true }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
           >
-            Technology
+            {label}
           </motion.span>
           <motion.h2
             className="mt-3 text-3xl md:text-5xl font-bold font-[family-name:var(--font-space)]"
@@ -103,7 +121,7 @@ export default function TechStack() {
             viewport={{ once: true }}
             transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           >
-            Integrated Platform
+            {title}
           </motion.h2>
           <motion.p
             className="mt-4 text-white/60 text-sm md:text-base max-w-xl mx-auto"
@@ -112,7 +130,7 @@ export default function TechStack() {
             viewport={{ once: true }}
             transition={{ delay: 0.5, duration: 0.8 }}
           >
-            Every mission powered by our proprietary technology stack
+            {desc}
           </motion.p>
         </motion.div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">

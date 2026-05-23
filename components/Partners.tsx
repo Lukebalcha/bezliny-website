@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useLang } from "@/lib/LangContext";
 
 const partners = [
   "DJI Enterprise", "Kärcher", "Pix4D", "DroneDeploy",
@@ -8,6 +9,11 @@ const partners = [
 ];
 
 export default function Partners() {
+  const { locale } = useLang();
+  const ecosystemLabel = locale === "pl" ? "Ekosystem" : "Ecosystem";
+  const titleText = locale === "pl" ? "Partnerzy Technologiczni" : "Technology Partners";
+  const descText = locale === "pl" ? "Zintegrowani z wiodącymi platformami i sprzętem" : "Integrated with industry-leading platforms and hardware";
+
   return (
     <section className="py-16 md:py-24 relative border-t border-white/[0.03]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -24,7 +30,7 @@ export default function Partners() {
             viewport={{ once: true }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           >
-            Ecosystem
+            {ecosystemLabel}
           </motion.span>
           <motion.h2
             className="mt-3 text-2xl md:text-4xl font-bold font-[family-name:var(--font-space)]"
@@ -33,7 +39,7 @@ export default function Partners() {
             viewport={{ once: true }}
             transition={{ delay: 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           >
-            Technology Partners
+            {titleText}
           </motion.h2>
           <motion.p
             className="mt-3 text-white/50 text-sm max-w-lg mx-auto"
@@ -42,7 +48,7 @@ export default function Partners() {
             viewport={{ once: true }}
             transition={{ delay: 0.3, duration: 0.6 }}
           >
-            Integrated with industry-leading platforms and hardware
+            {descText}
           </motion.p>
         </motion.div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">

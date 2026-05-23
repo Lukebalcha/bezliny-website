@@ -1,19 +1,36 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useLang } from "@/lib/LangContext";
 
-const certs = [
-  { name: "ISO 9001:2015", desc: "Quality Management", type: "certified" },
-  { name: "ISO 14001", desc: "Environmental Management", type: "certified" },
-  { name: "EASA Compliant", desc: "EU Aviation Safety", type: "compliant" },
-  { name: "ULC Certified", desc: "Polish Civil Aviation", type: "certified" },
-  { name: "PANSA Registered", desc: "Air Navigation Services", type: "registered" },
-  { name: "CE Marking", desc: "European Conformity", type: "certified" },
-  { name: "ATEX Zone 1", desc: "Explosive Atmospheres", type: "rated" },
-  { name: "IP67 Rated", desc: "Dust & Water Proof", type: "rated" },
+const certsEn = [
+  { name: "ISO 9001:2015", desc: "Quality Management" },
+  { name: "ISO 14001", desc: "Environmental Management" },
+  { name: "EASA Compliant", desc: "EU Aviation Safety" },
+  { name: "ULC Certified", desc: "Polish Civil Aviation" },
+  { name: "PANSA Registered", desc: "Air Navigation Services" },
+  { name: "CE Marking", desc: "European Conformity" },
+  { name: "ATEX Zone 1", desc: "Explosive Atmospheres" },
+  { name: "IP67 Rated", desc: "Dust & Water Proof" },
+];
+
+const certsPl = [
+  { name: "ISO 9001:2015", desc: "Zarządzanie jakością" },
+  { name: "ISO 14001", desc: "Zarządzanie środowiskowe" },
+  { name: "EASA", desc: "Bezpieczeństwo lotnicze UE" },
+  { name: "ULC", desc: "Lotnictwo cywilne" },
+  { name: "PANSA", desc: "Służby nawigacji powietrznej" },
+  { name: "CE", desc: "Zgodność europejska" },
+  { name: "ATEX Strefa 1", desc: "Atmosfery wybuchowe" },
+  { name: "IP67", desc: "Pyło- i wodoszczelność" },
 ];
 
 export default function Certifications() {
+  const { locale } = useLang();
+  const certs = locale === "pl" ? certsPl : certsEn;
+  const label = locale === "pl" ? "Zgodność" : "Compliance";
+  const title = locale === "pl" ? "Certyfikaty i Standardy" : "Certifications & Standards";
+
   return (
     <section className="py-16 md:py-24 relative border-t border-white/[0.03]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -31,7 +48,7 @@ export default function Certifications() {
             viewport={{ once: true }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           >
-            Compliance
+            {label}
           </motion.span>
           <motion.h2
             className="mt-3 text-2xl md:text-4xl font-bold font-[family-name:var(--font-space)]"
@@ -40,7 +57,7 @@ export default function Certifications() {
             viewport={{ once: true }}
             transition={{ delay: 0.15, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           >
-            Certifications & Standards
+            {title}
           </motion.h2>
         </motion.div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">

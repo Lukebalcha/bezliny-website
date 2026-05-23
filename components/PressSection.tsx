@@ -1,31 +1,28 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useLang } from "@/lib/LangContext";
 
-const pressItems = [
-  {
-    source: "Industry",
-    title: "Global Façade Cleaning Market Projected to Reach $50B by 2030",
-    date: "2025",
-  },
-  {
-    source: "EU Policy",
-    title: "European Green Deal Drives Demand for Chemical-Free Maintenance",
-    date: "2025",
-  },
-  {
-    source: "Aviation",
-    title: "EASA Expands Commercial Drone Operations Framework Across EU",
-    date: "2024",
-  },
-  {
-    source: "Energy",
-    title: "Wind Turbine Fleet Maintenance Costs Reduced 40% with Autonomous Systems",
-    date: "2024",
-  },
+const pressItemsEn = [
+  { source: "Industry", title: "Global Façade Cleaning Market Projected to Reach $50B by 2030", date: "2025" },
+  { source: "EU Policy", title: "European Green Deal Drives Demand for Chemical-Free Maintenance", date: "2025" },
+  { source: "Aviation", title: "EASA Expands Commercial Drone Operations Framework Across EU", date: "2024" },
+  { source: "Energy", title: "Wind Turbine Fleet Maintenance Costs Reduced 40% with Autonomous Systems", date: "2024" },
+];
+
+const pressItemsPl = [
+  { source: "Branża", title: "Globalny rynek czyszczenia fasad osiągnie $50 mld do 2030", date: "2025" },
+  { source: "Polityka UE", title: "Europejski Zielony Ład napędza popyt na bezchemiczną konserwację", date: "2025" },
+  { source: "Lotnictwo", title: "EASA rozszerza ramy komercyjnych operacji dronowych w UE", date: "2024" },
+  { source: "Energia", title: "Koszty utrzymania turbin wiatrowych obniżone o 40% dzięki autonomii", date: "2024" },
 ];
 
 export default function PressSection() {
+  const { locale } = useLang();
+  const pressItems = locale === "pl" ? pressItemsPl : pressItemsEn;
+  const label = locale === "pl" ? "Rynek" : "Market";
+  const heading = locale === "pl" ? "Informacje Branżowe" : "Industry Insights";
+
   return (
     <section className="py-16 md:py-24 relative border-t border-white/[0.03]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -43,7 +40,7 @@ export default function PressSection() {
               viewport={{ once: true }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
             >
-              Press
+              {label}
             </motion.span>
             <motion.h2
               className="mt-2 text-2xl md:text-4xl font-bold font-[family-name:var(--font-space)]"
@@ -52,7 +49,7 @@ export default function PressSection() {
               viewport={{ once: true }}
               transition={{ delay: 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             >
-              Industry Insights
+              {heading}
             </motion.h2>
           </div>
         </motion.div>

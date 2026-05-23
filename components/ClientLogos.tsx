@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useLang } from "@/lib/LangContext";
 
 const clients = [
   "PROPERTY MANAGERS", "ENERGY SECTOR", "MARITIME", "INFRASTRUCTURE",
@@ -8,11 +9,21 @@ const clients = [
   "OIL & GAS", "AVIATION", "LOGISTICS", "AGRICULTURE",
 ];
 
+const clientsPl = [
+  "ZARZĄDCY NIERUCHOMOŚCI", "SEKTOR ENERGETYCZNY", "MORSKI", "INFRASTRUKTURA",
+  "SEKTOR PUBLICZNY", "PRZEMYSŁOWY", "KOMERCYJNY", "ODNAWIALNE",
+  "ROPA I GAZ", "LOTNICTWO", "LOGISTYKA", "ROLNICTWO",
+];
+
 export default function ClientLogos() {
+  const { locale } = useLang();
+  const items = locale === "pl" ? clientsPl : clients;
+  const label = locale === "pl" ? "Sektory, które obsługujemy" : "Sectors We Serve";
+
   return (
     <section className="py-10 md:py-14 border-b border-white/[0.03] overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 mb-6">
-        <span className="text-[10px] uppercase tracking-[0.3em] text-white/30">Sectors We Serve</span>
+        <span className="text-[10px] uppercase tracking-[0.3em] text-white/30">{label}</span>
       </div>
       <div className="relative">
         <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#09090b] to-transparent z-10" />
@@ -22,7 +33,7 @@ export default function ClientLogos() {
           animate={{ x: ["0%", "-50%"] }}
           transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
         >
-          {[...clients, ...clients].map((name, i) => (
+          {[...items, ...items].map((name, i) => (
             <span
               key={i}
               className="text-sm md:text-base font-semibold tracking-[0.15em] text-white/20 hover:text-white/50 transition-colors duration-500 select-none"
