@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useEffect } from "react";
 import { useLang } from "@/lib/LangContext";
 
 const videosEn = [
@@ -28,23 +28,36 @@ const videosPl = [
 
 function GalleryItem({ video, index }: { video: typeof videosEn[0]; index: number }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isHovered, setIsHovered] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    const vid = videoRef.current;
+    if (!el || !vid) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          vid.play().catch(() => {});
+        } else {
+          vid.pause();
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <motion.div
-      className="relative group cursor-pointer overflow-hidden rounded-lg border border-white/[0.04]"
+      ref={containerRef}
+      className="relative group overflow-hidden rounded-lg border border-white/[0.04]"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.08, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-      onMouseEnter={() => {
-        setIsHovered(true);
-        videoRef.current?.play();
-      }}
-      onMouseLeave={() => {
-        setIsHovered(false);
-        videoRef.current?.pause();
-      }}
     >
       <div className="aspect-video relative">
         <video
@@ -56,35 +69,18 @@ function GalleryItem({ video, index }: { video: typeof videosEn[0]; index: numbe
           preload="metadata"
           className="w-full h-full object-cover"
         />
-        {/* Overlay */}
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-t from-[#09090b] via-[#09090b]/40 to-transparent"
-          animate={{ opacity: isHovered ? 0.4 : 0.7 }}
-          transition={{ duration: 0.3 }}
-        />
-        {/* Play indicator */}
-        <motion.div
-          className="absolute inset-0 flex items-center justify-center"
-          animate={{ opacity: isHovered ? 0 : 1 }}
-          transition={{ duration: 0.2 }}
-        >
-          <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center backdrop-blur-sm">
-            <div className="w-0 h-0 border-l-[10px] border-l-white/80 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent ml-1" />
-          </div>
-        </motion.div>
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#09090b]/80 via-transparent to-transparent" />
         {/* Title bar */}
-        <motion.div
-          className="absolute bottom-0 left-0 right-0 p-4"
-          animate={{ y: isHovered ? 0 : 5, opacity: isHovered ? 1 : 0.8 }}
-        >
-          <h3 className="text-sm font-semibold text-white font-[family-name:var(--font-space)]">
+        <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4">
+          <h3 className="text-xs md:text-sm font-semibold text-white font-[family-name:var(--font-space)]">
             {video.title}
           </h3>
-          <p className="text-[11px] text-white/50 mt-1">{video.desc}</p>
-        </motion.div>
-        {/* Corner accent */}
-        <div className="absolute top-3 left-3 w-4 h-4 border-t border-l border-cyan-400/30 opacity-0 group-hover:opacity-100 transition-opacity" />
-        <div className="absolute top-3 right-3 w-4 h-4 border-t border-r border-cyan-400/30 opacity-0 group-hover:opacity-100 transition-opacity" />
+          <p className="text-[10px] md:text-[11px] text-white/50 mt-0.5">{video.desc}</p>
+        </div>
+        {/* Corner accents */}
+        <div className="absolute top-2 left-2 w-3 h-3 border-t border-l border-cyan-400/20" />
+        <div className="absolute top-2 right-2 w-3 h-3 border-t border-r border-cyan-400/20" />
       </div>
     </motion.div>
   );
@@ -138,7 +134,7 @@ export default function VideoGallery() {
           </motion.p>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
           {videos.map((video, i) => (
             <GalleryItem key={video.src} video={video} index={i} />
           ))}
