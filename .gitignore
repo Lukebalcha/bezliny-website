@@ -43,3 +43,5 @@ next-env.d.ts
 # environment variables
 .env.local
 .env*.local
+
+raw-videos/

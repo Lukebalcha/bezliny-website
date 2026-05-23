@@ -20,6 +20,7 @@ import Certifications from "@/components/Certifications";
 import TechStack from "@/components/TechStack";
 import Partners from "@/components/Partners";
 import PressSection from "@/components/PressSection";
+import VideoGallery from "@/components/VideoGallery";
 
 export default function HomeContent() {
   const { t } = useLang();
@@ -134,7 +135,7 @@ export default function HomeContent() {
             <div className="lg:col-span-5">
               <SlideIn direction="right" delay={0.2}>
                 <div className="relative aspect-[4/3] md:aspect-[4/5] rounded-2xl overflow-hidden">
-                  <AutoVideo src="/assets/drone-hero.mp4" className="w-full h-full object-contain md:object-cover object-center" />
+                  <AutoVideo src="/assets/videos/drone-multifunction.mp4" className="w-full h-full object-contain md:object-cover object-center" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#09090b]/70 to-transparent" />
                   <div className="hidden md:block absolute top-4 right-4 w-8 h-8 border-t border-r border-white/10" />
                 </div>
@@ -179,7 +180,7 @@ export default function HomeContent() {
 
       {/* Video Break */}
       <section className="relative h-[50vh] md:h-[70vh] overflow-hidden">
-        <AutoVideo src="/assets/drone-hero.mp4" className="absolute inset-0 w-full h-full object-cover scale-105" />
+        <AutoVideo src="/assets/videos/drone-rooftop.mp4" className="absolute inset-0 w-full h-full object-cover scale-105" />
         <div className="absolute inset-0 bg-[#09090b]/75" />
         <div className="relative z-10 flex items-center justify-center h-full px-5">
           <FadeUp>
@@ -210,7 +211,7 @@ export default function HomeContent() {
             <div className="lg:col-span-5 order-2 lg:order-1">
               <ScaleIn delay={0.1}>
                 <div className="relative aspect-[3/2] md:aspect-[4/5] rounded-2xl md:rounded-3xl overflow-hidden border border-white/[0.04]">
-                  <AutoVideo src="/assets/drone-hero.mp4" className="w-full h-full object-contain md:object-cover object-center" />
+                  <AutoVideo src="/assets/videos/drone-tethered.mp4" className="w-full h-full object-contain md:object-cover object-center" />
                 </div>
               </ScaleIn>
             </div>
@@ -245,6 +246,9 @@ export default function HomeContent() {
 
       {/* Global Map */}
       <GlobalMap />
+
+      {/* Video Gallery - Drones in Action */}
+      <VideoGallery />
 
       {/* Technology Stack */}
       <TechStack />
