@@ -3,85 +3,268 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
-// Cinematic scroll transition — drone flies across as you scroll through this divider
-export function DroneTransition({ direction = "left" }: { direction?: "left" | "right" }) {
+// TRANSITION 1: Intelligent Pipeline — shows connected system nodes with data flow
+// Communicates: "This is a precision-engineered process, not random cleaning"
+export function DroneTransition() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
   });
 
-  const droneX = useTransform(
-    scrollYProgress,
-    [0, 0.3, 0.7, 1],
-    direction === "left" 
-      ? ["-120%", "0%", "0%", "120%"] 
-      : ["120%", "0%", "0%", "-120%"]
-  );
-  const droneY = useTransform(scrollYProgress, [0, 0.3, 0.5, 0.7, 1], ["40px", "0px", "-10px", "0px", "-30px"]);
-  const droneRotate = useTransform(
-    scrollYProgress, 
-    [0, 0.3, 0.7, 1], 
-    direction === "left" ? [-5, 0, 0, 5] : [5, 0, 0, -5]
-  );
-  const droneScale = useTransform(scrollYProgress, [0, 0.3, 0.5, 0.7, 1], [0.6, 1, 1.1, 1, 0.6]);
-  const opacity = useTransform(scrollYProgress, [0, 0.15, 0.5, 0.85, 1], [0, 1, 1, 1, 0]);
-  const scanWidth = useTransform(scrollYProgress, [0.2, 0.8], ["0%", "100%"]);
-  const scanOpacity = useTransform(scrollYProgress, [0.15, 0.3, 0.7, 0.85], [0, 1, 1, 0]);
-  const trailWidth = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], ["0%", "40%", "60%", "100%"]);
-  const trailOpacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 0.4, 0.4, 0]);
-  const edgeGlow = useTransform(scrollYProgress, [0.3, 0.5, 0.7], [0, 0.5, 0]);
+  const masterOpacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0]);
+  const lineProgress = useTransform(scrollYProgress, [0.1, 0.7], [0, 100]);
+  const node1 = useTransform(scrollYProgress, [0.1, 0.25], [0, 1]);
+  const node2 = useTransform(scrollYProgress, [0.2, 0.35], [0, 1]);
+  const node3 = useTransform(scrollYProgress, [0.3, 0.45], [0, 1]);
+  const node4 = useTransform(scrollYProgress, [0.4, 0.55], [0, 1]);
+  const node5 = useTransform(scrollYProgress, [0.5, 0.65], [0, 1]);
+  const pulseOpacity = useTransform(scrollYProgress, [0.3, 0.5, 0.7], [0, 0.8, 0]);
+  const dataFlow = useTransform(scrollYProgress, [0.15, 0.85], [0, 5]);
+
+  const stages = [
+    { label: "SCAN", sub: "3D Mapping", icon: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" },
+    { label: "ANALYZE", sub: "AI Processing", icon: "M21 3H3v18h18V3zm-2 16H5V5h14v14zM7 7h4v4H7zm6 0h4v4h-4zm-6 6h4v4H7zm6 0h4v4h-4z" },
+    { label: "PLAN", sub: "Path Routing", icon: "M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z" },
+    { label: "EXECUTE", sub: "Precision Clean", icon: "M19.35 10.04A7.49 7.49 0 0012 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 000 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z" },
+    { label: "VERIFY", sub: "Quality Check", icon: "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" },
+  ];
 
   return (
-    <div ref={ref} className="relative h-[25vh] md:h-[35vh] overflow-hidden">
-      {/* Horizontal scan line */}
-      <motion.div
-        style={{ width: scanWidth, opacity: scanOpacity }}
-        className="absolute top-1/2 left-0 h-[2px] bg-gradient-to-r from-transparent via-white/60 to-transparent"
-      />
+    <div ref={ref} className="relative h-[35vh] md:h-[45vh] overflow-hidden bg-gradient-to-b from-[#09090b] via-[#0a0a0f] to-[#09090b]">
+      <motion.div style={{ opacity: masterOpacity }} className="absolute inset-0 flex items-center justify-center">
+        {/* Background grid pattern */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: `linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px)`,
+          backgroundSize: '40px 40px'
+        }} />
 
-      {/* The drone */}
-      <motion.div
-        style={{ x: droneX, y: droneY, rotate: droneRotate, scale: droneScale, opacity }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100px] h-[100px] md:w-[160px] md:h-[160px]"
-      >
-        <svg width="100%" height="100%" viewBox="0 0 80 80" fill="none">
-          <rect x="30" y="35" width="20" height="10" rx="3" fill="white" fillOpacity="1" />
-          <line x1="20" y1="20" x2="40" y2="40" stroke="white" strokeOpacity="0.85" strokeWidth="2" />
-          <line x1="60" y1="20" x2="40" y2="40" stroke="white" strokeOpacity="0.85" strokeWidth="2" />
-          <line x1="20" y1="60" x2="40" y2="40" stroke="white" strokeOpacity="0.85" strokeWidth="2" />
-          <line x1="60" y1="60" x2="40" y2="40" stroke="white" strokeOpacity="0.85" strokeWidth="2" />
-          <circle cx="20" cy="20" r="9" stroke="white" strokeOpacity="0.7" strokeWidth="1.5" fill="none">
-            <animateTransform attributeName="transform" type="rotate" from="0 20 20" to="360 20 20" dur="0.3s" repeatCount="indefinite" />
-          </circle>
-          <circle cx="60" cy="20" r="9" stroke="white" strokeOpacity="0.7" strokeWidth="1.5" fill="none">
-            <animateTransform attributeName="transform" type="rotate" from="0 60 20" to="-360 60 20" dur="0.3s" repeatCount="indefinite" />
-          </circle>
-          <circle cx="20" cy="60" r="9" stroke="white" strokeOpacity="0.7" strokeWidth="1.5" fill="none">
-            <animateTransform attributeName="transform" type="rotate" from="0 20 60" to="360 20 60" dur="0.3s" repeatCount="indefinite" />
-          </circle>
-          <circle cx="60" cy="60" r="9" stroke="white" strokeOpacity="0.7" strokeWidth="1.5" fill="none">
-            <animateTransform attributeName="transform" type="rotate" from="0 60 60" to="-360 60 60" dur="0.3s" repeatCount="indefinite" />
-          </circle>
-          <circle cx="40" cy="40" r="4" fill="white" fillOpacity="1" />
-          {/* Glow around center */}
-          <circle cx="40" cy="40" r="8" fill="white" fillOpacity="0.15" />
+        {/* Main pipeline SVG */}
+        <svg className="w-full max-w-5xl h-full" viewBox="0 0 1000 300" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <linearGradient id="pipeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#3b82f6" stopOpacity="0" />
+              <stop offset="20%" stopColor="#3b82f6" stopOpacity="0.6" />
+              <stop offset="50%" stopColor="#60a5fa" stopOpacity="0.9" />
+              <stop offset="80%" stopColor="#3b82f6" stopOpacity="0.6" />
+              <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
+            </linearGradient>
+            <filter id="nodeGlow">
+              <feGaussianBlur stdDeviation="3" result="blur" />
+              <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+            </filter>
+            <filter id="strongGlow">
+              <feGaussianBlur stdDeviation="6" result="blur" />
+              <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+            </filter>
+          </defs>
+
+          {/* Main connection line */}
+          <motion.line
+            x1="100" y1="150" x2="900" y2="150"
+            stroke="url(#pipeGradient)" strokeWidth="1.5"
+            strokeDasharray="1000"
+            style={{ strokeDashoffset: useTransform(lineProgress, (v) => 1000 - v * 10) }}
+          />
+
+          {/* Secondary parallel lines */}
+          <motion.line x1="100" y1="145" x2="900" y2="145" stroke="#3b82f6" strokeOpacity="0.15" strokeWidth="0.5"
+            strokeDasharray="4 8" style={{ opacity: useTransform(scrollYProgress, [0.2, 0.4], [0, 1]) }} />
+          <motion.line x1="100" y1="155" x2="900" y2="155" stroke="#3b82f6" strokeOpacity="0.15" strokeWidth="0.5"
+            strokeDasharray="4 8" style={{ opacity: useTransform(scrollYProgress, [0.2, 0.4], [0, 1]) }} />
+
+          {/* Data packets traveling along the line */}
+          {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+            <motion.circle key={`packet-${i}`} cy="150" r="2.5" fill="#60a5fa" filter="url(#nodeGlow)"
+              style={{
+                cx: useTransform(dataFlow, (v) => 100 + ((v * 160 + i * 115) % 800)),
+                opacity: useTransform(scrollYProgress, [0.15, 0.25, 0.8, 0.9], [0, 0.8, 0.8, 0])
+              }}
+            />
+          ))}
+
+          {/* Pipeline nodes */}
+          {stages.map((stage, i) => {
+            const cx = 140 + i * 180;
+            const nodeOpacity = [node1, node2, node3, node4, node5][i];
+            return (
+              <motion.g key={stage.label} style={{ opacity: nodeOpacity }}>
+                {/* Node outer ring */}
+                <motion.circle cx={cx} cy={150} r="32" fill="none" stroke="#3b82f6" strokeWidth="1"
+                  strokeDasharray="4 3" filter="url(#nodeGlow)">
+                  <animateTransform attributeName="transform" type="rotate"
+                    from={`0 ${cx} 150`} to={`${i % 2 === 0 ? 360 : -360} ${cx} 150`} dur={`${8 + i * 2}s`} repeatCount="indefinite" />
+                </motion.circle>
+                {/* Node inner circle */}
+                <circle cx={cx} cy={150} r="22" fill="#09090b" stroke="#60a5fa" strokeWidth="1.5" />
+                {/* Node core glow */}
+                <circle cx={cx} cy={150} r="14" fill="#3b82f6" fillOpacity="0.1" />
+                <circle cx={cx} cy={150} r="6" fill="#60a5fa" fillOpacity="0.6" />
+                {/* Pulse ring */}
+                <motion.circle cx={cx} cy={150} r="22" fill="none" stroke="#60a5fa" strokeWidth="0.5"
+                  style={{ opacity: pulseOpacity, r: useTransform(scrollYProgress, [0.3, 0.7], [22, 40]) }} />
+                {/* Stage label */}
+                <text x={cx} y={195} textAnchor="middle" fill="white" fillOpacity="0.9" fontSize="10" fontWeight="600" letterSpacing="2">{stage.label}</text>
+                <text x={cx} y={210} textAnchor="middle" fill="white" fillOpacity="0.4" fontSize="8" letterSpacing="1">{stage.sub}</text>
+                {/* Connection dots between nodes */}
+                {i < 4 && (
+                  <>
+                    <circle cx={cx + 60} cy={150} r="1.5" fill="#3b82f6" fillOpacity="0.5" />
+                    <circle cx={cx + 90} cy={150} r="1" fill="#3b82f6" fillOpacity="0.3" />
+                    <circle cx={cx + 120} cy={150} r="1.5" fill="#3b82f6" fillOpacity="0.5" />
+                  </>
+                )}
+              </motion.g>
+            );
+          })}
+
+          {/* Top data readout */}
+          <motion.g style={{ opacity: useTransform(scrollYProgress, [0.3, 0.5, 0.8, 0.9], [0, 0.7, 0.7, 0]) }}>
+            <text x="500" y="80" textAnchor="middle" fill="#60a5fa" fillOpacity="0.5" fontSize="9" letterSpacing="4">AUTONOMOUS CLEANING PIPELINE v3.2</text>
+            <line x1="200" y1="90" x2="800" y2="90" stroke="#3b82f6" strokeOpacity="0.1" strokeWidth="0.5" />
+          </motion.g>
+
+          {/* Bottom status indicators */}
+          <motion.g style={{ opacity: useTransform(scrollYProgress, [0.4, 0.6, 0.8, 0.9], [0, 0.6, 0.6, 0]) }}>
+            <text x="200" y="260" textAnchor="middle" fill="#22c55e" fillOpacity="0.6" fontSize="8" letterSpacing="2">● SYSTEM ACTIVE</text>
+            <text x="500" y="260" textAnchor="middle" fill="white" fillOpacity="0.3" fontSize="8" letterSpacing="2">LATENCY: 12ms</text>
+            <text x="800" y="260" textAnchor="middle" fill="#60a5fa" fillOpacity="0.5" fontSize="8" letterSpacing="2">ACCURACY: 99.7%</text>
+          </motion.g>
         </svg>
       </motion.div>
+    </div>
+  );
+}
 
-      {/* Flight trail behind drone */}
-      <motion.div
-        style={{ width: trailWidth, opacity: trailOpacity }}
-        className={`absolute top-[calc(50%-1px)] h-[2px] ${direction === "left" ? "left-0" : "right-0"}`}
-      >
-        <div className="w-full h-full bg-gradient-to-r from-transparent via-white/50 to-transparent" />
+// TRANSITION 2: Performance Matrix — radial metrics emanating from core
+// Communicates: "These numbers prove WHY this technology is superior"
+export function PerformanceTransition() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+
+  const masterOpacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0]);
+  const coreScale = useTransform(scrollYProgress, [0.1, 0.4], [0, 1]);
+  const ring1 = useTransform(scrollYProgress, [0.15, 0.4], [0, 1]);
+  const ring2 = useTransform(scrollYProgress, [0.2, 0.5], [0, 1]);
+  const ring3 = useTransform(scrollYProgress, [0.25, 0.55], [0, 1]);
+  const metricsOpacity = useTransform(scrollYProgress, [0.3, 0.5, 0.8, 0.9], [0, 1, 1, 0]);
+  const connectionOpacity = useTransform(scrollYProgress, [0.2, 0.45], [0, 1]);
+  const rotateOuter = useTransform(scrollYProgress, [0, 1], [0, 45]);
+  const rotateInner = useTransform(scrollYProgress, [0, 1], [0, -30]);
+
+  const metrics = [
+    { value: "99.7%", label: "PRECISION", angle: -60, color: "#22c55e" },
+    { value: "4×", label: "FASTER", angle: 0, color: "#3b82f6" },
+    { value: "ZERO", label: "RISK", angle: 60, color: "#f59e0b" },
+    { value: "150m", label: "ALTITUDE", angle: 120, color: "#8b5cf6" },
+    { value: "24/7", label: "OPERATION", angle: 180, color: "#06b6d4" },
+    { value: "360°", label: "COVERAGE", angle: 240, color: "#ec4899" },
+  ];
+
+  return (
+    <div ref={ref} className="relative h-[35vh] md:h-[45vh] overflow-hidden bg-gradient-to-b from-[#09090b] via-[#0a0a0f] to-[#09090b]">
+      <motion.div style={{ opacity: masterOpacity }} className="absolute inset-0 flex items-center justify-center">
+        {/* Radial background */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-[600px] h-[600px] rounded-full bg-gradient-radial from-blue-500/[0.03] to-transparent" />
+        </div>
+
+        <svg className="w-full max-w-4xl h-full" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <filter id="metricGlow">
+              <feGaussianBlur stdDeviation="4" result="blur" />
+              <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+            </filter>
+            <radialGradient id="coreGrad">
+              <stop offset="0%" stopColor="#60a5fa" stopOpacity="0.4" />
+              <stop offset="70%" stopColor="#3b82f6" stopOpacity="0.1" />
+              <stop offset="100%" stopColor="#1e40af" stopOpacity="0" />
+            </radialGradient>
+          </defs>
+
+          {/* Outer rotating ring */}
+          <motion.g style={{ rotate: rotateOuter, transformOrigin: "400px 200px", opacity: ring3 }}>
+            <circle cx="400" cy="200" r="170" fill="none" stroke="#3b82f6" strokeOpacity="0.1" strokeWidth="0.5" strokeDasharray="8 4" />
+            {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((a) => (
+              <circle key={`dot-outer-${a}`} cx={400 + 170 * Math.cos(a * Math.PI / 180)} cy={200 + 170 * Math.sin(a * Math.PI / 180)} r="1.5" fill="#3b82f6" fillOpacity="0.3" />
+            ))}
+          </motion.g>
+
+          {/* Middle rotating ring */}
+          <motion.g style={{ rotate: rotateInner, transformOrigin: "400px 200px", opacity: ring2 }}>
+            <circle cx="400" cy="200" r="120" fill="none" stroke="#60a5fa" strokeOpacity="0.15" strokeWidth="1" strokeDasharray="3 6" />
+            {[0, 45, 90, 135, 180, 225, 270, 315].map((a) => (
+              <circle key={`dot-mid-${a}`} cx={400 + 120 * Math.cos(a * Math.PI / 180)} cy={200 + 120 * Math.sin(a * Math.PI / 180)} r="2" fill="#60a5fa" fillOpacity="0.4" />
+            ))}
+          </motion.g>
+
+          {/* Inner ring */}
+          <motion.g style={{ opacity: ring1 }}>
+            <circle cx="400" cy="200" r="60" fill="none" stroke="#93c5fd" strokeOpacity="0.2" strokeWidth="1.5" />
+            <circle cx="400" cy="200" r="55" fill="none" stroke="#60a5fa" strokeOpacity="0.08" strokeWidth="8" />
+          </motion.g>
+
+          {/* Core */}
+          <motion.g style={{ scale: coreScale, transformOrigin: "400px 200px" }}>
+            <circle cx="400" cy="200" r="35" fill="url(#coreGrad)" />
+            <circle cx="400" cy="200" r="20" fill="#09090b" stroke="#60a5fa" strokeWidth="2" />
+            <circle cx="400" cy="200" r="8" fill="#3b82f6" fillOpacity="0.8" filter="url(#metricGlow)" />
+            {/* Core pulse */}
+            <circle cx="400" cy="200" r="20" fill="none" stroke="#60a5fa" strokeWidth="0.5" strokeOpacity="0.6">
+              <animate attributeName="r" values="20;35;20" dur="3s" repeatCount="indefinite" />
+              <animate attributeName="stroke-opacity" values="0.6;0;0.6" dur="3s" repeatCount="indefinite" />
+            </circle>
+          </motion.g>
+
+          {/* Connection lines from core to metrics */}
+          <motion.g style={{ opacity: connectionOpacity }}>
+            {metrics.map((m, i) => {
+              const rad = m.angle * Math.PI / 180;
+              const x2 = 400 + 140 * Math.cos(rad);
+              const y2 = 200 + 95 * Math.sin(rad);
+              return (
+                <g key={`conn-${i}`}>
+                  <line x1="400" y1="200" x2={x2} y2={y2} stroke={m.color} strokeOpacity="0.2" strokeWidth="0.5" strokeDasharray="3 3" />
+                  {/* Traveling dot on connection */}
+                  <circle r="2" fill={m.color} fillOpacity="0.7">
+                    <animateMotion dur={`${2 + i * 0.3}s`} repeatCount="indefinite"
+                      path={`M400,200 L${x2},${y2}`} />
+                  </circle>
+                </g>
+              );
+            })}
+          </motion.g>
+
+          {/* Metric nodes */}
+          <motion.g style={{ opacity: metricsOpacity }}>
+            {metrics.map((m, i) => {
+              const rad = m.angle * Math.PI / 180;
+              const x = 400 + 140 * Math.cos(rad);
+              const y = 200 + 95 * Math.sin(rad);
+              return (
+                <g key={`metric-${i}`}>
+                  {/* Metric background */}
+                  <circle cx={x} cy={y} r="28" fill="#09090b" stroke={m.color} strokeOpacity="0.4" strokeWidth="1" />
+                  <circle cx={x} cy={y} r="28" fill={m.color} fillOpacity="0.05" />
+                  {/* Value */}
+                  <text x={x} y={y - 2} textAnchor="middle" fill={m.color} fontSize="12" fontWeight="700" letterSpacing="1">{m.value}</text>
+                  {/* Label */}
+                  <text x={x} y={y + 11} textAnchor="middle" fill="white" fillOpacity="0.5" fontSize="6.5" letterSpacing="2">{m.label}</text>
+                </g>
+              );
+            })}
+          </motion.g>
+
+          {/* Title */}
+          <motion.g style={{ opacity: useTransform(scrollYProgress, [0.3, 0.5, 0.8, 0.9], [0, 0.7, 0.7, 0]) }}>
+            <text x="400" y="35" textAnchor="middle" fill="white" fillOpacity="0.4" fontSize="9" letterSpacing="5">PERFORMANCE METRICS</text>
+            <text x="400" y="380" textAnchor="middle" fill="white" fillOpacity="0.25" fontSize="8" letterSpacing="3">REAL-TIME MONITORING ACTIVE</text>
+          </motion.g>
+        </svg>
       </motion.div>
-
-      {/* Bottom edge glow */}
-      <motion.div
-        style={{ opacity: edgeGlow }}
-        className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/50 to-transparent"
-      />
     </div>
   );
 }

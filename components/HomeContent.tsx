@@ -9,7 +9,7 @@ import MagneticButton from "@/components/MagneticButton";
 import HorizontalScroll from "@/components/HorizontalScroll";
 import { Section3D, MeshGradient } from "@/components/Dynamic3D";
 import AutoVideo from "@/components/AutoVideo";
-import { DroneTransition, BurstTransition } from "@/components/ScrollTransitions";
+import { DroneTransition, BurstTransition, PerformanceTransition } from "@/components/ScrollTransitions";
 import { FormingSection, FormingElement } from "@/components/CinematicReveal";
 import { FadeUp, ScaleIn, SlideIn } from "@/components/Animations";
 import DroneServicesReveal from "@/components/DroneServicesReveal";
@@ -143,7 +143,7 @@ export default function HomeContent() {
       </section>
 
       {/* Services */}
-      <DroneTransition direction="left" />
+      <DroneTransition />
       <DroneServicesReveal />
       <FormingSection className="py-20 md:py-40 relative">
         <div className="hidden md:block absolute top-32 right-8 text-[12rem] font-bold text-white/[0.015] font-[family-name:var(--font-space)] select-none pointer-events-none leading-none">03</div>
@@ -198,7 +198,7 @@ export default function HomeContent() {
       </section>
 
       {/* Technology */}
-      <DroneTransition direction="right" />
+      <PerformanceTransition />
       <section className="py-20 md:py-40 relative overflow-hidden">
         <Section3D />
         <MeshGradient />
