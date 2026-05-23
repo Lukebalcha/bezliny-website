@@ -3,10 +3,11 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
-// TRANSITION 1: Cinematic 4D Window Perspective
-// Story: Customer POV through apartment window → rope cleaners appear (invasive) 
-// → panic/curtains close → drone swoops in (private, efficient) → crystal clear view
-// Psychology: Why drones are superior — privacy, dignity, no human intrusion
+// TRANSITION 1: Cinematic 4D Window Perspective — NANO-TECH DETAIL LEVEL
+// Story: Customer POV through high-rise window → rope cleaners descend (hyper-detailed, invasive, creepy)
+// → panic/curtains close → industrial drone arrives with precision nozzle array
+// Detail level: Every rope fiber, harness buckle, pocket zipper, skin texture visible
+// Architecture: Real industrial drone proportions — 2m wingspan, multi-nozzle array, composite body
 export function DroneTransition() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -15,285 +16,548 @@ export function DroneTransition() {
   });
 
   // Scene progression (0→1 as user scrolls)
-  const masterOpacity = useTransform(scrollYProgress, [0, 0.08, 0.92, 1], [0, 1, 1, 0]);
+  const masterOpacity = useTransform(scrollYProgress, [0, 0.06, 0.94, 1], [0, 1, 1, 0]);
   
-  // Phase 1: Window frame appears, city visible (0.0 - 0.25)
-  const windowOpacity = useTransform(scrollYProgress, [0.05, 0.15], [0, 1]);
-  const cityOpacity = useTransform(scrollYProgress, [0.08, 0.2], [0, 1]);
+  // Phase 1: Window frame appears (0.0 - 0.2)
+  const windowOpacity = useTransform(scrollYProgress, [0.03, 0.12], [0, 1]);
+  const cityOpacity = useTransform(scrollYProgress, [0.06, 0.18], [0, 1]);
   
-  // Phase 2: Rope cleaners descend (0.2 - 0.4)
-  const ropeY = useTransform(scrollYProgress, [0.18, 0.35], [-200, 60]);
-  const ropeOpacity = useTransform(scrollYProgress, [0.18, 0.25, 0.45, 0.5], [0, 1, 1, 0]);
-  const ropeSwing = useTransform(scrollYProgress, [0.25, 0.3, 0.35, 0.4], [-3, 2, -2, 1]);
+  // Phase 2: Rope cleaners descend (0.15 - 0.42)
+  const ropeY = useTransform(scrollYProgress, [0.15, 0.35], [-300, 40]);
+  const ropeOpacity = useTransform(scrollYProgress, [0.15, 0.22, 0.42, 0.48], [0, 1, 1, 0]);
+  const ropeSwing = useTransform(scrollYProgress, [0.22, 0.28, 0.34, 0.4], [-2, 1.5, -1, 0.5]);
   
-  // Phase 3: Discomfort — red tint, curtains close (0.35 - 0.55)
-  const discomfortOpacity = useTransform(scrollYProgress, [0.33, 0.4, 0.5, 0.55], [0, 0.4, 0.4, 0]);
-  const curtainLeft = useTransform(scrollYProgress, [0.38, 0.52], [-50, 48]);
-  const curtainRight = useTransform(scrollYProgress, [0.38, 0.52], [100, 52]);
+  // Phase 3: Discomfort + curtains close (0.35 - 0.55)
+  const discomfortOpacity = useTransform(scrollYProgress, [0.34, 0.4, 0.5, 0.54], [0, 0.35, 0.35, 0]);
   
-  // Phase 4: Transition flash (0.5 - 0.6)
-  const flashOpacity = useTransform(scrollYProgress, [0.52, 0.55, 0.58], [0, 1, 0]);
+  // Phase 4: Transition flash (0.5 - 0.58)
+  const flashOpacity = useTransform(scrollYProgress, [0.52, 0.55, 0.58], [0, 0.9, 0]);
   
-  // Phase 5: Drone arrives, curtains open, clean view (0.55 - 0.85)
-  const curtainOpenLeft = useTransform(scrollYProgress, [0.58, 0.7], [48, -50]);
-  const curtainOpenRight = useTransform(scrollYProgress, [0.58, 0.7], [52, 100]);
-  const droneX = useTransform(scrollYProgress, [0.55, 0.68, 0.8], [120, 50, 40]);
-  const droneY = useTransform(scrollYProgress, [0.55, 0.65, 0.75], [-50, 45, 50]);
-  const droneOpacity = useTransform(scrollYProgress, [0.55, 0.62, 0.88, 0.95], [0, 1, 1, 0]);
-  const droneScale = useTransform(scrollYProgress, [0.55, 0.7, 0.85], [0.3, 1, 1.1]);
-  const sprayOpacity = useTransform(scrollYProgress, [0.68, 0.73, 0.85, 0.9], [0, 0.8, 0.8, 0]);
-  const cleanGlow = useTransform(scrollYProgress, [0.7, 0.85], [0, 1]);
+  // Phase 5: Drone arrives (0.55 - 0.9)
+  const droneOpacity = useTransform(scrollYProgress, [0.56, 0.63, 0.9, 0.96], [0, 1, 1, 0]);
+  const droneScale = useTransform(scrollYProgress, [0.56, 0.72, 0.88], [0.2, 1, 1.05]);
+  const sprayOpacity = useTransform(scrollYProgress, [0.7, 0.75, 0.88, 0.93], [0, 1, 1, 0]);
+  const cleanGlow = useTransform(scrollYProgress, [0.75, 0.88], [0, 1]);
   
   // Text reveals
-  const oldWayText = useTransform(scrollYProgress, [0.25, 0.32, 0.42, 0.48], [0, 1, 1, 0]);
-  const newWayText = useTransform(scrollYProgress, [0.7, 0.78, 0.88, 0.95], [0, 1, 1, 0]);
+  const oldWayText = useTransform(scrollYProgress, [0.25, 0.3, 0.42, 0.47], [0, 1, 1, 0]);
+  const newWayText = useTransform(scrollYProgress, [0.72, 0.78, 0.9, 0.95], [0, 1, 1, 0]);
 
   return (
-    <div ref={ref} className="relative h-[80vh] md:h-[100vh] overflow-hidden bg-[#09090b]">
+    <div ref={ref} className="relative h-[100vh] md:h-[120vh] overflow-hidden bg-[#030308]">
       <motion.div style={{ opacity: masterOpacity }} className="absolute inset-0 flex items-center justify-center">
         
-        <svg className="w-full h-full max-w-6xl" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet">
+        <svg className="w-full h-full max-w-7xl" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid meet">
           <defs>
-            <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+            {/* Hyper-realistic gradients */}
+            <linearGradient id="skyGrad4d" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#0a0a1a" />
+              <stop offset="40%" stopColor="#0d1525" />
+              <stop offset="100%" stopColor="#131b2e" />
+            </linearGradient>
+            <linearGradient id="steelFrame" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#3a3a3a" />
+              <stop offset="30%" stopColor="#2a2a2a" />
+              <stop offset="70%" stopColor="#1f1f1f" />
+              <stop offset="100%" stopColor="#0f0f0f" />
+            </linearGradient>
+            <linearGradient id="skinTone" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#d4a574" />
+              <stop offset="50%" stopColor="#c49464" />
+              <stop offset="100%" stopColor="#b08050" />
+            </linearGradient>
+            <linearGradient id="overallGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#1a3a5c" />
+              <stop offset="50%" stopColor="#153050" />
+              <stop offset="100%" stopColor="#0f2540" />
+            </linearGradient>
+            <linearGradient id="helmetGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#ffcc00" />
+              <stop offset="30%" stopColor="#e6b800" />
+              <stop offset="100%" stopColor="#cc9900" />
+            </linearGradient>
+            <linearGradient id="droneBody" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#1a2744" />
+              <stop offset="40%" stopColor="#0f1c33" />
+              <stop offset="100%" stopColor="#0a1422" />
+            </linearGradient>
+            <linearGradient id="droneArm" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="#2a4060" />
+              <stop offset="50%" stopColor="#1a3050" />
+              <stop offset="100%" stopColor="#0f2040" />
+            </linearGradient>
+            <linearGradient id="carbonFiber" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stopColor="#1a1a2e" />
-              <stop offset="100%" stopColor="#16213e" />
+              <stop offset="25%" stopColor="#222244" />
+              <stop offset="50%" stopColor="#1a1a2e" />
+              <stop offset="75%" stopColor="#222244" />
+              <stop offset="100%" stopColor="#1a1a2e" />
             </linearGradient>
-            <linearGradient id="glassGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#1e3a5f" stopOpacity="0.1" />
-              <stop offset="100%" stopColor="#0a1628" stopOpacity="0.3" />
+            <linearGradient id="nozzleGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="#0f2040" />
+              <stop offset="50%" stopColor="#1a3050" />
+              <stop offset="100%" stopColor="#0a1830" />
             </linearGradient>
-            <linearGradient id="curtainGrad" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor="#2a1a1a" />
-              <stop offset="50%" stopColor="#3d2222" />
-              <stop offset="100%" stopColor="#2a1a1a" />
+            <radialGradient id="propBlur" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="#60a5fa" stopOpacity="0.4" />
+              <stop offset="70%" stopColor="#3b82f6" stopOpacity="0.15" />
+              <stop offset="100%" stopColor="#1d4ed8" stopOpacity="0" />
+            </radialGradient>
+            <linearGradient id="curtainVelvet" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="#1a0808" />
+              <stop offset="20%" stopColor="#2d1010" />
+              <stop offset="40%" stopColor="#3d1515" />
+              <stop offset="60%" stopColor="#2d1010" />
+              <stop offset="80%" stopColor="#3d1515" />
+              <stop offset="100%" stopColor="#1a0808" />
             </linearGradient>
-            <linearGradient id="sprayGrad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#60a5fa" stopOpacity="0.8" />
-              <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
-            </linearGradient>
-            <filter id="glow4d">
-              <feGaussianBlur stdDeviation="4" result="blur" />
+            <filter id="nanoGlow">
+              <feGaussianBlur stdDeviation="2" result="blur" />
               <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
             </filter>
-            <filter id="softGlow">
-              <feGaussianBlur stdDeviation="8" result="blur" />
+            <filter id="heavyGlow">
+              <feGaussianBlur stdDeviation="6" result="blur" />
               <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
             </filter>
-            <clipPath id="windowClip">
-              <rect x="150" y="50" width="700" height="500" rx="8" />
+            <filter id="softShadow">
+              <feDropShadow dx="0" dy="4" stdDeviation="4" floodColor="#000" floodOpacity="0.5" />
+            </filter>
+            <clipPath id="windowClip4d">
+              <rect x="180" y="60" width="840" height="580" rx="3" />
             </clipPath>
+            {/* Rope texture pattern */}
+            <pattern id="ropeTexture" x="0" y="0" width="4" height="8" patternUnits="userSpaceOnUse">
+              <path d="M0 0 Q2 2 4 0 Q2 6 0 8" fill="none" stroke="#8b7355" strokeWidth="0.5" />
+            </pattern>
           </defs>
 
-          {/* === THE WINDOW FRAME (customer's perspective, looking out) === */}
+          {/* === ARCHITECTURAL WINDOW FRAME (premium steel & glass) === */}
           <motion.g style={{ opacity: windowOpacity }}>
-            {/* Room darkness around window */}
-            <rect x="0" y="0" width="1000" height="600" fill="#050508" />
+            {/* Room darkness — deep black void surrounding window */}
+            <rect x="0" y="0" width="1200" height="700" fill="#020205" />
             
-            {/* Window opening */}
-            <rect x="150" y="50" width="700" height="500" fill="url(#skyGrad)" rx="4" />
+            {/* Window opening — the view */}
+            <rect x="180" y="60" width="840" height="580" fill="url(#skyGrad4d)" rx="2" />
             
-            {/* Window frame (thick, architectural) */}
-            <rect x="145" y="45" width="710" height="510" fill="none" stroke="#333" strokeWidth="8" rx="6" />
-            {/* Window cross bars */}
-            <rect x="495" y="45" width="6" height="510" fill="#333" />
-            <rect x="145" y="295" width="710" height="6" fill="#333" />
+            {/* Premium steel frame — multi-layer depth */}
+            <rect x="172" y="52" width="856" height="596" fill="none" stroke="#1a1a1a" strokeWidth="16" rx="4" />
+            <rect x="176" y="56" width="848" height="588" fill="none" stroke="#2a2a2a" strokeWidth="8" rx="3" />
+            <rect x="178" y="58" width="844" height="584" fill="none" stroke="#3a3a3a" strokeWidth="2" rx="2" />
             
-            {/* Window sill */}
-            <rect x="130" y="550" width="740" height="20" fill="#222" rx="3" />
+            {/* Cross mullions — precision engineered */}
+            <rect x="595" y="52" width="10" height="596" fill="url(#steelFrame)" />
+            <rect x="172" y="345" width="856" height="8" fill="url(#steelFrame)" />
             
-            {/* Glass reflection lines */}
-            <line x1="180" y1="80" x2="220" y2="280" stroke="white" strokeOpacity="0.03" strokeWidth="30" />
-            <line x1="650" y1="60" x2="700" y2="200" stroke="white" strokeOpacity="0.02" strokeWidth="20" />
+            {/* Mullion edge highlights */}
+            <line x1="595" y1="52" x2="595" y2="648" stroke="#4a4a4a" strokeWidth="0.5" />
+            <line x1="605" y1="52" x2="605" y2="648" stroke="#111" strokeWidth="0.5" />
+            
+            {/* Window hardware — locks, handles */}
+            <rect x="588" y="330" width="24" height="30" rx="3" fill="#222" stroke="#444" strokeWidth="1" />
+            <circle cx="600" cy="345" r="4" fill="#333" stroke="#555" strokeWidth="0.5" />
+            
+            {/* Window sill — polished stone */}
+            <rect x="165" y="645" width="870" height="22" fill="#1a1a1a" rx="2" />
+            <rect x="165" y="645" width="870" height="3" fill="#333" rx="1" />
+            
+            {/* Glass reflections — subtle, realistic */}
+            <path d="M200 80 L240 400" stroke="white" strokeOpacity="0.015" strokeWidth="40" strokeLinecap="round" />
+            <path d="M800 70 L850 250" stroke="white" strokeOpacity="0.01" strokeWidth="25" strokeLinecap="round" />
+            <path d="M400 600 L500 400" stroke="white" strokeOpacity="0.008" strokeWidth="15" strokeLinecap="round" />
           </motion.g>
 
-          {/* === CITY SKYLINE (visible through window) === */}
-          <motion.g style={{ opacity: cityOpacity }} clipPath="url(#windowClip)">
-            {/* Distant buildings */}
-            <rect x="160" y="200" width="60" height="350" fill="#1a1a2e" stroke="#2a2a4e" strokeWidth="0.5" />
-            <rect x="230" y="150" width="80" height="400" fill="#151530" stroke="#252550" strokeWidth="0.5" />
-            <rect x="320" y="180" width="55" height="370" fill="#1c1c35" stroke="#2c2c55" strokeWidth="0.5" />
-            <rect x="520" y="130" width="90" height="420" fill="#141428" stroke="#242448" strokeWidth="0.5" />
-            <rect x="620" y="170" width="65" height="380" fill="#1a1a30" stroke="#2a2a50" strokeWidth="0.5" />
-            <rect x="700" y="190" width="70" height="360" fill="#181830" stroke="#282850" strokeWidth="0.5" />
-            <rect x="780" y="220" width="55" height="330" fill="#1c1c38" stroke="#2c2c58" strokeWidth="0.5" />
+          {/* === CITY SKYLINE — Warsaw at night (hyper-detailed) === */}
+          <motion.g style={{ opacity: cityOpacity }} clipPath="url(#windowClip4d)">
+            {/* Sky gradient overlay */}
+            <rect x="180" y="60" width="840" height="580" fill="url(#skyGrad4d)" />
             
-            {/* Building windows (small lit rectangles) */}
-            {[180, 250, 540, 640, 720].map((bx, bi) => 
-              [0, 1, 2, 3, 4, 5, 6, 7].map((floor) => (
-                <rect key={`bw-${bi}-${floor}`} x={bx + 8} y={220 + floor * 40} width="12" height="16" 
-                  fill="#ffd700" fillOpacity={Math.random() > 0.5 ? 0.15 : 0.05} rx="1" />
+            {/* Distant buildings — varied architectural styles */}
+            <rect x="195" y="200" width="75" height="440" fill="#0c0c1a" stroke="#1a1a30" strokeWidth="0.3" />
+            <rect x="280" y="140" width="95" height="500" fill="#0a0a18" stroke="#181830" strokeWidth="0.3" />
+            <rect x="385" y="170" width="65" height="470" fill="#0d0d1e" stroke="#1c1c35" strokeWidth="0.3" />
+            <rect x="460" y="110" width="110" height="530" fill="#090916" stroke="#161630" strokeWidth="0.3" />
+            <rect x="620" y="130" width="85" height="510" fill="#0b0b1a" stroke="#1a1a32" strokeWidth="0.3" />
+            <rect x="715" y="155" width="70" height="485" fill="#0c0c1c" stroke="#1b1b34" strokeWidth="0.3" />
+            <rect x="795" y="185" width="90" height="455" fill="#0a0a17" stroke="#191930" strokeWidth="0.3" />
+            <rect x="895" y="210" width="60" height="430" fill="#0d0d1e" stroke="#1d1d36" strokeWidth="0.3" />
+            <rect x="960" y="165" width="50" height="475" fill="#0b0b19" stroke="#1a1a32" strokeWidth="0.3" />
+            
+            {/* Building window grids — life inside */}
+            {[210, 295, 475, 635, 730, 810].map((bx, bi) => 
+              Array.from({length: 12}, (_, floor) => (
+                <rect key={`bw-${bi}-${floor}`} x={bx + 8 + (floor % 3) * 18} y={230 + floor * 32} width="10" height="14" 
+                  fill="#ffd700" fillOpacity={[0.03, 0.08, 0.15, 0.05, 0.12, 0.02][bi] * (floor % 2 === 0 ? 1.5 : 0.5)} rx="0.5" />
               ))
             )}
+            
+            {/* Atmospheric haze layers */}
+            <rect x="180" y="450" width="840" height="190" fill="#0a0a1a" fillOpacity="0.4" />
+            <rect x="180" y="550" width="840" height="90" fill="#0a0a1a" fillOpacity="0.3" />
           </motion.g>
 
-          {/* === ROPE CLEANERS (the old invasive way) === */}
-          <motion.g style={{ opacity: ropeOpacity }} clipPath="url(#windowClip)">
-            <motion.g style={{ y: ropeY, rotate: ropeSwing, transformOrigin: "500px 0px" }}>
-              {/* Ropes from above */}
-              <line x1="380" y1="-200" x2="380" y2="180" stroke="#666" strokeWidth="2" />
-              <line x1="600" y1="-200" x2="600" y2="160" stroke="#666" strokeWidth="2" />
+          {/* === ROPE CLEANERS — HYPER-DETAILED HUMANS (the old invasive way) === */}
+          <motion.g style={{ opacity: ropeOpacity }} clipPath="url(#windowClip4d)">
+            <motion.g style={{ y: ropeY, rotate: ropeSwing, transformOrigin: "600px 0px" }}>
               
-              {/* Worker 1 — hanging on rope, too close to window */}
-              <g transform="translate(360, 140)">
-                {/* Body harness */}
-                <rect x="0" y="20" width="30" height="50" fill="#ff6b35" rx="4" />
-                {/* Head with helmet */}
-                <circle cx="15" cy="10" r="12" fill="#ffcc80" />
-                <path d="M3 8 Q15 -2 27 8" fill="#ff8c00" />
-                {/* Arms reaching toward window */}
-                <line x1="5" y1="35" x2="-15" y2="50" stroke="#ffcc80" strokeWidth="4" strokeLinecap="round" />
-                <line x1="25" y1="35" x2="45" y2="45" stroke="#ffcc80" strokeWidth="4" strokeLinecap="round" />
-                {/* Squeegee */}
-                <rect x="40" y="40" width="30" height="4" fill="#ccc" rx="2" />
+              {/* ROPES — individual fiber detail with braided texture */}
+              <line x1="420" y1="-300" x2="420" y2="250" stroke="url(#ropeTexture)" strokeWidth="5" />
+              <line x1="418" y1="-300" x2="418" y2="250" stroke="#5a4a35" strokeWidth="1.5" />
+              <line x1="422" y1="-300" x2="422" y2="250" stroke="#6b5a45" strokeWidth="1" />
+              {/* Rope 2 */}
+              <line x1="760" y1="-300" x2="760" y2="220" stroke="url(#ropeTexture)" strokeWidth="5" />
+              <line x1="758" y1="-300" x2="758" y2="220" stroke="#5a4a35" strokeWidth="1.5" />
+              <line x1="762" y1="-300" x2="762" y2="220" stroke="#6b5a45" strokeWidth="1" />
+
+              {/* === WORKER 1 — RIGHT AT THE WINDOW, detailed down to pores === */}
+              <g transform="translate(380, 180)" filter="url(#softShadow)">
+                {/* HARNESS SYSTEM — full body rigging */}
+                {/* Main webbing straps */}
+                <path d="M15 30 L15 0 L45 0 L45 30" fill="none" stroke="#cc0000" strokeWidth="3" />
+                <path d="M15 30 L15 90 M45 30 L45 90" fill="none" stroke="#cc0000" strokeWidth="3" />
+                <path d="M15 55 L45 55" fill="none" stroke="#cc0000" strokeWidth="2.5" />
+                {/* D-ring connector (chest) */}
+                <circle cx="30" cy="30" r="5" fill="none" stroke="#aaa" strokeWidth="2" />
+                <rect x="27" y="24" width="6" height="4" fill="#888" rx="1" />
+                {/* Carabiner on rope */}
+                <path d="M37 -5 Q42 -10 40 -20 L38 -20 Q40 -10 37 -5" fill="#bbb" stroke="#999" strokeWidth="1" />
+                
+                {/* BODY — realistic proportions */}
+                {/* Torso in work coverall */}
+                <path d="M12 30 Q8 35 8 50 L8 95 Q8 98 12 100 L48 100 Q52 98 52 95 L52 50 Q52 35 48 30 Z" fill="url(#overallGrad)" stroke="#0a1a30" strokeWidth="0.5" />
+                {/* Chest pocket (left) with pen */}
+                <rect x="14" y="40" width="12" height="14" fill="#122840" stroke="#1a3a5c" strokeWidth="0.5" rx="1" />
+                <line x1="18" y1="40" x2="18" y2="36" stroke="#333" strokeWidth="1.5" />
+                {/* Chest pocket (right) — radio */}
+                <rect x="34" y="38" width="12" height="18" fill="#111" stroke="#333" strokeWidth="0.5" rx="1" />
+                <rect x="36" y="40" width="8" height="8" fill="#1a1a1a" rx="0.5" />
+                <line x1="40" y1="38" x2="42" y2="30" stroke="#333" strokeWidth="0.5" />
+                {/* Tool belt */}
+                <rect x="8" y="88" width="44" height="8" fill="#2a1a0a" stroke="#1a0a00" strokeWidth="0.5" rx="1" />
+                {/* Belt loops and buckle */}
+                <rect x="26" y="87" width="8" height="10" fill="#888" stroke="#666" strokeWidth="0.5" rx="1" />
+                {/* Hip pouches (tools) */}
+                <rect x="6" y="88" width="10" height="14" fill="#1a0a00" stroke="#0a0500" strokeWidth="0.5" rx="2" />
+                <rect x="44" y="88" width="12" height="16" fill="#1a0a00" stroke="#0a0500" strokeWidth="0.5" rx="2" />
+                
+                {/* HEAD — detailed face visible through window */}
+                <ellipse cx="30" cy="8" rx="13" ry="14" fill="url(#skinTone)" />
+                {/* Facial features — you can see the detail */}
+                <ellipse cx="24" cy="5" rx="2.5" ry="1.5" fill="#2a1a0a" /> {/* Left eye */}
+                <ellipse cx="36" cy="5" rx="2.5" ry="1.5" fill="#2a1a0a" /> {/* Right eye */}
+                <path d="M28 11 Q30 13 32 11" fill="none" stroke="#8a6040" strokeWidth="1" /> {/* Nose */}
+                <path d="M25 16 Q30 18 35 16" fill="none" stroke="#7a5030" strokeWidth="1.2" /> {/* Mouth */}
+                {/* Stubble texture */}
+                <rect x="22" y="14" width="16" height="8" fill="#2a1a0a" fillOpacity="0.08" rx="4" />
+                {/* Eyebrows — furrowed (concentrated) */}
+                <path d="M21 0 Q24 -2 27 0" fill="none" stroke="#3a2a1a" strokeWidth="1.5" />
+                <path d="M33 0 Q36 -2 39 0" fill="none" stroke="#3a2a1a" strokeWidth="1.5" />
+                
+                {/* HELMET — industrial safety hard hat */}
+                <path d="M14 -4 Q15 -18 30 -20 Q45 -18 46 -4 Q44 -2 30 -2 Q16 -2 14 -4 Z" fill="url(#helmetGrad)" stroke="#aa8800" strokeWidth="0.5" />
+                {/* Helmet brim */}
+                <path d="M12 -3 Q30 0 48 -3" fill="none" stroke="#cc9900" strokeWidth="2" />
+                {/* Chin strap */}
+                <path d="M18 -3 L16 12 Q17 14 18 12" fill="none" stroke="#333" strokeWidth="1" />
+                <path d="M42 -3 L44 12 Q43 14 42 12" fill="none" stroke="#333" strokeWidth="1" />
+                {/* Headlamp */}
+                <rect x="25" y="-16" width="10" height="6" fill="#222" stroke="#444" strokeWidth="0.5" rx="2" />
+                <circle cx="30" cy="-13" r="2.5" fill="#ffd700" fillOpacity="0.3" />
+                
+                {/* ARMS — reaching toward window, muscular detail */}
+                {/* Left arm — holding rope */}
+                <path d="M12 35 Q5 40 2 55 Q0 65 -5 75" fill="none" stroke="url(#skinTone)" strokeWidth="6" strokeLinecap="round" />
+                {/* Gloved hand gripping rope */}
+                <ellipse cx="-5" cy="78" rx="5" ry="6" fill="#333" stroke="#222" strokeWidth="0.5" />
+                {/* Right arm — holding squeegee pressed to glass */}
+                <path d="M48 35 Q58 38 68 42 Q78 45 85 48" fill="none" stroke="url(#skinTone)" strokeWidth="6" strokeLinecap="round" />
+                {/* Gloved hand */}
+                <ellipse cx="88" cy="49" rx="5" ry="5" fill="#333" stroke="#222" strokeWidth="0.5" />
+                {/* SQUEEGEE — professional tool, detailed */}
+                <rect x="85" y="44" width="55" height="4" fill="#bbb" stroke="#999" strokeWidth="0.5" rx="1" />
+                <rect x="135" y="38" width="4" height="16" fill="#666" rx="1" /> {/* Handle joint */}
+                <rect x="134" y="36" width="40" height="3" fill="#444" rx="1" /> {/* Rubber blade */}
+                <rect x="134" y="53" width="40" height="3" fill="#444" rx="1" /> {/* Rubber blade bottom */}
+                <line x1="140" y1="38" x2="140" y2="54" stroke="#555" strokeWidth="0.3" />
+                <line x1="150" y1="38" x2="150" y2="54" stroke="#555" strokeWidth="0.3" />
+                <line x1="160" y1="38" x2="160" y2="54" stroke="#555" strokeWidth="0.3" />
+                
+                {/* LEGS — heavy work boots, detailed */}
+                <path d="M16 100 L14 135 L12 165" fill="none" stroke="url(#overallGrad)" strokeWidth="9" strokeLinecap="round" />
+                <path d="M44 100 L46 135 L48 165" fill="none" stroke="url(#overallGrad)" strokeWidth="9" strokeLinecap="round" />
+                {/* Knee pads */}
+                <ellipse cx="14" cy="135" rx="6" ry="8" fill="#222" stroke="#111" strokeWidth="0.5" />
+                <ellipse cx="46" cy="135" rx="6" ry="8" fill="#222" stroke="#111" strokeWidth="0.5" />
+                {/* Steel-toe boots */}
+                <rect x="5" y="160" width="16" height="14" fill="#1a0a00" stroke="#0a0500" strokeWidth="0.5" rx="3" />
+                <rect x="41" y="160" width="16" height="14" fill="#1a0a00" stroke="#0a0500" strokeWidth="0.5" rx="3" />
+                {/* Boot soles */}
+                <rect x="5" y="172" width="16" height="3" fill="#0a0500" rx="1" />
+                <rect x="41" y="172" width="16" height="3" fill="#0a0500" rx="1" />
+                
+                {/* Water dripping from squeegee */}
+                <circle cx="140" cy="58" r="1" fill="#60a5fa" fillOpacity="0.5">
+                  <animate attributeName="cy" values="58;120;180" dur="2s" repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0.5;0.3;0" dur="2s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="155" cy="60" r="0.8" fill="#60a5fa" fillOpacity="0.4">
+                  <animate attributeName="cy" values="60;130;200" dur="2.5s" repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0.4;0.2;0" dur="2.5s" repeatCount="indefinite" />
+                </circle>
+              </g>
+
+              {/* === WORKER 2 — CREEPING CLOSER, face pressed to glass === */}
+              <g transform="translate(710, 150)" filter="url(#softShadow)">
+                {/* Harness system */}
+                <path d="M15 30 L15 0 L45 0 L45 30" fill="none" stroke="#cc0000" strokeWidth="3" />
+                <path d="M15 30 L15 90 M45 30 L45 90" fill="none" stroke="#cc0000" strokeWidth="3" />
+                <circle cx="30" cy="30" r="5" fill="none" stroke="#aaa" strokeWidth="2" />
+                
+                {/* Torso — same workwear */}
+                <path d="M12 30 Q8 35 8 50 L8 95 Q8 98 12 100 L48 100 Q52 98 52 95 L52 50 Q52 35 48 30 Z" fill="url(#overallGrad)" stroke="#0a1a30" strokeWidth="0.5" />
+                {/* Pockets visible */}
+                <rect x="14" y="42" width="12" height="12" fill="#122840" stroke="#1a3a5c" strokeWidth="0.5" rx="1" />
+                <rect x="10" y="88" width="40" height="8" fill="#2a1a0a" stroke="#1a0a00" strokeWidth="0.5" rx="1" />
+                
+                {/* Head — PRESSED AGAINST GLASS (the creepy invasion) */}
+                <ellipse cx="30" cy="8" rx="13" ry="14" fill="url(#skinTone)" />
+                {/* Eyes LOOKING IN — directly at you */}
+                <ellipse cx="24" cy="5" rx="3" ry="2" fill="#1a0a00" />
+                <circle cx="24" cy="5" r="1" fill="#fff" /> {/* Eye gleam */}
+                <ellipse cx="36" cy="5" rx="3" ry="2" fill="#1a0a00" />
+                <circle cx="36" cy="5" r="1" fill="#fff" />
+                <path d="M27 12 Q30 14 33 12" fill="none" stroke="#8a6040" strokeWidth="1" />
+                
+                {/* Helmet */}
+                <path d="M14 -4 Q15 -18 30 -20 Q45 -18 46 -4 Q44 -2 30 -2 Q16 -2 14 -4 Z" fill="url(#helmetGrad)" stroke="#aa8800" strokeWidth="0.5" />
+                <rect x="25" y="-16" width="10" height="6" fill="#222" stroke="#444" strokeWidth="0.5" rx="2" />
+                
+                {/* Hand pressed flat against glass — creepy detail */}
+                <g transform="translate(50, 20)">
+                  <path d="M0 0 L-3 -15 M3 0 L3 -16 M7 0 L8 -14 M11 0 L13 -13 M15 0 L16 -10" fill="none" stroke="url(#skinTone)" strokeWidth="3" strokeLinecap="round" />
+                  <ellipse cx="8" cy="5" rx="10" ry="6" fill="url(#skinTone)" fillOpacity="0.8" />
+                </g>
+                
                 {/* Legs */}
-                <line x1="8" y1="70" x2="5" y2="100" stroke="#334" strokeWidth="5" strokeLinecap="round" />
-                <line x1="22" y1="70" x2="25" y2="100" stroke="#334" strokeWidth="5" strokeLinecap="round" />
+                <path d="M16 100 L15 140 L13 170" fill="none" stroke="url(#overallGrad)" strokeWidth="9" strokeLinecap="round" />
+                <path d="M44 100 L45 140 L47 170" fill="none" stroke="url(#overallGrad)" strokeWidth="9" strokeLinecap="round" />
+                <rect x="6" y="165" width="16" height="14" fill="#1a0a00" rx="3" />
+                <rect x="40" y="165" width="16" height="14" fill="#1a0a00" rx="3" />
               </g>
-              
-              {/* Worker 2 — peering in */}
-              <g transform="translate(570, 120)">
-                <rect x="0" y="20" width="30" height="50" fill="#ff6b35" rx="4" />
-                <circle cx="15" cy="10" r="12" fill="#ffcc80" />
-                <path d="M3 8 Q15 -2 27 8" fill="#ff8c00" />
-                <line x1="5" y1="35" x2="-10" y2="55" stroke="#ffcc80" strokeWidth="4" strokeLinecap="round" />
-                <line x1="25" y1="35" x2="40" y2="30" stroke="#ffcc80" strokeWidth="4" strokeLinecap="round" />
-                <line x1="8" y1="70" x2="3" y2="100" stroke="#334" strokeWidth="5" strokeLinecap="round" />
-                <line x1="22" y1="70" x2="27" y2="100" stroke="#334" strokeWidth="5" strokeLinecap="round" />
-              </g>
+
+              {/* Safety rope connections to building above */}
+              <path d="M420 -300 Q420 -280 418 -260" fill="none" stroke="#5a4a35" strokeWidth="2" />
+              <path d="M760 -300 Q760 -280 758 -260" fill="none" stroke="#5a4a35" strokeWidth="2" />
             </motion.g>
           </motion.g>
 
-          {/* === DISCOMFORT OVERLAY (red tint = invasion of privacy) === */}
-          <motion.rect x="150" y="50" width="700" height="500" fill="#ff0000"
+          {/* === DISCOMFORT OVERLAY (deep red invasion feeling) === */}
+          <motion.rect x="180" y="60" width="840" height="580" fill="#8b0000"
             style={{ opacity: discomfortOpacity }} />
 
-          {/* === CURTAINS CLOSING (customer's reaction) === */}
-          <motion.g style={{ opacity: useTransform(scrollYProgress, [0.35, 0.4, 0.68, 0.72], [0, 1, 1, 0]) }}>
+          {/* === CURTAINS CLOSING (velvet, heavy, detailed folds) === */}
+          <motion.g style={{ opacity: useTransform(scrollYProgress, [0.36, 0.4, 0.7, 0.74], [0, 1, 1, 0]) }}>
             {/* Left curtain */}
-            <motion.g style={{ x: useTransform(scrollYProgress, (v) => {
-              if (v < 0.52) return -50 + (v - 0.38) * (98 / 0.14);
-              return 48 + (v - 0.58) * (-98 / 0.12);
+            <motion.g style={{ x: useTransform(scrollYProgress, (v: number) => {
+              if (v < 0.38) return -500;
+              if (v < 0.52) return -500 + ((v - 0.38) / 0.14) * 500;
+              if (v < 0.6) return 0;
+              if (v < 0.72) return -((v - 0.6) / 0.12) * 500;
+              return -500;
             }) }}>
-              <rect x="150" y="50" width="200" height="500" fill="url(#curtainGrad)" />
-              {/* Curtain folds */}
-              <line x1="200" y1="50" x2="200" y2="550" stroke="#1a0a0a" strokeWidth="1" strokeOpacity="0.5" />
-              <line x1="250" y1="50" x2="250" y2="550" stroke="#4a2020" strokeWidth="1" strokeOpacity="0.3" />
-              <line x1="300" y1="50" x2="300" y2="550" stroke="#1a0a0a" strokeWidth="1" strokeOpacity="0.5" />
+              <rect x="180" y="60" width="430" height="580" fill="url(#curtainVelvet)" />
+              {/* Detailed curtain folds */}
+              {[210, 250, 290, 330, 370, 410, 450, 490, 530, 570].map((cx, i) => (
+                <line key={`cl-${i}`} x1={cx} y1="60" x2={cx} y2="640" stroke={i % 2 === 0 ? "#0a0303" : "#4a1515"} strokeWidth={i % 3 === 0 ? "2" : "1"} strokeOpacity="0.6" />
+              ))}
+              {/* Curtain rod rings */}
+              <circle cx="220" cy="65" r="6" fill="none" stroke="#888" strokeWidth="1.5" />
+              <circle cx="300" cy="65" r="6" fill="none" stroke="#888" strokeWidth="1.5" />
+              <circle cx="380" cy="65" r="6" fill="none" stroke="#888" strokeWidth="1.5" />
             </motion.g>
             {/* Right curtain */}
-            <motion.g style={{ x: useTransform(scrollYProgress, (v) => {
-              if (v < 0.52) return 100 - (v - 0.38) * (48 / 0.14);
-              return 52 - (v - 0.58) * (-48 / 0.12);
+            <motion.g style={{ x: useTransform(scrollYProgress, (v: number) => {
+              if (v < 0.38) return 500;
+              if (v < 0.52) return 500 - ((v - 0.38) / 0.14) * 500;
+              if (v < 0.6) return 0;
+              if (v < 0.72) return ((v - 0.6) / 0.12) * 500;
+              return 500;
             }) }}>
-              <rect x="550" y="50" width="200" height="500" fill="url(#curtainGrad)" />
-              <line x1="600" y1="50" x2="600" y2="550" stroke="#1a0a0a" strokeWidth="1" strokeOpacity="0.5" />
-              <line x1="650" y1="50" x2="650" y2="550" stroke="#4a2020" strokeWidth="1" strokeOpacity="0.3" />
-              <line x1="700" y1="50" x2="700" y2="550" stroke="#1a0a0a" strokeWidth="1" strokeOpacity="0.5" />
+              <rect x="600" y="60" width="420" height="580" fill="url(#curtainVelvet)" />
+              {[630, 670, 710, 750, 790, 830, 870, 910, 950].map((cx, i) => (
+                <line key={`cr-${i}`} x1={cx} y1="60" x2={cx} y2="640" stroke={i % 2 === 0 ? "#0a0303" : "#4a1515"} strokeWidth={i % 3 === 0 ? "2" : "1"} strokeOpacity="0.6" />
+              ))}
+              <circle cx="660" cy="65" r="6" fill="none" stroke="#888" strokeWidth="1.5" />
+              <circle cx="740" cy="65" r="6" fill="none" stroke="#888" strokeWidth="1.5" />
+              <circle cx="820" cy="65" r="6" fill="none" stroke="#888" strokeWidth="1.5" />
             </motion.g>
           </motion.g>
 
           {/* === TRANSITION FLASH === */}
-          <motion.rect x="0" y="0" width="1000" height="600" fill="white"
+          <motion.rect x="0" y="0" width="1200" height="700" fill="white"
             style={{ opacity: flashOpacity }} />
 
-          {/* === DRONE ARRIVES (the new way — private, efficient) === */}
-          <motion.g style={{ opacity: droneOpacity }} clipPath="url(#windowClip)">
+          {/* === INDUSTRIAL DRONE — REAL ARCHITECTURE, MASSIVE, DETAILED === */}
+          <motion.g style={{ opacity: droneOpacity }} clipPath="url(#windowClip4d)">
             <motion.g style={{ 
-              x: useTransform(scrollYProgress, [0.55, 0.68, 0.8], [300, 0, -20]),
-              y: useTransform(scrollYProgress, [0.55, 0.65, 0.75], [-150, -10, 0]),
               scale: droneScale,
-              transformOrigin: "500px 300px"
+              transformOrigin: "600px 350px"
             }}>
-              {/* Drone body — industrial, large, detailed */}
-              <g transform="translate(420, 230)">
-                {/* Main chassis */}
-                <rect x="20" y="30" width="120" height="40" rx="8" fill="#1a1a2e" stroke="#60a5fa" strokeWidth="1.5" />
-                {/* Core housing */}
-                <rect x="40" y="25" width="80" height="50" rx="6" fill="#0f1729" stroke="#3b82f6" strokeWidth="1" />
+              <g transform="translate(400, 220)">
+                {/* === MAIN BODY — carbon fiber composite fuselage === */}
+                {/* Central body — hexagonal cross-section industrial housing */}
+                <path d="M80 40 L320 40 Q340 40 340 60 L340 100 Q340 120 320 120 L80 120 Q60 120 60 100 L60 60 Q60 40 80 40 Z" fill="url(#droneBody)" stroke="#3b82f6" strokeWidth="1" />
+                {/* Carbon fiber panel lines */}
+                <line x1="100" y1="40" x2="100" y2="120" stroke="#2a4060" strokeWidth="0.3" />
+                <line x1="140" y1="40" x2="140" y2="120" stroke="#2a4060" strokeWidth="0.3" />
+                <line x1="180" y1="40" x2="180" y2="120" stroke="#2a4060" strokeWidth="0.3" />
+                <line x1="220" y1="40" x2="220" y2="120" stroke="#2a4060" strokeWidth="0.3" />
+                <line x1="260" y1="40" x2="260" y2="120" stroke="#2a4060" strokeWidth="0.3" />
+                <line x1="300" y1="40" x2="300" y2="120" stroke="#2a4060" strokeWidth="0.3" />
+                {/* Horizontal seams */}
+                <line x1="60" y1="70" x2="340" y2="70" stroke="#2a4060" strokeWidth="0.3" />
+                <line x1="60" y1="90" x2="340" y2="90" stroke="#2a4060" strokeWidth="0.3" />
                 
-                {/* Propeller arms */}
-                <line x1="30" y1="50" x2="-30" y2="10" stroke="#60a5fa" strokeWidth="2.5" />
-                <line x1="130" y1="50" x2="190" y2="10" stroke="#60a5fa" strokeWidth="2.5" />
-                <line x1="30" y1="50" x2="-30" y2="90" stroke="#60a5fa" strokeWidth="2.5" />
-                <line x1="130" y1="50" x2="190" y2="90" stroke="#60a5fa" strokeWidth="2.5" />
+                {/* Top sensor array dome */}
+                <ellipse cx="200" cy="38" rx="40" ry="12" fill="#0a1422" stroke="#3b82f6" strokeWidth="0.8" />
+                <circle cx="185" cy="35" r="3" fill="#111" stroke="#60a5fa" strokeWidth="0.5" />
+                <circle cx="200" cy="33" r="4" fill="#111" stroke="#60a5fa" strokeWidth="0.5" />
+                <circle cx="215" cy="35" r="3" fill="#111" stroke="#60a5fa" strokeWidth="0.5" />
                 
-                {/* Propellers (spinning) */}
-                <circle cx="-30" cy="10" r="20" fill="none" stroke="#60a5fa" strokeWidth="1" strokeOpacity="0.6">
-                  <animateTransform attributeName="transform" type="rotate" from="0 -30 10" to="360 -30 10" dur="0.15s" repeatCount="indefinite" />
-                </circle>
-                <circle cx="190" cy="10" r="20" fill="none" stroke="#60a5fa" strokeWidth="1" strokeOpacity="0.6">
-                  <animateTransform attributeName="transform" type="rotate" from="0 190 10" to="-360 190 10" dur="0.15s" repeatCount="indefinite" />
-                </circle>
-                <circle cx="-30" cy="90" r="20" fill="none" stroke="#60a5fa" strokeWidth="1" strokeOpacity="0.6">
-                  <animateTransform attributeName="transform" type="rotate" from="0 -30 90" to="360 -30 90" dur="0.15s" repeatCount="indefinite" />
-                </circle>
-                <circle cx="190" cy="90" r="20" fill="none" stroke="#60a5fa" strokeWidth="1" strokeOpacity="0.6">
-                  <animateTransform attributeName="transform" type="rotate" from="0 190 90" to="-360 190 90" dur="0.15s" repeatCount="indefinite" />
-                </circle>
+                {/* === PROPULSION ARMS — 6 arms, carbon fiber tubular === */}
+                {/* Front-left arm */}
+                <rect x="30" y="55" width="80" height="8" rx="4" fill="url(#droneArm)" stroke="#3b82f6" strokeWidth="0.5" transform="rotate(-30 60 60)" />
+                {/* Front-right arm */}
+                <rect x="290" y="55" width="80" height="8" rx="4" fill="url(#droneArm)" stroke="#3b82f6" strokeWidth="0.5" transform="rotate(30 340 60)" />
+                {/* Mid-left arm */}
+                <rect x="10" y="76" width="70" height="8" rx="4" fill="url(#droneArm)" stroke="#3b82f6" strokeWidth="0.5" />
+                {/* Mid-right arm */}
+                <rect x="320" y="76" width="70" height="8" rx="4" fill="url(#droneArm)" stroke="#3b82f6" strokeWidth="0.5" />
+                {/* Rear-left arm */}
+                <rect x="30" y="95" width="80" height="8" rx="4" fill="url(#droneArm)" stroke="#3b82f6" strokeWidth="0.5" transform="rotate(25 60 100)" />
+                {/* Rear-right arm */}
+                <rect x="290" y="95" width="80" height="8" rx="4" fill="url(#droneArm)" stroke="#3b82f6" strokeWidth="0.5" transform="rotate(-25 340 100)" />
                 
-                {/* NOZZLE SYSTEM (front — the cleaning nose) */}
-                <g transform="translate(140, 40)">
-                  {/* Triple nozzle housing */}
-                  <rect x="0" y="-5" width="40" height="20" rx="4" fill="#1a2744" stroke="#3b82f6" strokeWidth="1" />
-                  {/* Individual nozzles */}
-                  <circle cx="45" cy="0" r="4" fill="#09090b" stroke="#60a5fa" strokeWidth="1.5" />
-                  <circle cx="45" cy="10" r="3" fill="#09090b" stroke="#60a5fa" strokeWidth="1" />
-                  <circle cx="50" cy="5" r="3.5" fill="#09090b" stroke="#93c5fd" strokeWidth="1" />
+                {/* === PROPELLERS — motion blur discs (6 props) === */}
+                <ellipse cx="-20" cy="25" rx="35" ry="35" fill="url(#propBlur)" stroke="#60a5fa" strokeWidth="0.5" strokeOpacity="0.4">
+                  <animateTransform attributeName="transform" type="rotate" from="0 -20 25" to="360 -20 25" dur="0.1s" repeatCount="indefinite" />
+                </ellipse>
+                <ellipse cx="420" cy="25" rx="35" ry="35" fill="url(#propBlur)" stroke="#60a5fa" strokeWidth="0.5" strokeOpacity="0.4">
+                  <animateTransform attributeName="transform" type="rotate" from="0 420 25" to="-360 420 25" dur="0.1s" repeatCount="indefinite" />
+                </ellipse>
+                <ellipse cx="-40" cy="80" rx="32" ry="32" fill="url(#propBlur)" stroke="#60a5fa" strokeWidth="0.5" strokeOpacity="0.3">
+                  <animateTransform attributeName="transform" type="rotate" from="0 -40 80" to="360 -40 80" dur="0.12s" repeatCount="indefinite" />
+                </ellipse>
+                <ellipse cx="440" cy="80" rx="32" ry="32" fill="url(#propBlur)" stroke="#60a5fa" strokeWidth="0.5" strokeOpacity="0.3">
+                  <animateTransform attributeName="transform" type="rotate" from="0 440 80" to="-360 440 80" dur="0.12s" repeatCount="indefinite" />
+                </ellipse>
+                <ellipse cx="-15" cy="135" rx="33" ry="33" fill="url(#propBlur)" stroke="#60a5fa" strokeWidth="0.5" strokeOpacity="0.3">
+                  <animateTransform attributeName="transform" type="rotate" from="0 -15 135" to="360 -15 135" dur="0.11s" repeatCount="indefinite" />
+                </ellipse>
+                <ellipse cx="415" cy="135" rx="33" ry="33" fill="url(#propBlur)" stroke="#60a5fa" strokeWidth="0.5" strokeOpacity="0.3">
+                  <animateTransform attributeName="transform" type="rotate" from="0 415 135" to="-360 415 135" dur="0.11s" repeatCount="indefinite" />
+                </ellipse>
+                
+                {/* === NOZZLE ARRAY — the cleaning nose (front-mounted) === */}
+                <g transform="translate(340, 55)">
+                  {/* Nozzle housing — extends forward */}
+                  <path d="M0 0 L60 -10 L80 -5 L80 35 L60 40 L0 30 Z" fill="url(#nozzleGrad)" stroke="#3b82f6" strokeWidth="1" />
+                  {/* Multi-nozzle tips — high pressure array */}
+                  <circle cx="85" cy="5" r="5" fill="#050510" stroke="#60a5fa" strokeWidth="1.5" filter="url(#nanoGlow)" />
+                  <circle cx="88" cy="15" r="4" fill="#050510" stroke="#60a5fa" strokeWidth="1" filter="url(#nanoGlow)" />
+                  <circle cx="85" cy="25" r="5" fill="#050510" stroke="#60a5fa" strokeWidth="1.5" filter="url(#nanoGlow)" />
+                  <circle cx="90" cy="10" r="2.5" fill="#050510" stroke="#93c5fd" strokeWidth="0.8" />
+                  <circle cx="90" cy="20" r="2.5" fill="#050510" stroke="#93c5fd" strokeWidth="0.8" />
+                  {/* Pressure lines to nozzles */}
+                  <line x1="60" y1="5" x2="80" y2="5" stroke="#3b82f6" strokeWidth="1.5" />
+                  <line x1="60" y1="15" x2="83" y2="15" stroke="#3b82f6" strokeWidth="1" />
+                  <line x1="60" y1="25" x2="80" y2="25" stroke="#3b82f6" strokeWidth="1.5" />
+                  {/* Flow direction arrows */}
+                  <path d="M70 5 L75 3 L75 7 Z" fill="#60a5fa" fillOpacity="0.6" />
+                  <path d="M70 25 L75 23 L75 27 Z" fill="#60a5fa" fillOpacity="0.6" />
                 </g>
                 
-                {/* Status LEDs */}
-                <circle cx="50" cy="40" r="3" fill="#22c55e">
+                {/* === STATUS INDICATORS — running systems === */}
+                {/* Power indicator */}
+                <circle cx="120" cy="55" r="4" fill="#22c55e" filter="url(#nanoGlow)">
+                  <animate attributeName="opacity" values="1;0.4;1" dur="1.5s" repeatCount="indefinite" />
+                </circle>
+                {/* Pressure gauge */}
+                <circle cx="160" cy="55" r="4" fill="#3b82f6" filter="url(#nanoGlow)">
+                  <animate attributeName="opacity" values="0.6;1;0.6" dur="1s" repeatCount="indefinite" />
+                </circle>
+                {/* Navigation */}
+                <circle cx="200" cy="55" r="4" fill="#22c55e" filter="url(#nanoGlow)">
                   <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite" />
                 </circle>
-                <circle cx="65" cy="40" r="2" fill="#3b82f6">
-                  <animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" repeatCount="indefinite" />
+                {/* LiDAR active */}
+                <circle cx="240" cy="55" r="4" fill="#a855f7" filter="url(#nanoGlow)">
+                  <animate attributeName="opacity" values="0.8;0.3;0.8" dur="0.8s" repeatCount="indefinite" />
                 </circle>
-                <circle cx="80" cy="40" r="3" fill="#22c55e">
-                  <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite" begin="0.5s" />
+                {/* Fluid level */}
+                <circle cx="280" cy="55" r="4" fill="#06b6d4" filter="url(#nanoGlow)">
+                  <animate attributeName="opacity" values="1;0.5;1" dur="3s" repeatCount="indefinite" />
                 </circle>
-
-                {/* Tether cable going up */}
-                <path d="M80 25 Q80 -20 75 -60 Q70 -100 80 -150" fill="none" stroke="#666" strokeWidth="1.5" strokeDasharray="4 2" />
+                
+                {/* === WATER TANK (underslung) === */}
+                <rect x="120" y="122" width="160" height="30" rx="8" fill="#0a1422" stroke="#1e40af" strokeWidth="0.8" />
+                <text x="200" y="141" textAnchor="middle" fill="#3b82f6" fillOpacity="0.5" fontSize="7" fontFamily="monospace">H₂O TANK — 15L</text>
+                
+                {/* === TETHER CABLE (to roof unit) === */}
+                <path d="M200 38 Q200 -20 195 -60 Q190 -120 200 -200" fill="none" stroke="#444" strokeWidth="2" strokeDasharray="6 3" />
+                <path d="M202 38 Q202 -20 197 -60 Q192 -120 202 -200" fill="none" stroke="#222" strokeWidth="1" />
               </g>
             </motion.g>
 
-            {/* Spray particles (cleaning in action) */}
+            {/* === SPRAY SYSTEM ACTIVE — high pressure water mist === */}
             <motion.g style={{ opacity: sprayOpacity }}>
-              {[0,1,2,3,4,5,6,7,8,9,10,11].map((i) => (
-                <circle key={`spray-${i}`} r={1.5 + Math.random() * 2}
-                  cx={610 + Math.random() * 80} cy={260 + Math.random() * 60}
-                  fill="#60a5fa" fillOpacity={0.3 + Math.random() * 0.4}>
-                  <animate attributeName="cx" values={`${610 + i * 7};${640 + i * 8};${610 + i * 7}`} dur={`${1 + Math.random()}s`} repeatCount="indefinite" />
-                  <animate attributeName="opacity" values="0.6;0.2;0.6" dur={`${0.8 + Math.random()}s`} repeatCount="indefinite" />
+              {/* Main spray cone */}
+              <path d="M830 280 Q900 260 950 290 Q930 340 860 350 Z" fill="#60a5fa" fillOpacity="0.06" />
+              <path d="M835 285 Q890 270 940 295 Q920 330 855 340 Z" fill="#93c5fd" fillOpacity="0.04" />
+              
+              {/* Individual droplets — nano-scale spray visualization */}
+              {Array.from({length: 25}, (_, i) => (
+                <circle key={`nano-${i}`} r={0.5 + Math.random() * 2}
+                  cx={835 + Math.random() * 120} cy={265 + Math.random() * 90}
+                  fill="#60a5fa" fillOpacity={0.2 + Math.random() * 0.5}>
+                  <animate attributeName="cx" values={`${835 + i * 5};${855 + i * 5};${835 + i * 5}`} dur={`${0.5 + Math.random() * 1.5}s`} repeatCount="indefinite" />
+                  <animate attributeName="r" values={`${0.5 + Math.random()};${1 + Math.random() * 2};${0.5 + Math.random()}`} dur={`${0.8 + Math.random()}s`} repeatCount="indefinite" />
                 </circle>
               ))}
-              {/* Water mist fan */}
-              <path d="M600 270 Q650 250 700 270 Q680 300 620 300 Z" fill="#60a5fa" fillOpacity="0.08" />
+              
+              {/* Pressure stream lines */}
+              {[280, 295, 310, 325].map((y, i) => (
+                <line key={`stream-${i}`} x1="830" y1={y} x2={900 + i * 15} y2={y + 5}
+                  stroke="#60a5fa" strokeWidth="0.8" strokeOpacity="0.4" strokeDasharray="3 5">
+                  <animate attributeName="strokeDashoffset" values="0;-8" dur="0.3s" repeatCount="indefinite" />
+                </line>
+              ))}
+            </motion.g>
+            
+            {/* Clean glass result — pristine glow */}
+            <motion.g style={{ opacity: useTransform(cleanGlow, (v: number) => v * 0.06) }}>
+              <rect x="180" y="60" width="840" height="580" fill="#60a5fa" rx="2" />
             </motion.g>
           </motion.g>
 
-          {/* === CLEAN GLOW (result — crystal clear window) === */}
-          <motion.rect x="150" y="50" width="700" height="500" fill="#60a5fa" rx="4"
-            style={{ opacity: useTransform(cleanGlow, (v) => v * 0.05) }} />
-
-          {/* === TEXT OVERLAYS === */}
-          {/* "The Old Way" text */}
+          {/* === TEXT — minimal, luxury typography === */}
           <motion.g style={{ opacity: oldWayText }}>
-            <text x="500" y="540" textAnchor="middle" fill="#ff6b35" fillOpacity="0.8" fontSize="11" letterSpacing="6" fontWeight="600">THE OLD WAY</text>
-            <text x="500" y="560" textAnchor="middle" fill="white" fillOpacity="0.4" fontSize="8" letterSpacing="3">INVASIVE • UNCOMFORTABLE • NO PRIVACY</text>
+            <text x="600" y="660" textAnchor="middle" fill="#ff4444" fillOpacity="0.7" fontSize="10" letterSpacing="8" fontFamily="monospace">THE OLD WAY</text>
+            <text x="600" y="678" textAnchor="middle" fill="white" fillOpacity="0.3" fontSize="7" letterSpacing="4" fontFamily="monospace">INVASIVE • NO PRIVACY • HUMAN ERROR</text>
           </motion.g>
-
-          {/* "The Bezliny Way" text */}
           <motion.g style={{ opacity: newWayText }}>
-            <text x="500" y="540" textAnchor="middle" fill="#60a5fa" fillOpacity="0.9" fontSize="11" letterSpacing="6" fontWeight="600">THE BEZLINY WAY</text>
-            <text x="500" y="560" textAnchor="middle" fill="white" fillOpacity="0.5" fontSize="8" letterSpacing="3">AUTONOMOUS • PRIVATE • PRECISION CLEAN</text>
+            <text x="600" y="660" textAnchor="middle" fill="#60a5fa" fillOpacity="0.9" fontSize="10" letterSpacing="8" fontFamily="monospace" filter="url(#nanoGlow)">THE BEZLINY WAY</text>
+            <text x="600" y="678" textAnchor="middle" fill="white" fillOpacity="0.4" fontSize="7" letterSpacing="4" fontFamily="monospace">AUTONOMOUS • PRECISION • ZERO INTRUSION</text>
           </motion.g>
 
-          {/* 4th dimension depth lines (nano-tech aesthetic) */}
-          <motion.g style={{ opacity: useTransform(scrollYProgress, [0.6, 0.7, 0.85, 0.92], [0, 0.3, 0.3, 0]) }}>
-            {[0,1,2,3,4,5].map((i) => (
-              <line key={`depth-${i}`} x1={200 + i * 120} y1="55" x2={250 + i * 100} y2="545"
-                stroke="#3b82f6" strokeOpacity="0.08" strokeWidth="0.5" strokeDasharray="2 6" />
+          {/* === NANO-TECH DEPTH GRID (4th dimension layer) === */}
+          <motion.g style={{ opacity: useTransform(scrollYProgress, [0.6, 0.7, 0.88, 0.94], [0, 0.2, 0.2, 0]) }}>
+            {Array.from({length: 15}, (_, i) => (
+              <line key={`grid-v-${i}`} x1={250 + i * 50} y1="65" x2={260 + i * 48} y2="635"
+                stroke="#3b82f6" strokeOpacity="0.04" strokeWidth="0.3" />
+            ))}
+            {Array.from({length: 8}, (_, i) => (
+              <line key={`grid-h-${i}`} x1="185" y1={100 + i * 70} x2="1015" y2={105 + i * 68}
+                stroke="#3b82f6" strokeOpacity="0.03" strokeWidth="0.3" />
             ))}
           </motion.g>
         </svg>
