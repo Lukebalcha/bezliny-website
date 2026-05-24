@@ -22,23 +22,23 @@ export function DroneTransition() {
   const scanLine = useTransform(scrollYProgress, [0.1, 0.9], ["0%", "100%"]);
 
   return (
-    <div ref={ref} className="relative h-[70vh] md:h-[85vh] overflow-hidden bg-[#020204]">
+    <div ref={ref} className="relative h-[70vh] md:h-[85vh] overflow-hidden bg-[#080c14]">
       <motion.div style={{ opacity: masterOpacity }} className="absolute inset-0">
 
         {/* Deep perspective grid — architectural */}
         <motion.div style={{ opacity: facadeReveal, y: parallaxY }} className="absolute inset-0">
           <div className="absolute inset-0" style={{
             background: `
-              linear-gradient(180deg, transparent 0%, rgba(6,182,212,0.02) 50%, transparent 100%),
-              repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(148,163,184,0.04) 79px, rgba(148,163,184,0.04) 80px),
-              repeating-linear-gradient(0deg, transparent, transparent 119px, rgba(148,163,184,0.03) 119px, rgba(148,163,184,0.03) 120px)
+              linear-gradient(180deg, transparent 0%, rgba(6,182,212,0.06) 50%, transparent 100%),
+              repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(148,163,184,0.12) 79px, rgba(148,163,184,0.12) 80px),
+              repeating-linear-gradient(0deg, transparent, transparent 119px, rgba(148,163,184,0.08) 119px, rgba(148,163,184,0.08) 120px)
             `
           }} />
           {/* Vertical facade lines — perspective depth */}
           <div className="absolute inset-0 flex justify-center">
             <div className="relative w-full max-w-5xl h-full" style={{
               background: `
-                linear-gradient(to bottom, transparent 0%, rgba(6,182,212,0.01) 30%, rgba(6,182,212,0.03) 60%, transparent 100%)
+                linear-gradient(to bottom, transparent 0%, rgba(6,182,212,0.04) 30%, rgba(6,182,212,0.08) 60%, transparent 100%)
               `,
               maskImage: `linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)`
             }}>
@@ -47,14 +47,14 @@ export function DroneTransition() {
                 <div key={`col-${i}`} className="absolute top-0 bottom-0" style={{
                   left: `${8 + i * 7.5}%`,
                   width: '1px',
-                  background: `linear-gradient(to bottom, transparent, rgba(148,163,184,${0.06 + (i % 3 === 0 ? 0.04 : 0)}) 20%, rgba(148,163,184,${0.04 + (i % 3 === 0 ? 0.03 : 0)}) 80%, transparent)`,
+                  background: `linear-gradient(to bottom, transparent, rgba(148,163,184,${0.15 + (i % 3 === 0 ? 0.1 : 0)}) 20%, rgba(148,163,184,${0.12 + (i % 3 === 0 ? 0.08 : 0)}) 80%, transparent)`,
                 }} />
               ))}
               {Array.from({length: 8}).map((_, i) => (
                 <div key={`row-${i}`} className="absolute left-0 right-0" style={{
                   top: `${12 + i * 11}%`,
                   height: '1px',
-                  background: `linear-gradient(to right, transparent 5%, rgba(148,163,184,0.05) 20%, rgba(148,163,184,0.05) 80%, transparent 95%)`,
+                  background: `linear-gradient(to right, transparent 5%, rgba(148,163,184,0.12) 20%, rgba(148,163,184,0.12) 80%, transparent 95%)`,
                 }} />
               ))}
             </div>
@@ -67,16 +67,16 @@ export function DroneTransition() {
             <defs>
               <linearGradient id="trailGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stopColor="#06b6d4" stopOpacity="0" />
-                <stop offset="30%" stopColor="#06b6d4" stopOpacity="0.6" />
-                <stop offset="70%" stopColor="#3b82f6" stopOpacity="0.8" />
+                <stop offset="30%" stopColor="#06b6d4" stopOpacity="0.9" />
+                <stop offset="70%" stopColor="#3b82f6" stopOpacity="1" />
                 <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0" />
               </linearGradient>
               <filter id="trailBloom">
                 <feGaussianBlur stdDeviation="3" />
               </filter>
               <radialGradient id="nodeGlow">
-                <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.8" />
-                <stop offset="50%" stopColor="#06b6d4" stopOpacity="0.2" />
+                <stop offset="0%" stopColor="#06b6d4" stopOpacity="1" />
+                <stop offset="50%" stopColor="#06b6d4" stopOpacity="0.4" />
                 <stop offset="100%" stopColor="#06b6d4" stopOpacity="0" />
               </radialGradient>
             </defs>
@@ -97,7 +97,7 @@ export function DroneTransition() {
               strokeWidth="8"
               fill="none"
               filter="url(#trailBloom)"
-              style={{ pathLength: droneTrail, opacity: 0.3 }}
+              style={{ pathLength: droneTrail, opacity: 0.5 }}
               strokeLinecap="round"
             />
 
@@ -108,7 +108,7 @@ export function DroneTransition() {
               strokeWidth="1.5"
               fill="none"
               strokeDasharray="6 4"
-              style={{ pathLength: droneTrail, opacity: 0.4 }}
+              style={{ pathLength: droneTrail, opacity: 0.6 }}
             />
 
             {/* Waypoint nodes — precision markers */}
@@ -119,26 +119,26 @@ export function DroneTransition() {
               { x: 800, y: 180, delay: 0.6 },
             ].map((node, i) => (
               <g key={`node-${i}`}>
-                <circle cx={node.x} cy={node.y} r="20" fill="url(#nodeGlow)" opacity="0.5">
+                <circle cx={node.x} cy={node.y} r="20" fill="url(#nodeGlow)" opacity="0.8">
                   <animate attributeName="r" values="15;22;15" dur={`${2 + i * 0.3}s`} repeatCount="indefinite" />
                 </circle>
-                <circle cx={node.x} cy={node.y} r="3" fill="#06b6d4" />
-                <circle cx={node.x} cy={node.y} r="6" fill="none" stroke="#06b6d4" strokeWidth="0.5" strokeOpacity="0.6" />
+                <circle cx={node.x} cy={node.y} r="4" fill="#06b6d4" />
+                <circle cx={node.x} cy={node.y} r="8" fill="none" stroke="#06b6d4" strokeWidth="0.8" strokeOpacity="0.8" />
                 {/* Crosshair */}
-                <line x1={node.x - 10} y1={node.y} x2={node.x - 5} y2={node.y} stroke="#06b6d4" strokeWidth="0.5" strokeOpacity="0.4" />
-                <line x1={node.x + 5} y1={node.y} x2={node.x + 10} y2={node.y} stroke="#06b6d4" strokeWidth="0.5" strokeOpacity="0.4" />
-                <line x1={node.x} y1={node.y - 10} x2={node.x} y2={node.y - 5} stroke="#06b6d4" strokeWidth="0.5" strokeOpacity="0.4" />
-                <line x1={node.x} y1={node.y + 5} x2={node.x} y2={node.y + 10} stroke="#06b6d4" strokeWidth="0.5" strokeOpacity="0.4" />
+                <line x1={node.x - 10} y1={node.y} x2={node.x - 5} y2={node.y} stroke="#06b6d4" strokeWidth="0.8" strokeOpacity="0.7" />
+                <line x1={node.x + 5} y1={node.y} x2={node.x + 10} y2={node.y} stroke="#06b6d4" strokeWidth="0.8" strokeOpacity="0.7" />
+                <line x1={node.x} y1={node.y - 10} x2={node.x} y2={node.y - 5} stroke="#06b6d4" strokeWidth="0.8" strokeOpacity="0.7" />
+                <line x1={node.x} y1={node.y + 5} x2={node.x} y2={node.y + 10} stroke="#06b6d4" strokeWidth="0.8" strokeOpacity="0.7" />
               </g>
             ))}
 
-            {/* Cleaning zone indicators — precision rectangles */}
-            <rect x="350" y="130" width="300" height="200" fill="none" stroke="#06b6d4" strokeWidth="0.5" strokeOpacity="0.15" strokeDasharray="4 2" />
-            <rect x="370" y="150" width="260" height="160" fill="rgba(6,182,212,0.02)" stroke="#06b6d4" strokeWidth="0.3" strokeOpacity="0.2" />
+            {/* Cleaning zone indicators */}
+            <rect x="350" y="130" width="300" height="200" fill="none" stroke="#06b6d4" strokeWidth="0.8" strokeOpacity="0.3" strokeDasharray="4 2" />
+            <rect x="370" y="150" width="260" height="160" fill="rgba(6,182,212,0.04)" stroke="#06b6d4" strokeWidth="0.5" strokeOpacity="0.4" />
 
             {/* Status data points */}
-            <text x="380" y="145" fill="#06b6d4" fillOpacity="0.4" fontSize="8" fontFamily="monospace">ZONE_A7 // ACTIVE</text>
-            <text x="380" y="320" fill="#06b6d4" fillOpacity="0.3" fontSize="7" fontFamily="monospace">COVERAGE: 94.2% // ETA: 3m 42s</text>
+            <text x="380" y="145" fill="#06b6d4" fillOpacity="0.7" fontSize="8" fontFamily="monospace">ZONE_A7 // ACTIVE</text>
+            <text x="380" y="320" fill="#06b6d4" fillOpacity="0.6" fontSize="7" fontFamily="monospace">COVERAGE: 94.2% // ETA: 3m 42s</text>
           </svg>
         </motion.div>
 
@@ -150,7 +150,7 @@ export function DroneTransition() {
               height: `${1 + Math.random() * 2}px`,
               left: `${10 + Math.random() * 80}%`,
               top: `${10 + Math.random() * 80}%`,
-              backgroundColor: i % 3 === 0 ? 'rgba(6,182,212,0.4)' : 'rgba(148,163,184,0.2)',
+              backgroundColor: i % 3 === 0 ? 'rgba(6,182,212,0.7)' : 'rgba(148,163,184,0.4)',
               animation: `float ${3 + Math.random() * 4}s ease-in-out infinite`,
               animationDelay: `${Math.random() * 3}s`,
             }} />
@@ -158,26 +158,26 @@ export function DroneTransition() {
         </motion.div>
 
         {/* Horizontal scan line */}
-        <motion.div style={{ top: scanLine, opacity: 0.3 }} className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/60 to-transparent" />
+        <motion.div style={{ top: scanLine, opacity: 0.5 }} className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/80 to-transparent" />
 
         {/* Center text — appears mid-scroll */}
         <motion.div style={{ opacity: textReveal }} className="absolute inset-0 flex flex-col items-center justify-center z-10">
-          <p className="text-[10px] md:text-xs tracking-[0.4em] text-cyan-400/60 uppercase mb-4 font-light">Autonomous Precision</p>
-          <h3 className="text-2xl md:text-4xl font-extralight text-white/90 tracking-wide">
-            <span className="text-white/40">Beyond</span> Human Reach
+          <p className="text-[10px] md:text-xs tracking-[0.4em] text-cyan-400/80 uppercase mb-4 font-light">Autonomous Precision</p>
+          <h3 className="text-2xl md:text-4xl font-extralight text-white tracking-wide">
+            <span className="text-white/60">Beyond</span> Human Reach
           </h3>
-          <div className="mt-6 flex items-center gap-8 text-[10px] tracking-[0.2em] text-white/30 uppercase">
+          <div className="mt-6 flex items-center gap-8 text-[10px] tracking-[0.2em] text-white/50 uppercase">
             <span>150m Altitude</span>
-            <span className="w-1 h-1 rounded-full bg-cyan-400/40" />
+            <span className="w-1 h-1 rounded-full bg-cyan-400/60" />
             <span>Zero Risk</span>
-            <span className="w-1 h-1 rounded-full bg-cyan-400/40" />
+            <span className="w-1 h-1 rounded-full bg-cyan-400/60" />
             <span>360° Coverage</span>
           </div>
         </motion.div>
 
         {/* Vignette overlay */}
         <div className="absolute inset-0 pointer-events-none" style={{
-          background: `radial-gradient(ellipse at center, transparent 30%, rgba(2,2,4,0.7) 100%)`
+          background: `radial-gradient(ellipse at center, transparent 50%, rgba(8,12,20,0.5) 100%)`
         }} />
       </motion.div>
 
@@ -217,14 +217,14 @@ export function PerformanceTransition() {
   ];
 
   return (
-    <div ref={ref} className="relative h-[50vh] md:h-[60vh] overflow-hidden bg-gradient-to-b from-[#020204] via-[#050509] to-[#020204]">
+    <div ref={ref} className="relative h-[50vh] md:h-[60vh] overflow-hidden bg-gradient-to-b from-[#080c14] via-[#0c1018] to-[#080c14]">
       <motion.div style={{ opacity: masterOpacity }} className="absolute inset-0 flex flex-col items-center justify-center px-6">
 
         {/* Section title */}
         <motion.div style={{ opacity: titleReveal }} className="text-center mb-8 md:mb-12">
-          <p className="text-[10px] md:text-[11px] tracking-[0.5em] text-white/30 uppercase mb-3">Verified Operational Data</p>
-          <h3 className="text-lg md:text-2xl font-extralight text-white/80 tracking-wide">Why Industry Leaders Choose Us</h3>
-          <motion.div style={{ width: lineWidth }} className="h-px bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent mt-4 mx-auto" />
+          <p className="text-[10px] md:text-[11px] tracking-[0.5em] text-white/50 uppercase mb-3">Verified Operational Data</p>
+          <h3 className="text-lg md:text-2xl font-extralight text-white/90 tracking-wide">Why Industry Leaders Choose Us</h3>
+          <motion.div style={{ width: lineWidth }} className="h-px bg-gradient-to-r from-transparent via-cyan-500/60 to-transparent mt-4 mx-auto" />
         </motion.div>
 
         {/* Metrics grid — clean cards */}
@@ -232,19 +232,19 @@ export function PerformanceTransition() {
           {metrics.map((m, i) => (
             <div key={i} className="relative group">
               {/* Card */}
-              <div className="relative border border-white/[0.06] rounded-lg p-4 md:p-6 backdrop-blur-sm overflow-hidden"
-                style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.02) 0%, rgba(6,182,212,0.01) 100%)' }}>
+              <div className="relative border border-white/[0.1] rounded-lg p-4 md:p-6 backdrop-blur-sm overflow-hidden"
+                style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(6,182,212,0.03) 100%)' }}>
                 {/* Subtle top accent */}
-                <div className="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent" />
+                <div className="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent" />
                 {/* Value */}
                 <div className="flex items-baseline gap-0.5">
-                  <span className="text-2xl md:text-4xl font-extralight text-white/90 tabular-nums">{m.value}</span>
-                  <span className="text-sm md:text-lg font-light text-cyan-400/70">{m.unit}</span>
+                  <span className="text-2xl md:text-4xl font-extralight text-white tabular-nums">{m.value}</span>
+                  <span className="text-sm md:text-lg font-light text-cyan-400/90">{m.unit}</span>
                 </div>
                 {/* Label */}
-                <p className="mt-1 text-[11px] md:text-xs font-medium text-white/60 tracking-wide">{m.label}</p>
+                <p className="mt-1 text-[11px] md:text-xs font-medium text-white/75 tracking-wide">{m.label}</p>
                 {/* Sub */}
-                <p className="mt-0.5 text-[9px] md:text-[10px] text-white/25 tracking-wider">{m.sub}</p>
+                <p className="mt-0.5 text-[9px] md:text-[10px] text-white/40 tracking-wider">{m.sub}</p>
               </div>
             </div>
           ))}
@@ -272,10 +272,10 @@ export function BurstTransition() {
   const scanOpacity = useTransform(scrollYProgress, [0.1, 0.2, 0.8, 0.9], [0, 0.3, 0.3, 0]);
 
   return (
-    <div ref={ref} className="relative h-[45vh] md:h-[55vh] overflow-hidden flex items-center justify-center bg-[#020204]">
+    <div ref={ref} className="relative h-[45vh] md:h-[55vh] overflow-hidden flex items-center justify-center bg-[#080c14]">
       {/* Background grid */}
       <motion.div style={{ opacity: masterOpacity }} className="absolute inset-0">
-        <div className="absolute inset-0 opacity-[0.03]" style={{
+        <div className="absolute inset-0 opacity-[0.06]" style={{
           backgroundImage: `linear-gradient(to right, rgba(34,211,238,0.5) 1px, transparent 1px), linear-gradient(to bottom, rgba(34,211,238,0.5) 1px, transparent 1px)`,
           backgroundSize: "40px 40px",
         }} />
@@ -296,8 +296,8 @@ export function BurstTransition() {
 
           {/* Core body */}
           <motion.g style={{ opacity: assembleProgress }}>
-            <rect x="340" y="220" width="120" height="55" rx="6" stroke="rgba(255,255,255,0.3)" strokeWidth="1" fill="rgba(255,255,255,0.01)" />
-            <rect x="355" y="230" width="90" height="35" rx="3" stroke="rgba(6,182,212,0.25)" strokeWidth="0.6" fill="rgba(6,182,212,0.01)" />
+            <rect x="340" y="220" width="120" height="55" rx="6" stroke="rgba(255,255,255,0.5)" strokeWidth="1.2" fill="rgba(255,255,255,0.02)" />
+            <rect x="355" y="230" width="90" height="35" rx="3" stroke="rgba(6,182,212,0.45)" strokeWidth="0.8" fill="rgba(6,182,212,0.02)" />
             {/* Internal components */}
             <rect x="362" y="236" width="10" height="22" rx="1.5" stroke="rgba(6,182,212,0.35)" strokeWidth="0.5" />
             <rect x="377" y="236" width="10" height="22" rx="1.5" stroke="rgba(6,182,212,0.35)" strokeWidth="0.5" />
@@ -343,18 +343,18 @@ export function BurstTransition() {
 
           {/* HUD data */}
           <motion.g style={{ opacity: hudOpacity }}>
-            <text x="100" y="150" fill="rgba(6,182,212,0.5)" fontSize="8" fontFamily="monospace">SYS: NOMINAL</text>
-            <text x="100" y="165" fill="rgba(6,182,212,0.35)" fontSize="7" fontFamily="monospace">PWR: 94.2% | ALT: 87m</text>
-            <text x="100" y="180" fill="rgba(6,182,212,0.3)" fontSize="7" fontFamily="monospace">WIND: 3.2 m/s NNE</text>
-            <text x="100" y="195" fill="rgba(52,211,153,0.4)" fontSize="7" fontFamily="monospace">STATUS: CLEANING</text>
+            <text x="100" y="150" fill="rgba(6,182,212,0.8)" fontSize="8" fontFamily="monospace">SYS: NOMINAL</text>
+            <text x="100" y="165" fill="rgba(6,182,212,0.6)" fontSize="7" fontFamily="monospace">PWR: 94.2% | ALT: 87m</text>
+            <text x="100" y="180" fill="rgba(6,182,212,0.5)" fontSize="7" fontFamily="monospace">WIND: 3.2 m/s NNE</text>
+            <text x="100" y="195" fill="rgba(52,211,153,0.7)" fontSize="7" fontFamily="monospace">STATUS: CLEANING</text>
 
-            <text x="600" y="400" fill="rgba(6,182,212,0.4)" fontSize="8" fontFamily="monospace">NOZZLE PRESSURE: 142 BAR</text>
-            <text x="600" y="415" fill="rgba(6,182,212,0.3)" fontSize="7" fontFamily="monospace">WATER FLOW: 2.4 L/min</text>
-            <text x="600" y="430" fill="rgba(6,182,212,0.3)" fontSize="7" fontFamily="monospace">SURFACE TEMP: 18.3°C</text>
+            <text x="600" y="400" fill="rgba(6,182,212,0.7)" fontSize="8" fontFamily="monospace">NOZZLE PRESSURE: 142 BAR</text>
+            <text x="600" y="415" fill="rgba(6,182,212,0.5)" fontSize="7" fontFamily="monospace">WATER FLOW: 2.4 L/min</text>
+            <text x="600" y="430" fill="rgba(6,182,212,0.5)" fontSize="7" fontFamily="monospace">SURFACE TEMP: 18.3°C</text>
           </motion.g>
 
           {/* Corner brackets — technical frame */}
-          <motion.g style={{ opacity: assembleProgress }} stroke="rgba(255,255,255,0.15)" strokeWidth="0.8">
+          <motion.g style={{ opacity: assembleProgress }} stroke="rgba(255,255,255,0.3)" strokeWidth="0.8">
             <path d="M60 60 L60 80 M60 60 L80 60" />
             <path d="M740 60 L740 80 M740 60 L720 60" />
             <path d="M60 440 L60 420 M60 440 L80 440" />
@@ -362,15 +362,14 @@ export function BurstTransition() {
           </motion.g>
 
           {/* Model designation */}
-          <motion.text style={{ opacity: hudOpacity }} x="400" y="470" textAnchor="middle" fill="rgba(255,255,255,0.2)" fontSize="9" fontFamily="monospace" letterSpacing="4">
+          <motion.text style={{ opacity: hudOpacity }} x="400" y="470" textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="9" fontFamily="monospace" letterSpacing="4">
             BEZ-X1 AUTONOMOUS CLEANING PLATFORM
           </motion.text>
         </svg>
       </motion.div>
 
-      {/* Vignette */}
       <div className="absolute inset-0 pointer-events-none" style={{
-        background: `radial-gradient(ellipse at center, transparent 40%, rgba(2,2,4,0.6) 100%)`
+        background: `radial-gradient(ellipse at center, transparent 50%, rgba(8,12,20,0.4) 100%)`
       }} />
     </div>
   );
