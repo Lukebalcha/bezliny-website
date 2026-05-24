@@ -92,7 +92,7 @@ export default function InvestorsPage() {
 
       {/* Competitive advantages */}
       <section className="py-20 md:py-32 relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/[0.01] to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/[0.005] to-transparent" />
         <div className="relative max-w-5xl mx-auto px-6">
           <FadeUp>
             <p className="text-[10px] tracking-[0.4em] text-white/40 uppercase mb-4">Why Bezliny</p>
@@ -129,7 +129,7 @@ export default function InvestorsPage() {
             ].map((item, i) => (
               <FadeUp key={i} delay={i * 0.08}>
                 <div className="flex gap-6 items-start py-4 border-b border-white/[0.04]">
-                  <span className="text-lg font-bold font-[family-name:var(--font-space)] text-cyan-400/70 shrink-0 w-14">{item.year}</span>
+                  <span className="text-lg font-bold font-[family-name:var(--font-space)] text-white/70 shrink-0 w-14">{item.year}</span>
                   <div>
                     <h4 className="text-base font-medium text-white/80">{item.milestone}</h4>
                     <p className="text-sm text-white/35 mt-0.5">{item.desc}</p>

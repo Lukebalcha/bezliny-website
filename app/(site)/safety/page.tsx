@@ -72,7 +72,7 @@ export default function SafetyPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#09090b] via-[#0a0d12] to-[#09090b]" />
         <div className="relative z-10 text-center max-w-5xl px-6">
           <FadeUp>
-            <p className="text-[10px] md:text-xs tracking-[0.5em] text-cyan-400/70 uppercase mb-6">Safety & Compliance</p>
+            <p className="text-[10px] md:text-xs tracking-[0.5em] text-white/70 uppercase mb-6">Safety & Compliance</p>
             <h1 className="text-4xl sm:text-6xl md:text-8xl font-bold font-[family-name:var(--font-space)] leading-[0.9]">
               Zero humans.<br />
               <span className="text-white/40">Zero risk.</span>
@@ -89,7 +89,7 @@ export default function SafetyPage() {
         <div className="text-center max-w-4xl">
           <p className="text-white/30 text-sm uppercase tracking-[0.3em] mb-6">The industry standard</p>
           <h2 className="text-3xl md:text-5xl font-light text-white/80 leading-tight">
-            Every year, <span className="text-red-400 font-normal">hundreds of workers</span> are injured cleaning buildings at height.
+            Every year, <span className="text-white font-normal">hundreds of workers</span> are injured cleaning buildings at height.
           </h2>
           <p className="mt-6 text-white/40 text-lg">Rope access. Scaffolding. Cradles. Human error.</p>
         </div>
@@ -123,7 +123,7 @@ export default function SafetyPage() {
 
       {/* Certifications grid */}
       <section className="py-20 md:py-32 relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/[0.02] to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/[0.01] to-transparent" />
         <div className="relative max-w-6xl mx-auto px-6">
           <FadeUp>
             <p className="text-[10px] md:text-xs tracking-[0.4em] text-white/40 uppercase mb-4">Certifications & Compliance</p>
@@ -139,7 +139,7 @@ export default function SafetyPage() {
                   style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.02), rgba(6,182,212,0.01))' }}>
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-lg font-bold text-white/90 font-[family-name:var(--font-space)]">{cert.code}</span>
-                    <span className="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 uppercase tracking-wider">{cert.status}</span>
+                    <span className="text-[9px] px-2 py-0.5 rounded-full bg-white/10 text-white/70 border border-white/20 uppercase tracking-wider">{cert.status}</span>
                   </div>
                   <p className="text-xs text-white/50 font-medium mb-1">{cert.name}</p>
                   <p className="text-[11px] text-white/35 leading-relaxed">{cert.desc}</p>
@@ -153,7 +153,7 @@ export default function SafetyPage() {
       {/* Operational protocols */}
       <FullScreenStatement>
         <div className="max-w-4xl">
-          <p className="text-[10px] tracking-[0.4em] text-cyan-400/60 uppercase mb-6">Operational Protocol</p>
+          <p className="text-[10px] tracking-[0.4em] text-white/60 uppercase mb-6">Operational Protocol</p>
           <h2 className="text-2xl md:text-4xl font-light text-white/80 leading-relaxed">
             Every flight is pre-authorized. Every path is computed. Every surface is mapped in real-time.
             The drone sees more than a human ever could — and never gets tired, distracted, or afraid.
@@ -179,8 +179,8 @@ export default function SafetyPage() {
             ].map((feature, i) => (
               <FadeUp key={i} delay={i * 0.03}>
                 <div className="flex items-center gap-4 py-3 border-b border-white/[0.04]">
-                  <div className="w-6 h-6 rounded-full border border-emerald-500/30 flex items-center justify-center shrink-0">
-                    <svg className="w-3 h-3 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div className="w-6 h-6 rounded-full border border-white/20 flex items-center justify-center shrink-0">
+                    <svg className="w-3 h-3 text-white/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                     </svg>
                   </div>

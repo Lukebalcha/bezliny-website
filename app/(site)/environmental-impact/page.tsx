@@ -23,13 +23,13 @@ export default function EnvironmentalImpactPage() {
     <>
       {/* Hero */}
       <section className="h-screen flex items-center justify-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#09090b] via-[#081210] to-[#09090b]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#09090b] via-[#0a0a0f] to-[#09090b]" />
         <div className="relative z-10 text-center max-w-5xl px-6">
           <FadeUp>
-            <p className="text-[10px] md:text-xs tracking-[0.5em] text-emerald-400/70 uppercase mb-6">Environmental Impact</p>
+            <p className="text-[10px] md:text-xs tracking-[0.5em] text-white/70 uppercase mb-6">Environmental Impact</p>
             <h1 className="text-4xl sm:text-6xl md:text-8xl font-bold font-[family-name:var(--font-space)] leading-[0.9]">
               Clean buildings.<br />
-              <span className="text-emerald-400/60">Clean conscience.</span>
+              <span className="text-white/50">Clean conscience.</span>
             </h1>
             <p className="mt-8 text-lg md:text-xl text-white/50 max-w-2xl mx-auto font-light">
               Traditional cleaning poisons the ground beneath it. We chose a different path.
@@ -42,7 +42,7 @@ export default function EnvironmentalImpactPage() {
       <ScrollReveal className="min-h-[60vh] flex items-center justify-center px-6">
         <div className="text-center max-w-4xl">
           <h2 className="text-3xl md:text-5xl font-light text-white/80 leading-tight">
-            Traditional facade cleaning uses <span className="text-red-400 font-normal">85,000 liters</span> of chemically-treated water per building, per year.
+            Traditional facade cleaning uses <span className="text-white font-normal">85,000 liters</span> of chemically-treated water per building, per year.
           </h2>
           <p className="mt-6 text-white/35 text-base">Runoff enters storm drains. Chemicals reach groundwater. Nobody talks about it.</p>
         </div>
@@ -51,7 +51,7 @@ export default function EnvironmentalImpactPage() {
       {/* Our numbers */}
       <ScrollReveal className="min-h-[50vh] flex items-center justify-center px-6">
         <div className="text-center">
-          <h2 className="text-6xl md:text-9xl font-bold font-[family-name:var(--font-space)] text-emerald-400">
+          <h2 className="text-6xl md:text-9xl font-bold font-[family-name:var(--font-space)] text-white/80">
             0
           </h2>
           <p className="mt-4 text-xl md:text-2xl text-white/60">Chemicals used. Ever.</p>
@@ -67,24 +67,24 @@ export default function EnvironmentalImpactPage() {
                 value: "90%",
                 label: "Water Recycled",
                 desc: "Closed-loop water system captures and filters runoff in real-time. Only 10% evaporates.",
-                color: "text-cyan-400",
+                color: "text-white/80",
               },
               {
                 value: "0",
                 label: "Chemical Agents",
                 desc: "Pure water at 142 BAR. Pressure does the work. No detergents, no surfactants, no acids.",
-                color: "text-emerald-400",
+                color: "text-white/80",
               },
               {
                 value: "Carbon Neutral",
                 label: "Operations",
                 desc: "Electric drones charged from renewable sources. Fleet carbon footprint offset quarterly.",
-                color: "text-amber-400",
+                color: "text-white/70",
               },
             ].map((metric, i) => (
               <FadeUp key={i} delay={i * 0.1}>
                 <div className="border border-white/[0.06] rounded-xl p-8 text-center"
-                  style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.01), rgba(16,185,129,0.02))' }}>
+                  style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02))' }}>
                   <div className={`text-3xl md:text-4xl font-bold font-[family-name:var(--font-space)] ${metric.color}`}>
                     {metric.value}
                   </div>
@@ -99,7 +99,7 @@ export default function EnvironmentalImpactPage() {
 
       {/* Comparison */}
       <section className="py-20 md:py-32 relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-emerald-500/[0.02] to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/[0.01] to-transparent" />
         <div className="relative max-w-4xl mx-auto px-6">
           <FadeUp>
             <p className="text-[10px] tracking-[0.4em] text-white/40 uppercase mb-6">Per Building, Per Year</p>
@@ -118,9 +118,9 @@ export default function EnvironmentalImpactPage() {
               <FadeUp key={i} delay={i * 0.05}>
                 <div className="grid grid-cols-4 gap-4 py-4 border-b border-white/[0.04] items-center">
                   <span className="text-sm text-white/60">{row.label}</span>
-                  <span className="text-sm text-red-400/60 line-through">{row.traditional}</span>
-                  <span className="text-sm text-emerald-400 font-medium">{row.bezliny}</span>
-                  <span className="text-[10px] text-emerald-400/60 uppercase tracking-wider">{row.savings}</span>
+                  <span className="text-sm text-white/50 line-through">{row.traditional}</span>
+                  <span className="text-sm text-white/80 font-medium">{row.bezliny}</span>
+                  <span className="text-[10px] text-white/50 uppercase tracking-wider">{row.savings}</span>
                 </div>
               </FadeUp>
             ))}
@@ -158,7 +158,7 @@ export default function EnvironmentalImpactPage() {
         <FadeUp>
           <h2 className="text-3xl md:text-5xl font-bold font-[family-name:var(--font-space)] mb-6">
             Make your building<br />
-            <span className="text-emerald-400/60">part of the solution.</span>
+            <span className="text-white/50">part of the solution.</span>
           </h2>
           <p className="text-white/40 mb-10 max-w-lg mx-auto">Request an environmental impact assessment for your property.</p>
           <MagneticButton href="/contact" variant="primary">
