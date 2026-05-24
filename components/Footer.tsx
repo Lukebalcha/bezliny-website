@@ -24,10 +24,29 @@ export default function Footer() {
           <div>
             <h4 className="text-[11px] uppercase tracking-[0.2em] text-white/70 mb-6">Navigation</h4>
             <ul className="space-y-3">
-              {["Home", "Services", "About", "Government", "Contact"].map((item) => (
+              {["Home", "Services", "Technology", "Safety", "About", "Contact"].map((item) => (
                 <li key={item}>
                   <Link href={item === "Home" ? "/" : `/${item.toLowerCase()}`} className="text-sm text-white/70 hover:text-white transition-colors duration-500">
                     {item}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Company */}
+          <div>
+            <h4 className="text-[11px] uppercase tracking-[0.2em] text-white/70 mb-6">Company</h4>
+            <ul className="space-y-3">
+              {[
+                { label: "Environmental Impact", href: "/environmental-impact" },
+                { label: "Investors", href: "/investors" },
+                { label: "Brand & Policy", href: "/brand" },
+                { label: "Government", href: "/government" },
+              ].map((item) => (
+                <li key={item.href}>
+                  <Link href={item.href} className="text-sm text-white/70 hover:text-white transition-colors duration-500">
+                    {item.label}
                   </Link>
                 </li>
               ))}

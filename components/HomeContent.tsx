@@ -262,6 +262,71 @@ export default function HomeContent() {
       {/* Operational Capability */}
       <LiveOpsCounter />
 
+      {/* Property Management Integration */}
+      <section className="py-20 md:py-32 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-[#09090b] via-[#080c14] to-[#09090b]" />
+        <div className="relative max-w-6xl mx-auto px-5 md:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <FadeUp>
+                <span className="text-[10px] md:text-[11px] uppercase tracking-[0.4em] text-cyan-400/60">Integration Ready</span>
+                <h2 className="mt-4 text-3xl md:text-4xl font-bold font-[family-name:var(--font-space)] leading-tight">
+                  Plugs into your<br />property management system.
+                </h2>
+                <p className="mt-5 text-white/50 leading-relaxed text-sm md:text-base max-w-lg">
+                  Bezliny connects directly to your BMS, CMMS, or property management platform. 
+                  Automated scheduling, real-time status updates, digital completion reports — 
+                  all flowing into your existing workflows.
+                </p>
+                <div className="mt-8 space-y-3">
+                  {[
+                    "REST API for scheduling & status queries",
+                    "Webhook notifications on operation events",
+                    "Digital completion reports (PDF + JSON)",
+                    "Calendar sync for maintenance planning",
+                    "Automated recurring schedule configuration",
+                    "Multi-property portfolio dashboard",
+                  ].map((feature, i) => (
+                    <div key={i} className="flex items-center gap-3">
+                      <div className="w-1 h-1 rounded-full bg-cyan-400/60" />
+                      <span className="text-sm text-white/60">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+              </FadeUp>
+            </div>
+            <div>
+              <FadeUp delay={0.2}>
+                <div className="border border-white/[0.06] rounded-2xl p-6 md:p-8 font-mono text-[11px] md:text-xs leading-relaxed"
+                  style={{ background: 'linear-gradient(135deg, rgba(6,182,212,0.02), rgba(0,0,0,0.3))' }}>
+                  <div className="flex items-center gap-2 mb-4 pb-3 border-b border-white/[0.06]">
+                    <div className="w-2.5 h-2.5 rounded-full bg-red-400/60" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-amber-400/60" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-400/60" />
+                    <span className="ml-2 text-white/30">api.bezliny.com</span>
+                  </div>
+                  <div className="space-y-1 text-white/50">
+                    <p><span className="text-emerald-400/70">POST</span> <span className="text-white/70">/v1/operations/schedule</span></p>
+                    <p className="text-white/30">{"{"}</p>
+                    <p className="pl-4"><span className="text-cyan-400/60">&quot;building_id&quot;</span>: <span className="text-amber-400/60">&quot;bld_warsaw_central_01&quot;</span>,</p>
+                    <p className="pl-4"><span className="text-cyan-400/60">&quot;service&quot;</span>: <span className="text-amber-400/60">&quot;facade_clean_full&quot;</span>,</p>
+                    <p className="pl-4"><span className="text-cyan-400/60">&quot;preferred_date&quot;</span>: <span className="text-amber-400/60">&quot;2025-06-15&quot;</span>,</p>
+                    <p className="pl-4"><span className="text-cyan-400/60">&quot;priority&quot;</span>: <span className="text-purple-400/60">&quot;standard&quot;</span></p>
+                    <p className="text-white/30">{"}"}</p>
+                    <p className="mt-3 text-emerald-400/50">// Response: 201 Created</p>
+                    <p className="text-white/30">{"{"}</p>
+                    <p className="pl-4"><span className="text-cyan-400/60">&quot;operation_id&quot;</span>: <span className="text-amber-400/60">&quot;op_7f3a9b2c&quot;</span>,</p>
+                    <p className="pl-4"><span className="text-cyan-400/60">&quot;status&quot;</span>: <span className="text-emerald-400/60">&quot;scheduled&quot;</span>,</p>
+                    <p className="pl-4"><span className="text-cyan-400/60">&quot;eta&quot;</span>: <span className="text-amber-400/60">&quot;2025-06-15T06:00:00Z&quot;</span></p>
+                    <p className="text-white/30">{"}"}</p>
+                  </div>
+                </div>
+              </FadeUp>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Enterprise CTA */}
       <section className="py-20 md:py-40 relative overflow-hidden">
         <MeshGradient />
