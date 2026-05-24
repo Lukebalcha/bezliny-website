@@ -48,7 +48,7 @@ export default function HomeContent() {
             text={t.hero.title}
             as="h1"
             delay={0.3}
-            className="text-[2.5rem] sm:text-5xl md:text-7xl lg:text-[6rem] font-bold font-[family-name:var(--font-space)] leading-[0.9] md:leading-[0.85] tracking-tight"
+            className="text-[2rem] sm:text-5xl md:text-7xl lg:text-[6rem] font-bold font-[family-name:var(--font-space)] leading-[0.95] md:leading-[0.85] tracking-tight"
           />
 
           <ParagraphReveal
