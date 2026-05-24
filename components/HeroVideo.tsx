@@ -80,6 +80,7 @@ export default function HeroVideo() {
 
   return (
     <motion.div ref={ref} style={{ scale, opacity }} className="absolute inset-0">
+      {/* Desktop hero */}
       <video
         ref={videoRef}
         autoPlay
@@ -89,13 +90,30 @@ export default function HeroVideo() {
         preload="auto"
         controls={false}
         disablePictureInPicture
-        className="w-full h-full object-contain md:object-cover object-center"
+        className="hidden md:block w-full h-full object-cover object-center"
         // @ts-ignore
         webkit-playsinline="true"
         x5-video-player-type="h5"
         x5-video-player-fullscreen="false"
       >
         <source src="/assets/drone-hero.mp4" type="video/mp4" />
+      </video>
+      {/* Mobile hero — portrait drone video, not zoomed in */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        controls={false}
+        disablePictureInPicture
+        className="block md:hidden w-full h-full object-cover object-center"
+        // @ts-ignore
+        webkit-playsinline="true"
+        x5-video-player-type="h5"
+        x5-video-player-fullscreen="false"
+      >
+        <source src="/assets/drone-hero-mobile.mp4" type="video/mp4" />
       </video>
     </motion.div>
   );
