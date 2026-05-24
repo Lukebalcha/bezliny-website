@@ -3,21 +3,11 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useEffect } from "react";
 
-export default function HeroVideo() {
-  const ref = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"],
-  });
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-
+function useForceAutoplay(videoRef: React.RefObject<HTMLVideoElement | null>) {
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    // Force attributes
     video.setAttribute("playsinline", "");
     video.setAttribute("webkit-playsinline", "true");
     video.setAttribute("x5-video-player-type", "h5");
@@ -38,7 +28,6 @@ export default function HeroVideo() {
     video.addEventListener("loadeddata", onLoaded);
     video.addEventListener("canplay", onLoaded);
 
-    // Retry on any user interaction
     const onInteract = () => {
       play();
       if (!video.paused) {
@@ -51,18 +40,15 @@ export default function HeroVideo() {
     document.addEventListener("click", onInteract, { passive: true });
     document.addEventListener("scroll", onInteract, { passive: true });
 
-    // Retry on visibility change
     const onVisible = () => {
       if (document.visibilityState === "visible") play();
     };
     document.addEventListener("visibilitychange", onVisible);
 
-    // Retry periodically
     const retries = [100, 300, 500, 1000, 2000, 3000, 5000, 8000].map(ms =>
       setTimeout(play, ms)
     );
 
-    // Resume if paused externally
     const onPause = () => setTimeout(play, 100);
     video.addEventListener("pause", onPause);
 
@@ -76,13 +62,28 @@ export default function HeroVideo() {
       video.removeEventListener("pause", onPause);
       retries.forEach(clearTimeout);
     };
-  }, []);
+  }, [videoRef]);
+}
+
+export default function HeroVideo() {
+  const ref = useRef<HTMLDivElement>(null);
+  const desktopRef = useRef<HTMLVideoElement>(null);
+  const mobileRef = useRef<HTMLVideoElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
+  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+
+  useForceAutoplay(desktopRef);
+  useForceAutoplay(mobileRef);
 
   return (
     <motion.div ref={ref} style={{ scale, opacity }} className="absolute inset-0">
       {/* Desktop hero */}
       <video
-        ref={videoRef}
+        ref={desktopRef}
         autoPlay
         muted
         loop
@@ -98,8 +99,9 @@ export default function HeroVideo() {
       >
         <source src="/assets/drone-hero.mp4" type="video/mp4" />
       </video>
-      {/* Mobile hero — portrait drone video, not zoomed in */}
+      {/* Mobile hero — portrait drone cleaning, no watermarks */}
       <video
+        ref={mobileRef}
         autoPlay
         muted
         loop
