@@ -36,7 +36,7 @@ export default function HomeContent() {
         <div className="hidden md:block absolute bottom-8 left-8 w-16 h-16 border-l border-b border-white/20 z-20" />
         <div className="hidden md:block absolute bottom-8 right-8 w-16 h-16 border-r border-b border-white/20 z-20" />
 
-        <div className="relative z-20 max-w-6xl mx-auto px-5 md:px-6 text-center">
+        <div className="relative z-20 max-w-6xl mx-auto px-8 md:px-6 text-center overflow-hidden">
           <FadeUp>
             <div className="inline-flex items-center gap-2 md:gap-3 px-4 md:px-5 py-2 md:py-2.5 rounded-full glass mb-8 md:mb-12">
               <span className="w-1.5 h-1.5 rounded-full bg-[#c8cdd3]" />
@@ -48,13 +48,13 @@ export default function HomeContent() {
             text={t.hero.title}
             as="h1"
             delay={0.3}
-            className="text-[1.75rem] sm:text-4xl md:text-7xl lg:text-[6rem] font-bold font-[family-name:var(--font-space)] leading-[1] sm:leading-[0.95] md:leading-[0.85] tracking-tight"
+            className="text-[1.5rem] xs:text-[1.75rem] sm:text-4xl md:text-7xl lg:text-[6rem] font-bold font-[family-name:var(--font-space)] leading-[1.05] sm:leading-[0.95] md:leading-[0.85] tracking-tight"
           />
 
           <ParagraphReveal
             text={t.hero.subtitle}
             delay={0.8}
-            className="mt-6 md:mt-10 text-base md:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed"
+            className="mt-6 md:mt-10 text-sm md:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed px-2"
           />
 
           <FadeUp delay={1}>
