@@ -1,11 +1,11 @@
 {
-  "name": "Bezliny CRM",
+  "name": "Bezliny — Autonomous Drone Cleaning",
   "short_name": "Bezliny",
-  "description": "Bezliny Internal CRM - Building & Contact Management",
-  "start_url": "/dashboard",
+  "description": "Europe's leading autonomous drone façade cleaning company",
+  "start_url": "/",
   "display": "standalone",
-  "background_color": "#0a0a0a",
-  "theme_color": "#10b981",
+  "background_color": "#09090b",
+  "theme_color": "#09090b",
   "orientation": "any",
   "icons": [
     { "src": "/icon-192.svg", "sizes": "192x192", "type": "image/svg+xml" },

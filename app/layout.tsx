@@ -83,7 +83,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: "your-google-verification-code",
+    // google: "ADD_VERIFICATION_CODE_AFTER_REGISTERING_WITH_GOOGLE_SEARCH_CONSOLE",
   },
   category: "technology",
 };
@@ -97,7 +97,7 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#06b6d4" />
+        <meta name="theme-color" content="#09090b" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <link rel="apple-touch-icon" href="/icon-192.svg" />
