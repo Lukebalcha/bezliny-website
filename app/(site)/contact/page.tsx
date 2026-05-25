@@ -1,7 +1,7 @@
 "use client";
 
 import ContactForm from "@/components/ContactForm";
-import { DroneTransition } from "@/components/ScrollTransitions";
+
 import { FormingSection, FormingElement } from "@/components/CinematicReveal";
 import { useLang } from "@/lib/LangContext";
 
@@ -19,8 +19,6 @@ export default function ContactPage() {
           </FormingElement>
         </div>
       </FormingSection>
-
-      <DroneTransition />
 
       <FormingSection className="pb-32 relative z-[1]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">

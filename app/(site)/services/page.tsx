@@ -2,7 +2,7 @@
 
 import ServiceCards from "@/components/ServiceCards";
 import DroneServicesReveal from "@/components/DroneServicesReveal";
-import { DroneTransition, BurstTransition } from "@/components/ScrollTransitions";
+import { BurstTransition } from "@/components/ScrollTransitions";
 import { FormingSection, FormingElement } from "@/components/CinematicReveal";
 import { useLang } from "@/lib/LangContext";
 
@@ -23,7 +23,6 @@ export default function ServicesPage() {
       </FormingSection>
 
       <DroneServicesReveal />
-      <DroneTransition />
 
       <FormingSection className="pb-36 relative z-[1]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
