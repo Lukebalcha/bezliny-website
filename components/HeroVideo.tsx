@@ -115,7 +115,7 @@ export default function HeroVideo() {
         x5-video-player-type="h5"
         x5-video-player-fullscreen="false"
       >
-        <source src="/assets/drone-hero-mobile.mp4" type="video/mp4" />
+        <source src="/assets/drone-hero.mp4" type="video/mp4" />
       </video>
     </motion.div>
   );
