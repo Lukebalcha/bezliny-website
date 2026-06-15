@@ -128,5 +128,49 @@
     "s04": "Reporting",
     "s04d": "Full documentation with inspection data"
   },
-  "footer": { "rights": "All rights reserved." }
+  "footer": { "rights": "All rights reserved." },
+  "safety": {
+    "heroLabel": "Safety & Compliance",
+    "heroTitle1": "Zero humans.",
+    "heroTitle2": "Zero risk.",
+    "heroSubtitle": "The safest way to clean a building is to never put a person on it.",
+    "problemLabel": "The industry standard",
+    "problemTitle": "Every year, <strong>hundreds of workers</strong> are injured cleaning buildings at height.",
+    "problemSubtitle": "Rope access. Scaffolding. Cradles. Human error.",
+    "answerTitle": "We eliminated the risk entirely.",
+    "metrics": [
+      { "value": "0", "label": "Incidents", "sub": "Since founding" },
+      { "value": "0", "label": "Personnel at height", "sub": "Ever" },
+      { "value": "100%", "label": "Autonomous ops", "sub": "No manual intervention" },
+      { "value": "24/7", "label": "Monitoring", "sub": "Real-time telemetry" }
+    ],
+    "certsLabel": "Certifications & Compliance",
+    "certsTitle": "Every credential. Verified.",
+    "certifications": [
+      { "code": "PANSA", "name": "Polish Air Navigation Services Agency", "desc": "Registered UAV operator for commercial operations in Polish airspace", "status": "ACTIVE" },
+      { "code": "ULC", "name": "Civil Aviation Authority of Poland", "desc": "Full operational license for BVLOS drone operations in urban environments", "status": "ACTIVE" },
+      { "code": "EASA", "name": "European Union Aviation Safety Agency", "desc": "Compliant with EU drone regulations for the Specific category of operations", "status": "COMPLIANT" },
+      { "code": "CE", "name": "Conformité Européenne", "desc": "All drone platforms meet EU safety, health, and environmental requirements", "status": "CERTIFIED" },
+      { "code": "ISO 14001", "name": "Environmental Management System", "desc": "Certified environmental management ensuring sustainable operations", "status": "CERTIFIED" },
+      { "code": "ISO 9001", "name": "Quality Management System", "desc": "Consistent quality standards across all cleaning operations", "status": "CERTIFIED" }
+    ],
+    "protocolLabel": "Operational Protocol",
+    "protocolText": "Every flight is pre-authorized. Every path is computed. Every surface is mapped in real-time. The drone sees more than a human ever could — and never gets tired, distracted, or afraid.",
+    "features": [
+      "Redundant flight controllers — dual IMU, triple GPS lock",
+      "Automatic RTH (Return to Home) on signal loss",
+      "Geofencing — drone cannot leave designated work zone",
+      "Real-time wind monitoring — auto-pause at 12 m/s",
+      "Obstacle avoidance — 360° LiDAR + optical sensors",
+      "Emergency parachute deployment system",
+      "Full flight telemetry recorded for every operation",
+      "Insurance coverage up to €5M per operation",
+      "Pre-flight automated system checks (127 parameters)",
+      "Post-flight inspection AI — detects wear before failure"
+    ],
+    "ctaTitle1": "Safety isn't a feature.",
+    "ctaTitle2": "It's the foundation.",
+    "ctaSubtitle": "Request our full safety documentation and compliance certificates for your procurement team.",
+    "ctaButton": "Request Safety Documentation"
+  }
 }

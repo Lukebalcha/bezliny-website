@@ -2,9 +2,6 @@
 
 import { useState } from "react";
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://zpwxoommugmtrwtqlxyq.supabase.co";
-const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "sb_publishable_N36ANIjfi0619K-0ZI4lBA_SWepReOL";
-
 export default function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -17,38 +14,30 @@ export default function ContactForm() {
     const form = e.currentTarget;
     const data = new FormData(form);
 
-    const contact = {
+    const payload = {
       name: data.get("name") as string,
-      email: data.get("email") as string,
+      email: (data.get("email") as string) || "Not provided",
       phone: data.get("phone") as string,
       company: data.get("company") as string,
-      role: data.get("building_type") as string,
-      relationship_status: "new",
-      how_we_met: "website_contact_form",
-      decision_power: "unknown",
-      pain_points: [],
-      notes: `[WEBSITE LEAD] ${data.get("message")}\n\nBuilding type: ${data.get("building_type")}\nSubmitted: ${new Date().toLocaleString("en-GB", { timeZone: "Europe/Warsaw" })}`,
+      building_type: data.get("building_type") as string,
+      message: data.get("message") as string,
+      _subject: `New Bezliny Lead: ${data.get("name")} — ${data.get("company")}`,
+      _template: "table",
     };
 
     try {
-      // Direct REST API call to Supabase (no SDK needed)
-      const resp = await fetch(`${SUPABASE_URL}/rest/v1/contacts`, {
+      const resp = await fetch("https://formsubmit.co/ajax/contact@bezliny.com", {
         method: "POST",
-        headers: {
-          "apikey": SUPABASE_KEY,
-          "Authorization": `Bearer ${SUPABASE_KEY}`,
-          "Content-Type": "application/json",
-          "Prefer": "return=minimal",
-        },
-        body: JSON.stringify(contact),
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(payload),
       });
 
-      if (!resp.ok) {
-        throw new Error(`Status ${resp.status}`);
+      const result = await resp.json();
+      if (result.success) {
+        setSubmitted(true);
+      } else {
+        throw new Error(result.message || "Submission failed");
       }
-
-      // Success — notifier daemon handles email + push notifications
-      setSubmitted(true);
     } catch (err) {
       console.error("Form submission error:", err);
       setError("Submission failed. Please try again or call us at +48 579 366 868.");
@@ -89,7 +78,7 @@ export default function ContactForm() {
               />
             </div>
             <div>
-              <label className="block text-sm text-white/80 mb-2">Business Email *</label>
+              <label className="block text-sm text-white/80 mb-2">Email *</label>
               <input
                 type="email" name="email" required
                 className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/30 focus:outline-none focus:border-blue-500/50 transition-colors"
@@ -99,17 +88,17 @@ export default function ContactForm() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
-              <label className="block text-sm text-white/80 mb-2">Phone Number *</label>
+              <label className="block text-sm text-white/80 mb-2">Phone Number</label>
               <input
-                type="tel" name="phone" required
+                type="tel" name="phone"
                 className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/30 focus:outline-none focus:border-blue-500/50 transition-colors"
                 placeholder="+48 XXX XXX XXX"
               />
             </div>
             <div>
-              <label className="block text-sm text-white/80 mb-2">Company / Building *</label>
+              <label className="block text-sm text-white/80 mb-2">Company / Building</label>
               <input
-                type="text" name="company" required
+                type="text" name="company"
                 className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/30 focus:outline-none focus:border-blue-500/50 transition-colors"
                 placeholder="Company or building name"
               />

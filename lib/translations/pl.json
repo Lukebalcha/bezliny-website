@@ -128,5 +128,49 @@
     "s04": "Raportowanie",
     "s04d": "Pełna dokumentacja z danymi inspekcyjnymi"
   },
-  "footer": { "rights": "Wszelkie prawa zastrzeżone." }
+  "footer": { "rights": "Wszelkie prawa zastrzeżone." },
+  "safety": {
+    "heroLabel": "Bezpieczeństwo i Zgodność",
+    "heroTitle1": "Zero ludzi.",
+    "heroTitle2": "Zero ryzyka.",
+    "heroSubtitle": "Najbezpieczniejszy sposób na czyszczenie budynku to nigdy nie stawiać na nim człowieka.",
+    "problemLabel": "Standard branżowy",
+    "problemTitle": "Każdego roku <strong>setki pracowników</strong> odnosi obrażenia podczas czyszczenia budynków na wysokości.",
+    "problemSubtitle": "Dostęp linowy. Rusztowania. Gondole. Błąd ludzki.",
+    "answerTitle": "Całkowicie wyeliminowaliśmy ryzyko.",
+    "metrics": [
+      { "value": "0", "label": "Incydentów", "sub": "Od założenia" },
+      { "value": "0", "label": "Osób na wysokości", "sub": "Nigdy" },
+      { "value": "100%", "label": "Operacje autonomiczne", "sub": "Bez interwencji ręcznej" },
+      { "value": "24/7", "label": "Monitoring", "sub": "Telemetria w czasie rzeczywistym" }
+    ],
+    "certsLabel": "Certyfikaty i Zgodność",
+    "certsTitle": "Każdy certyfikat. Zweryfikowany.",
+    "certifications": [
+      { "code": "PANSA", "name": "Polska Agencja Żeglugi Powietrznej", "desc": "Zarejestrowany operator BSP do operacji komercyjnych w polskiej przestrzeni powietrznej", "status": "AKTYWNY" },
+      { "code": "ULC", "name": "Urząd Lotnictwa Cywilnego", "desc": "Pełna licencja operacyjna na loty BVLOS dronów w środowisku miejskim", "status": "AKTYWNY" },
+      { "code": "EASA", "name": "Agencja Bezpieczeństwa Lotniczego UE", "desc": "Zgodność z przepisami UE dotyczącymi dronów w kategorii szczególnej", "status": "ZGODNY" },
+      { "code": "CE", "name": "Conformité Européenne", "desc": "Wszystkie platformy dronowe spełniają wymogi UE w zakresie bezpieczeństwa, zdrowia i środowiska", "status": "CERTYFIKAT" },
+      { "code": "ISO 14001", "name": "System Zarządzania Środowiskowego", "desc": "Certyfikowane zarządzanie środowiskowe zapewniające zrównoważone operacje", "status": "CERTYFIKAT" },
+      { "code": "ISO 9001", "name": "System Zarządzania Jakością", "desc": "Spójne standardy jakości we wszystkich operacjach czyszczenia", "status": "CERTYFIKAT" }
+    ],
+    "protocolLabel": "Protokół Operacyjny",
+    "protocolText": "Każdy lot jest wstępnie autoryzowany. Każda trasa jest obliczona. Każda powierzchnia jest mapowana w czasie rzeczywistym. Dron widzi więcej niż człowiek kiedykolwiek mógłby — i nigdy się nie męczy, nie rozprasza ani nie boi.",
+    "features": [
+      "Redundantne kontrolery lotu — podwójne IMU, potrójny lock GPS",
+      "Automatyczny RTH (Powrót do Bazy) przy utracie sygnału",
+      "Geofencing — dron nie może opuścić wyznaczonej strefy pracy",
+      "Monitoring wiatru w czasie rzeczywistym — auto-pauza przy 12 m/s",
+      "Unikanie przeszkód — 360° LiDAR + czujniki optyczne",
+      "System awaryjnego wdrożenia spadochronu",
+      "Pełna telemetria lotu rejestrowana dla każdej operacji",
+      "Ubezpieczenie do €5M na operację",
+      "Automatyczne kontrole systemu przed lotem (127 parametrów)",
+      "AI inspekcji po locie — wykrywa zużycie przed awarią"
+    ],
+    "ctaTitle1": "Bezpieczeństwo to nie funkcja.",
+    "ctaTitle2": "To fundament.",
+    "ctaSubtitle": "Poproś o pełną dokumentację bezpieczeństwa i certyfikaty zgodności dla Twojego zespołu zakupowego.",
+    "ctaButton": "Poproś o Dokumentację Bezpieczeństwa"
+  }
 }
