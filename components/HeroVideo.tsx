@@ -1,0 +1,122 @@
+"use client";
+
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef, useEffect } from "react";
+
+function useForceAutoplay(videoRef: React.RefObject<HTMLVideoElement | null>) {
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "true");
+    video.setAttribute("x5-video-player-type", "h5");
+    video.setAttribute("x5-video-player-fullscreen", "false");
+    video.muted = true;
+    video.defaultMuted = true;
+    video.autoplay = true;
+
+    const play = () => {
+      video.muted = true;
+      const p = video.play();
+      if (p) p.catch(() => {});
+    };
+
+    play();
+
+    const onLoaded = () => play();
+    video.addEventListener("loadeddata", onLoaded);
+    video.addEventListener("canplay", onLoaded);
+
+    const onInteract = () => {
+      play();
+      if (!video.paused) {
+        document.removeEventListener("touchstart", onInteract);
+        document.removeEventListener("click", onInteract);
+        document.removeEventListener("scroll", onInteract);
+      }
+    };
+    document.addEventListener("touchstart", onInteract, { passive: true });
+    document.addEventListener("click", onInteract, { passive: true });
+    document.addEventListener("scroll", onInteract, { passive: true });
+
+    const onVisible = () => {
+      if (document.visibilityState === "visible") play();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+
+    const retries = [100, 300, 500, 1000, 2000, 3000, 5000, 8000].map(ms =>
+      setTimeout(play, ms)
+    );
+
+    const onPause = () => setTimeout(play, 100);
+    video.addEventListener("pause", onPause);
+
+    return () => {
+      document.removeEventListener("touchstart", onInteract);
+      document.removeEventListener("click", onInteract);
+      document.removeEventListener("scroll", onInteract);
+      document.removeEventListener("visibilitychange", onVisible);
+      video.removeEventListener("loadeddata", onLoaded);
+      video.removeEventListener("canplay", onLoaded);
+      video.removeEventListener("pause", onPause);
+      retries.forEach(clearTimeout);
+    };
+  }, [videoRef]);
+}
+
+export default function HeroVideo() {
+  const ref = useRef<HTMLDivElement>(null);
+  const desktopRef = useRef<HTMLVideoElement>(null);
+  const mobileRef = useRef<HTMLVideoElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
+  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+
+  useForceAutoplay(desktopRef);
+  useForceAutoplay(mobileRef);
+
+  return (
+    <motion.div ref={ref} style={{ scale, opacity }} className="absolute inset-0">
+      {/* Desktop hero */}
+      <video
+        ref={desktopRef}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        controls={false}
+        disablePictureInPicture
+        className="hidden md:block w-full h-full object-cover object-center"
+        // @ts-ignore
+        webkit-playsinline="true"
+        x5-video-player-type="h5"
+        x5-video-player-fullscreen="false"
+      >
+        <source src="/assets/drone-hero.mp4" type="video/mp4" />
+      </video>
+      {/* Mobile hero — portrait drone cleaning, no watermarks */}
+      <video
+        ref={mobileRef}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        controls={false}
+        disablePictureInPicture
+        className="block md:hidden w-full h-full object-cover object-center"
+        // @ts-ignore
+        webkit-playsinline="true"
+        x5-video-player-type="h5"
+        x5-video-player-fullscreen="false"
+      >
+        <source src="/assets/drone-hero.mp4" type="video/mp4" />
+      </video>
+    </motion.div>
+  );
+}

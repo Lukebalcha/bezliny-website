@@ -1,0 +1,176 @@
+{
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "technology": "Technology",
+    "projects": "Projects",
+    "about": "About",
+    "government": "Government",
+    "contact": "Contact",
+    "quote": "Get a Quote"
+  },
+  "hero": {
+    "badge": "Industrial Drone Technology",
+    "title": "Autonomous Drone Cleaning for Industrial Infrastructure",
+    "subtitle": "Zero scaffolding. Zero risk. Absolute precision.",
+    "cta": "Request Assessment",
+    "ctaSecondary": "Our Capabilities"
+  },
+  "trust": { "label": "Trusted & Certified" },
+  "stats": {
+    "countries": "Addressable Markets",
+    "projects": "Service Sectors",
+    "safety": "Safety Record",
+    "cost": "Cost Reduction"
+  },
+  "mission": {
+    "label": "Our Mission",
+    "title": "Eliminating Human Risk in Industrial Maintenance",
+    "text": "Every year, thousands of workers are injured in high-altitude maintenance operations. Bezliny's autonomous drone platform replaces dangerous manual labor with precision robotic systems — delivering superior results while keeping people safe.",
+    "risk": "Human risk",
+    "faster": "Faster execution",
+    "chemical": "Chemical-free",
+    "operation": "Operation capable"
+  },
+  "services": {
+    "label": "Solutions",
+    "title": "Industrial-Grade Services",
+    "subtitle": "From skyscrapers to offshore platforms — precision drone operations for every sector.",
+    "viewAll": "View All Services",
+    "facade": "High-Rise Façade Cleaning",
+    "facadeDesc": "Glass, concrete, and cladding — any height, no scaffolding required.",
+    "bridge": "Bridge & Infrastructure",
+    "bridgeDesc": "Cleaning and inspection of girders, decks, and supports without traffic disruption.",
+    "oil": "Oil & Gas Platforms",
+    "oilDesc": "Offshore rigs, flare stacks, and storage tanks — preserving protective coatings.",
+    "wind": "Wind Turbine Cleaning",
+    "windDesc": "Blade cleaning and inspection at height — maximizing energy output.",
+    "ship": "Ship & Vessel Cleaning",
+    "shipDesc": "Hull and superstructure maintenance above the waterline — in port or at sea.",
+    "inspection": "Industrial Inspection",
+    "inspectionDesc": "Visual and thermal inspection of structures, pipelines, and equipment."
+  },
+  "process": {
+    "label": "Process",
+    "title": "How We Deliver",
+    "step01": "Site Assessment",
+    "step01Desc": "Comprehensive drone survey and structural analysis. Our engineers evaluate every surface, height, and environmental factor before any operation begins.",
+    "step02": "Mission Planning",
+    "step02Desc": "AI-driven flight path optimization. Every millimeter is calculated — pressure, temperature, water flow — for perfect results with zero surface damage.",
+    "step03": "Autonomous Execution",
+    "step03Desc": "GPS-RTK navigation with centimeter precision. Our drones operate fully autonomously while our operators monitor from a safe distance.",
+    "step04": "Verification & Reporting",
+    "step04Desc": "4K thermal and visual inspection post-operation. Full compliance documentation delivered within 24 hours."
+  },
+  "videoBreak": {
+    "title": "Precision Engineering. Zero Compromise.",
+    "text": "Our proprietary cleaning systems use filtered water, controlled heat, and calibrated pressure — preserving surfaces while delivering unmatched results."
+  },
+  "technology": {
+    "label": "Technology",
+    "title": "Bezliny Drone Systems",
+    "text": "Our proprietary sensor technology provides centimeter-level precision, setting a new standard for quality and significantly improving HSE performance.",
+    "f1": "Non-contact cleaning approach",
+    "f1d": "Preserves surface integrity",
+    "f2": "Patented safety system",
+    "f2d": "Automated collision avoidance",
+    "f3": "Centimeter-level precision",
+    "f3d": "GPS-RTK navigation",
+    "f4": "Chemical-free operation",
+    "f4d": "Pure water technology"
+  },
+  "global": {
+    "label": "Global Reach",
+    "title": "Operating Worldwide",
+    "subtitle": "From the high-rises of Warsaw to offshore platforms in the North Sea.",
+    "europe": "Europe",
+    "europeDetail": "HQ — Warsaw, Poland",
+    "scandinavia": "Scandinavia",
+    "scandinaviaDetail": "Nordic Operations",
+    "middleeast": "Middle East",
+    "middleeastDetail": "Oil & Gas Sector",
+    "asia": "Asia Pacific",
+    "asiaDetail": "Expansion 2026"
+  },
+  "cta": {
+    "title": "Ready to Eliminate Scaffolding Forever?",
+    "text": "Join the world's most innovative companies that have already switched to autonomous drone-based maintenance.",
+    "button": "Start Your Project"
+  },
+  "contactPage": {
+    "label": "Get In Touch",
+    "title": "Contact",
+    "subtitle": "Ready to transform your maintenance operations? Let's discuss how our drone technology can work for you.",
+    "hq": "Headquarters",
+    "hqCity": "Warsaw, Poland",
+    "hqRegion": "European Union",
+    "directContact": "Direct Contact",
+    "operations": "Operations",
+    "opsGlobal": "Expanding Worldwide",
+    "opsAvail": "Available 24/7 for emergency deployments",
+    "formName": "Full Name",
+    "formEmail": "Email",
+    "formMessage": "Message",
+    "formSend": "Send Message"
+  },
+  "servicesPage": {
+    "label": "What We Do",
+    "title": "Our Services",
+    "subtitle": "Comprehensive drone-based solutions for the most demanding industrial environments. Safe, efficient, and environmentally responsible.",
+    "processLabel": "Process",
+    "processTitle": "How We Work",
+    "s01": "Assessment",
+    "s01d": "Site survey and detailed project planning",
+    "s02": "Preparation",
+    "s02d": "Risk analysis and equipment configuration",
+    "s03": "Execution",
+    "s03d": "Autonomous drone operation with live monitoring",
+    "s04": "Reporting",
+    "s04d": "Full documentation with inspection data"
+  },
+  "footer": { "rights": "All rights reserved." },
+  "safety": {
+    "heroLabel": "Safety & Compliance",
+    "heroTitle1": "Zero humans.",
+    "heroTitle2": "Zero risk.",
+    "heroSubtitle": "The safest way to clean a building is to never put a person on it.",
+    "problemLabel": "The industry standard",
+    "problemTitle": "Every year, <strong>hundreds of workers</strong> are injured cleaning buildings at height.",
+    "problemSubtitle": "Rope access. Scaffolding. Cradles. Human error.",
+    "answerTitle": "We eliminated the risk entirely.",
+    "metrics": [
+      { "value": "0", "label": "Incidents", "sub": "Since founding" },
+      { "value": "0", "label": "Personnel at height", "sub": "Ever" },
+      { "value": "100%", "label": "Autonomous ops", "sub": "No manual intervention" },
+      { "value": "24/7", "label": "Monitoring", "sub": "Real-time telemetry" }
+    ],
+    "certsLabel": "Certifications & Compliance",
+    "certsTitle": "Every credential. Verified.",
+    "certifications": [
+      { "code": "PANSA", "name": "Polish Air Navigation Services Agency", "desc": "Registered UAV operator for commercial operations in Polish airspace", "status": "ACTIVE" },
+      { "code": "ULC", "name": "Civil Aviation Authority of Poland", "desc": "Full operational license for BVLOS drone operations in urban environments", "status": "ACTIVE" },
+      { "code": "EASA", "name": "European Union Aviation Safety Agency", "desc": "Compliant with EU drone regulations for the Specific category of operations", "status": "COMPLIANT" },
+      { "code": "CE", "name": "Conformité Européenne", "desc": "All drone platforms meet EU safety, health, and environmental requirements", "status": "CERTIFIED" },
+      { "code": "ISO 14001", "name": "Environmental Management System", "desc": "Certified environmental management ensuring sustainable operations", "status": "CERTIFIED" },
+      { "code": "ISO 9001", "name": "Quality Management System", "desc": "Consistent quality standards across all cleaning operations", "status": "CERTIFIED" }
+    ],
+    "protocolLabel": "Operational Protocol",
+    "protocolText": "Every flight is pre-authorized. Every path is computed. Every surface is mapped in real-time. The drone sees more than a human ever could — and never gets tired, distracted, or afraid.",
+    "features": [
+      "Redundant flight controllers — dual IMU, triple GPS lock",
+      "Automatic RTH (Return to Home) on signal loss",
+      "Geofencing — drone cannot leave designated work zone",
+      "Real-time wind monitoring — auto-pause at 12 m/s",
+      "Obstacle avoidance — 360° LiDAR + optical sensors",
+      "Emergency parachute deployment system",
+      "Full flight telemetry recorded for every operation",
+      "Insurance coverage up to €5M per operation",
+      "Pre-flight automated system checks (127 parameters)",
+      "Post-flight inspection AI — detects wear before failure"
+    ],
+    "ctaTitle1": "Safety isn't a feature.",
+    "ctaTitle2": "It's the foundation.",
+    "ctaSubtitle": "Request our full safety documentation and compliance certificates for your procurement team.",
+    "ctaButton": "Request Safety Documentation"
+  }
+}
