@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bezliny | Autonomous Drone Façade Cleaning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        display: ['Space Grotesk', 'sans-serif'],
+      },
+      colors: {
+        bezliny: {
+          bg: '#09090b',
+          card: '#0a0a0c',
+          card2: '#111113',
+          border: 'rgba(255,255,255,0.03)',
+          text: '#fafafa',
+          muted: '#a0a0a0',
+          dim: '#6b6b6b',
+        }
+      }
+    }
+  }
+}
+</script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: #09090b;
+  color: #fafafa;
+  overflow-x: hidden;
+}
+
+/* 3D Intro Overlay */
+#intro-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: #000;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.8s ease;
+}
+#intro-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+#intro-canvas {
+  width: 100%;
+  height: 100%;
+}
+.skip-intro {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #a0a0a0;
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.5px;
+  z-index: 10;
+}
+.skip-intro:hover {
+  background: rgba(255,255,255,0.15);
+  color: #fafafa;
+}
+
+/* Grain texture */
+.grain {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* Marquee */
+.marquee-track {
+  display: flex;
+  animation: marquee 30s linear infinite;
+  width: max-content;
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Map dots */
+.map-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #fafafa;
+  position: absolute;
+}
+.map-dot.hq {
+  width: 12px; height: 12px;
+  background: #fff;
+  box-shadow: 0 0 20px rgba(255,255,255,0.3);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.5); opacity: 0.6; }
+}
+
+/* Card hover */
+.solution-card {
+  border: 1px solid rgba(255,255,255,0.03);
+  background: #0a0a0c;
+  transition: all 0.4s ease;
+}
+.solution-card:hover {
+  border-color: rgba(255,255,255,0.08);
+  transform: translateY(-4px);
+}
+
+/* Video card */
+.video-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.03);
+}
+.video-card video {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+.video-card:hover video {
+  transform: scale(1.05);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #09090b; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+/* Nav */
+.nav-blur {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(9,9,11,0.8);
+}
+
+/* Mobile menu */
+.mobile-menu {
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+}
+.mobile-menu.open {
+  transform: translateX(0);
+}
+
+/* Form styling */
+.form-input {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #fafafa;
+  padding: 14px 18px;
+  border-radius: 8px;
+  font-size: 15px;
+  width: 100%;
+  transition: all 0.3s;
+  font-family: 'Inter', sans-serif;
+}
+.form-input:focus {
+  outline: none;
+  border-color: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.05);
+}
+.form-input::placeholder { color: #6b6b6b; }
+
+/* Section reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Badge */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.badge-operational {
+  background: rgba(255,255,255,0.06);
+  color: #a0a0a0;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.badge-expanding {
+  background: rgba(255,255,255,0.04);
+  color: #6b6b6b;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.badge-ready {
+  background: rgba(255,255,255,0.06);
+  color: #a0a0a0;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Lang switcher */
+.lang-btn {
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: 1px solid transparent;
+}
+.lang-btn.active {
+  background: rgba(255,255,255,0.1);
+  color: #fafafa;
+  border-color: rgba(255,255,255,0.15);
+}
+.lang-btn:not(.active) {
+  color: #6b6b6b;
+  background: transparent;
+}
+.lang-btn:not(.active):hover {
+  color: #a0a0a0;
+}
+
+/* Process step */
+.process-step {
+  position: relative;
+  padding-left: 60px;
+}
+.process-step::before {
+  content: attr(data-step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fafafa;
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+<!-- Grain Overlay -->
+<div class="grain"></div>
+
+<!-- 3D INTRO OVERLAY -->
+<div id="intro-overlay">
+  <canvas id="intro-canvas"></canvas>
+  <button class="skip-intro" onclick="skipIntro()">Pomiń intro / Skip Intro</button>
+</div>
+
+<!-- NAVIGATION -->
+<nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-500">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="flex items-center justify-between h-20">
+      <!-- Logo -->
+      <a href="#" class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <span class="font-display text-xl font-semibold tracking-tight">Bezliny</span>
+      </a>
+
+      <!-- Desktop Menu -->
+      <div class="hidden lg:flex items-center gap-8">
+        <a href="#solutions" class="text-sm text-[#a0a0a0] hover:text-[#fafafa] transition-colors">Solutions</a>
+        <a href="#technology" class="text-sm text-[#a0a0a0] hover:text-[#fafafa] transition-colors">Technology</a>
+        <a href="#operations" class="text-sm text-[#a0a0a0] hover:text-[#fafafa] transition-colors">Operations</a>
+        <a href="#insights" class="text-sm text-[#a0a0a0] hover:text-[#fafafa] transition-colors">Insights</a>
+        <a href="#contact" class="text-sm text-[#a0a0a0] hover:text-[#fafafa] transition-colors">About</a>
+        <a href="#contact" class="text-sm text-[#a0a0a0] hover:text-[#fafafa] transition-colors">Contact</a>
+      </div>
+
+      <!-- Right side -->
+      <div class="flex items-center gap-4">
+        <!-- Lang switcher -->
+        <div class="hidden sm:flex items-center gap-1">
+          <button class="lang-btn active" id="btn-pl" onclick="setLang('pl')">PL</button>
+          <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+        </div>
+
+        <a href="#contact" class="hidden md:inline-flex items-center gap-2 bg-white text-black px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-[#e0e0e0] transition-colors">
+          Get Started
+        </a>
+
+        <!-- Mobile hamburger -->
+        <button class="lg:hidden text-white" onclick="toggleMobileMenu()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div id="mobile-menu" class="mobile-menu fixed inset-0 z-40 bg-[#09090b]/98 backdrop-blur-xl lg:hidden">
+  <div class="flex flex-col items-center justify-center h-full gap-8">
+    <a href="#solutions" onclick="toggleMobileMenu()" class="text-2xl font-display text-[#fafafa]">Solutions</a>
+    <a href="#technology" onclick="toggleMobileMenu()" class="text-2xl font-display text-[#fafafa]">Technology</a>
+    <a href="#operations" onclick="toggleMobileMenu()" class="text-2xl font-display text-[#fafafa]">Operations</a>
+    <a href="#insights" onclick="toggleMobileMenu()" class="text-2xl font-display text-[#fafafa]">Insights</a>
+    <a href="#contact" onclick="toggleMobileMenu()" class="text-2xl font-display text-[#fafafa]">Contact</a>
+    <div class="flex items-center gap-2 mt-4">
+      <button class="lang-btn active" onclick="setLang('pl'); toggleMobileMenu()">PL</button>
+      <button class="lang-btn" onclick="setLang('en'); toggleMobileMenu()">EN</button>
+    </div>
+  </div>
+  <button class="absolute top-6 right-6 text-white" onclick="toggleMobileMenu()">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="18" y1="6" x2="6" y2="18"/>
+      <line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  </button>
+</div>
+
+<!-- HERO SECTION -->
+<section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+  <!-- Background Video -->
+  <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover opacity-40">
+    <source src="https://bezliny.com/assets/drone-hero.mp4" type="video/mp4">
+  </video>
+  <div class="absolute inset-0 bg-gradient-to-b from-[#09090b]/60 via-[#09090b]/40 to-[#09090b]"></div>
+
+  <div class="relative z-10 text-center px-6 max-w-4xl mx-auto pt-20">
+    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8">
+      <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+      <span class="text-xs text-[#a0a0a0] tracking-wider uppercase" data-pl="Autonomiczne Drony Czyszczące" data-en="Autonomous Cleaning Drones">Autonomiczne Drony Czyszczące</span>
+    </div>
+
+    <h1 class="font-display text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-[1.1]">
+      <span data-pl="Autonomiczne" data-en="Autonomous">Autonomiczne</span><br>
+      <span class="bg-gradient-to-r from-white via-white to-[#a0a0a0] bg-clip-text text-transparent" data-pl="Czyszczenie Fasad Dronami" data-en="Drone Façade Cleaning">Czyszczenie Fasad Dronami</span>
+    </h1>
+
+    <p class="text-lg sm:text-xl text-[#a0a0a0] max-w-2xl mx-auto mb-10 leading-relaxed" data-pl="Zero rusztowań. Zero ryzyka. Absolutna precyzja." data-en="Zero scaffolding. Zero risk. Absolute precision.">Zero rusztowań. Zero ryzyka. Absolutna precyzja.</p>
+
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a href="#contact" class="inline-flex items-center gap-2 bg-white text-black px-8 py-4 rounded-xl text-sm font-semibold hover:bg-[#e0e0e0] transition-all">
+        <span data-pl="Rozpocznij Współpracę" data-en="Get Started">Rozpocznij Współpracę</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#operations" class="inline-flex items-center gap-2 px-8 py-4 rounded-xl text-sm font-medium border border-white/10 text-[#a0a0a0] hover:border-white/20 hover:text-[#fafafa] transition-all">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <span data-pl="Zobacz w Akcji" data-en="Watch in Action">Zobacz w Akcji</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+    <span class="text-xs text-[#6b6b6b] tracking-wider uppercase" data-pl="Przewiń" data-en="Scroll">Przewiń</span>
+    <div class="w-px h-8 bg-gradient-to-b from-white/30 to-transparent"></div>
+  </div>
+</section>
+
+<!-- TRUSTED & CERTIFIED -->
+<section class="py-16 border-y border-white/[0.03]">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <p class="text-center text-xs text-[#6b6b6b] tracking-[0.2em] uppercase mb-10" data-pl="Zaufali Nam i Certyfikaty" data-en="Trusted & Certified">Zaufali Nam i Certyfikaty</p>
+    <div class="flex flex-wrap items-center justify-center gap-8 md:gap-16">
+      <div class="flex items-center gap-3 text-[#a0a0a0]">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span class="text-sm font-medium tracking-wide">PANSA Registered</span>
+      </div>
+      <div class="flex items-center gap-3 text-[#a0a0a0]">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 12l2 2 4-4"/></svg>
+        <span class="text-sm font-medium tracking-wide">ULC Certified</span>
+      </div>
+      <div class="flex items-center gap-3 text-[#a0a0a0]">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <span class="text-sm font-medium tracking-wide">CE Certified</span>
+      </div>
+      <div class="flex items-center gap-3 text-[#a0a0a0]">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12h20M2 12l5-5M2 12l5 5"/></svg>
+        <span class="text-sm font-medium tracking-wide">EASA Compliant</span>
+      </div>
+      <div class="flex items-center gap-3 text-[#a0a0a0]">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        <span class="text-sm font-medium tracking-wide">ISO 14001</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTORS MARQUEE -->
+<section class="py-12 overflow-hidden border-b border-white/[0.03]">
+  <div class="marquee-track">
+    <div class="flex items-center gap-16 px-8">
+      <span class="text-2xl md:text-3xl font-display font-light text-[#6b6b6b] whitespace-nowrap tracking-tight">PROPERTY MANAGERS</span>
+      <span class="text-[#333]">•</span>
+      <span class="text-2xl md:text-3xl font-display font-light text-[#6b6b6b] whitespace-nowrap tracking-tight">ENERGY SECTOR</span>
+      <span class="text-[#333]">•</span>
+      <span class="text-2xl md:text-3xl font-display font-light text-[#6b6b6b] whitespace-nowrap tracking-tight">MARITIME</span>
+      <span class="text-[#333]">•</span>
+      <span class="text-2xl md:text-3xl font-display font-light text-[#6b6b6b] whitespace-nowrap tracking-tight">INFRASTRUCTURE</span>
+      <span class="text-[#333]">•</span>
+      <span class="text-2xl md:text-3xl font-display font-light text-[#6b6b6b] whitespace-nowrap tracking-tight">GOVERNMENT</span>
+      <span class="text-[#333]">•</span>
+      <span class="text-2xl md:text-3xl font-display font-light text-[#6b6b6b] whitespace-nowrap tracking-tight">INDUSTRIAL</span>
+      <span class="text-[#333]">•</span>
+      <span class="text-2xl md:text-3xl font-display font-light text-[#6b6b6b] whitespace-nowrap tracking-tight">COMMERCIAL</span>
+      <span class="text-[#333]">•</span>
+      <span class="text-2xl md:text-3xl font-display font-light text-[#6b6b6b] whitespace-nowrap tracking-tight">RENEWABLE</span>
+      <span class="text-[#333]">•</span>
+      <span class="text-2xl md:text-3xl font-display font-light text-[#6b6b6b] whitespace-nowrap tracking-tight">OIL & GAS</span>
+      <span class="text-[#333]">•</span>
+      <span class="text-2xl md:text-3xl font-display font-light text-[#6b6b6b] whitespace-nowrap tracking-tight">AVIATION</span>
+      <span class="text-[#333]">•</span>
+      <span class="text-2xl md:text-3xl font-display font-light text-[#6b6b6b] whitespace-nowrap tracking-tight">LOGISTICS</span>
+      <span class="text-[#333]">•</span>
+      <span class="text-2xl md:text-3xl font-display font-light text-[#6b6b6b] whitespace-nowrap tracking-tight">AGRICULTURE</span>
+      <span class="text-[#333]">•</span>
+    </div>
+    <div class="flex items-center gap-16 px-8">
+      <span class="text-2xl md:text-3xl font-display font-light text-[#6b6b6b] whitespace-nowrap tracking-tight">PROPERTY MANAGERS</span>
+      <span class="text-[#333]">•</span>
+      <span class="text-2xl md:text-3xl font-display font-light text-[#6b6b6b] whitespace-nowrap tracking-tight">ENERGY SECTOR</span>
+      <span class="text-[#333]">•</span>
+      <span class="text-2xl md:text-3xl font-display font-light text-[#6b6b6b] whitespace-nowrap tracking-tight">MARITIME</span>
+      <span class="text-[#333]">•</span>
+      <span class="text-2xl md:text-3xl font-display font-light text-[#6b6b6b] whitespace-nowrap tracking-tight">INFRASTRUCTURE</span>
+      <span class="text-[#333]">•</span>
+      <span class="text-2xl md:text-3xl font-display font-light text-[#6b6b6b] whitespace-nowrap tracking-tight">GOVERNMENT</span>
+      <span class="text-[#333]">•</span>
+      <span class="text-2xl md:text-3xl font-display font-light text-[#6b6b6b] whitespace-nowrap tracking-tight">INDUSTRIAL</span>
+      <span class="text-[#333]">•</span>
+      <span class="text-2xl md:text-3xl font-display font-light text-[#6b6b6b] whitespace-nowrap tracking-tight">COMMERCIAL</span>
+      <span class="text-[#333]">•</span>
+      <span class="text-2xl md:text-3xl font-display font-light text-[#6b6b6b] whitespace-nowrap tracking-tight">RENEWABLE</span>
+      <span class="text-[#333]">•</span>
+      <span class="text-2xl md:text-3xl font-display font-light text-[#6b6b6b] whitespace-nowrap tracking-tight">OIL & GAS</span>
+      <span class="text-[#333]">•</span>
+      <span class="text-2xl md:text-3xl font-display font-light text-[#6b6b6b] whitespace-nowrap tracking-tight">AVIATION</span>
+      <span class="text-[#333]">•</span>
+      <span class="text-2xl md:text-3xl font-display font-light text-[#6b6b6b] whitespace-nowrap tracking-tight">LOGISTICS</span>
+      <span class="text-[#333]">•</span>
+      <span class="text-2xl md:text-3xl font-display font-light text-[#6b6b6b] whitespace-nowrap tracking-tight">AGRICULTURE</span>
+      <span class="text-[#333]">•</span>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="py-20 md:py-32">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+      <div class="text-center">
+        <div class="font-display text-5xl md:text-6xl font-bold text-[#fafafa] mb-2">12+</div>
+        <p class="text-sm text-[#6b6b6b]" data-pl="Rynki Adresowalne" data-en="Addressable Markets">Rynki Adresowalne</p>
+      </div>
+      <div class="text-center">
+        <div class="font-display text-5xl md:text-6xl font-bold text-[#fafafa] mb-2">9+</div>
+        <p class="text-sm text-[#6b6b6b]" data-pl="Sektory Usługowe" data-en="Service Sectors">Sektory Usługowe</p>
+      </div>
+      <div class="text-center">
+        <div class="font-display text-5xl md:text-6xl font-bold text-[#fafafa] mb-2">100%</div>
+        <p class="text-sm text-[#6b6b6b]" data-pl="Bezpieczeństwo" data-en="Safety Record">Bezpieczeństwo</p>
+      </div>
+      <div class="text-center">
+        <div class="font-display text-5xl md:text-6xl font-bold text-[#fafafa] mb-2">70%</div>
+        <p class="text-sm text-[#6b6b6b]" data-pl="Redukcja Kosztów" data-en="Cost Reduction">Redukcja Kosztów</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MISSION -->
+<section class="py-20 md:py-32 border-t border-white/[0.03]">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      <div>
+        <p class="text-xs text-[#6b6b6b] tracking-[0.2em] uppercase mb-6" data-pl="Nasza Misja" data-en="Our Mission">Nasza Misja</p>
+        <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tight mb-8 leading-tight" data-pl="Eliminowanie Ryzyka Ludzkiego w Konserwacji Przemysłowej" data-en="Eliminating Human Risk in Industrial Maintenance">Eliminowanie Ryzyka Ludzkiego w Konserwacji Przemysłowej</h2>
+        <p class="text-[#a0a0a0] leading-relaxed mb-8" data-pl="Każdego roku tysiące pracowników doznaje urazów podczas prac konserwacyjnych na wysokościach. Autonomiczna platforma dronowa Bezliny zastępuje niebezpieczną pracę manualną precyzyjnymi systemami robotycznymi — dostarczając lepsze rezultaty przy zachowaniu bezpieczeństwa ludzi." data-en="Every year, thousands of workers are injured in high-altitude maintenance operations. Bezliny's autonomous drone platform replaces dangerous manual labor with precision robotic systems — delivering superior results while keeping people safe.">Każdego roku tysiące pracowników doznaje urazów podczas prac konserwacyjnych na wysokościach. Autonomiczna platforma dronowa Bezliny zastępuje niebezpieczną pracę manualną precyzyjnymi systemami robotycznymi — dostarczając lepsze rezultaty przy zachowaniu bezpieczeństwa ludzi.</p>
+
+        <div class="grid grid-cols-2 gap-6">
+          <div class="p-5 rounded-xl bg-white/[0.02] border border-white/[0.03]">
+            <div class="font-display text-3xl font-bold text-[#fafafa] mb-1">Zero</div>
+            <p class="text-sm text-[#6b6b6b]" data-pl="Ryzyko ludzkie" data-en="Human risk">Ryzyko ludzkie</p>
+          </div>
+          <div class="p-5 rounded-xl bg-white/[0.02] border border-white/[0.03]">
+            <div class="font-display text-3xl font-bold text-[#fafafa] mb-1">3×</div>
+            <p class="text-sm text-[#6b6b6b]" data-pl="Szybsza realizacja" data-en="Faster execution">Szybsza realizacja</p>
+          </div>
+          <div class="p-5 rounded-xl bg-white/[0.02] border border-white/[0.03]">
+            <div class="font-display text-3xl font-bold text-[#fafafa] mb-1">100%</div>
+            <p class="text-sm text-[#6b6b6b]" data-pl="Bez chemikaliów" data-en="Chemical-free">Bez chemikaliów</p>
+          </div>
+          <div class="p-5 rounded-xl bg-white/[0.02] border border-white/[0.03]">
+            <div class="font-display text-3xl font-bold text-[#fafafa] mb-1">24/7</div>
+            <p class="text-sm text-[#6b6b6b]" data-pl="Możliwość pracy" data-en="Operation capable">Możliwość pracy</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Telemetry Panel -->
+      <div class="relative">
+        <div class="rounded-2xl border border-white/[0.05] bg-[#0a0a0c] p-8">
+          <div class="flex items-center justify-between mb-8">
+            <div>
+              <p class="text-xs text-[#6b6b6b] tracking-wider uppercase mb-1">BEZ-X1 AUTONOMOUS CLEANING PLATFORM</p>
+              <p class="text-xs text-[#333] font-mono">SYS: NOMINAL</p>
+            </div>
+            <div class="text-right">
+              <p class="text-xs text-[#6b6b6b]">PWR: 94.2%</p>
+              <p class="text-xs text-[#a0a0a0] mt-1">STATUS: CLEANING</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-4 mb-6">
+            <div class="p-4 rounded-lg bg-white/[0.02] border border-white/[0.03]">
+              <p class="text-xs text-[#6b6b6b] mb-1">PRESSURE</p>
+              <p class="font-mono text-lg text-[#fafafa]">142 <span class="text-xs text-[#6b6b6b]">BAR</span></p>
+            </div>
+            <div class="p-4 rounded-lg bg-white/[0.02] border border-white/[0.03]">
+              <p class="text-xs text-[#6b6b6b] mb-1">FLOW</p>
+              <p class="font-mono text-lg text-[#fafafa]">2.4 <span class="text-xs text-[#6b6b6b]">L/min</span></p>
+            </div>
+            <div class="p-4 rounded-lg bg-white/[0.02] border border-white/[0.03]">
+              <p class="text-xs text-[#6b6b6b] mb-1">TEMP</p>
+              <p class="font-mono text-lg text-[#fafafa]">18.3 <span class="text-xs text-[#6b6b6b]">°C</span></p>
+            </div>
+          </div>
+
+          <!-- Simulated camera feed -->
+          <div class="aspect-video rounded-lg bg-black border border-white/[0.05] overflow-hidden relative">
+            <video autoplay muted loop playsinline class="w-full h-full object-cover opacity-60">
+              <source src="https://bezliny.com/assets/operation-1.mp4" type="video/mp4">
+            </video>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="w-16 h-16 border border-white/20 rounded-full flex items-center justify-center">
+                <div class="w-2 h-2 bg-white rounded-full"></div>
+              </div>
+            </div>
+            <div class="absolute top-3 left-3 text-[10px] text-white/40 font-mono">CAM_01 | 4K | 30FPS</div>
+            <div class="absolute bottom-3 right-3 text-[10px] text-white/40 font-mono">ALT: 127m</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTIONS -->
+<section id="solutions" class="py-20 md:py-32 border-t border-white/[0.03]">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="mb-16">
+      <p class="text-xs text-[#6b6b6b] tracking-[0.2em] uppercase mb-4">03</p>
+      <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tight" data-pl="Usługi Przemysłowe" data-en="Industrial-Grade Services">Usługi Przemysłowe</h2>
+      <p class="text-[#a0a0a0] mt-4 max-w-xl" data-pl="Od drapaczy chmur po platformy offshore — precyzyjne operacje dronowe dla każdego sektora." data-en="From skyscrapers to offshore platforms — precision drone operations for every sector.">Od drapaczy chmur po platformy offshore — precyzyjne operacje dronowe dla każdego sektora.</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="solution-card rounded-2xl p-8">
+        <div class="flex items-center justify-between mb-6">
+          <span class="badge badge-operational" data-pl="OPERACYJNY" data-en="OPERATIONAL">OPERACYJNY</span>
+          <span class="text-xs text-[#333] font-mono">SECTOR 01</span>
+        </div>
+        <h3 class="font-display text-xl font-semibold mb-3" data-pl="Czyszczenie Fasad Wysokościowych" data-en="High-Rise Façade Cleaning">Czyszczenie Fasad Wysokościowych</h3>
+        <p class="text-sm text-[#a0a0a0] leading-relaxed" data-pl="Szkło, beton i okładzina — dowolna wysokość, bez rusztowań. Autonomiczna precyzja do 200m." data-en="Glass, concrete, and cladding — any height, no scaffolding. Autonomous precision up to 200m.">Szkło, beton i okładzina — dowolna wysokość, bez rusztowań. Autonomiczna precyzja do 200m.</p>
+      </div>
+
+      <div class="solution-card rounded-2xl p-8">
+        <div class="flex items-center justify-between mb-6">
+          <span class="badge badge-ready" data-pl="GOTOWY" data-en="READY">GOTOWY</span>
+          <span class="text-xs text-[#333] font-mono">SECTOR 02</span>
+        </div>
+        <h3 class="font-display text-xl font-semibold mb-3" data-pl="Infrastruktura Rządowa i Publiczna" data-en="Government & Public Infrastructure">Infrastruktura Rządowa i Publiczna</h3>
+        <p class="text-sm text-[#a0a0a0] leading-relaxed" data-pl="Restauracja zabytków, budynki użyteczności publicznej, infrastruktura obywatelska — współpraca z władzami lokalnymi." data-en="Monument restoration, public buildings, civic infrastructure — partnering with municipal authorities.">Restauracja zabytków, budynki użyteczności publicznej, infrastruktura obywatelska — współpraca z władzami lokalnymi.</p>
+      </div>
+
+      <div class="solution-card rounded-2xl p-8">
+        <div class="flex items-center justify-between mb-6">
+          <span class="badge badge-ready" data-pl="GOTOWY" data-en="READY">GOTOWY</span>
+          <span class="text-xs text-[#333] font-mono">SECTOR 03</span>
+        </div>
+        <h3 class="font-display text-xl font-semibold mb-3" data-pl="Mosty i Infrastruktura" data-en="Bridge & Infrastructure">Mosty i Infrastruktura</h3>
+        <p class="text-sm text-[#a0a0a0] leading-relaxed" data-pl="Belki, jezdnie i podpory czyszczone bez zakłócania ruchu lub zamknięć dróg." data-en="Girders, decks, and supports cleaned without traffic disruption or road closures.">Belki, jezdnie i podpory czyszczone bez zakłócania ruchu lub zamknięć dróg.</p>
+      </div>
+
+      <div class="solution-card rounded-2xl p-8">
+        <div class="flex items-center justify-between mb-6">
+          <span class="badge badge-expanding" data-pl="ROZWIJANY" data-en="EXPANDING">ROZWIJANY</span>
+          <span class="text-xs text-[#333] font-mono">SECTOR 04</span>
+        </div>
+        <h3 class="font-display text-xl font-semibold mb-3" data-pl="Platformy Naftowe i Gazowe" data-en="Oil & Gas Platforms">Platformy Naftowe i Gazowe</h3>
+        <p class="text-sm text-[#a0a0a0] leading-relaxed" data-pl="Platformy offshore, kominy, zbiorniki — zachowanie powłok w ekstremalnych warunkach." data-en="Offshore rigs, flare stacks, storage tanks — preserving coatings in extreme environments.">Platformy offshore, kominy, zbiorniki — zachowanie powłok w ekstremalnych warunkach.</p>
+      </div>
+
+      <div class="solution-card rounded-2xl p-8">
+        <div class="flex items-center justify-between mb-6">
+          <span class="badge badge-operational" data-pl="OPERACYJNY" data-en="OPERATIONAL">OPERACYJNY</span>
+          <span class="text-xs text-[#333] font-mono">SECTOR 05</span>
+        </div>
+        <h3 class="font-display text-xl font-semibold mb-3" data-pl="Czyszczenie Turbin Wiatrowych" data-en="Wind Turbine Cleaning">Czyszczenie Turbin Wiatrowych</h3>
+        <p class="text-sm text-[#a0a0a0] leading-relaxed" data-pl="Czyszczenie łopat na wysokości — maksymalizacja wydajności energetycznej, wydłużenie żywotności o 30%." data-en="Blade cleaning at height — maximizing energy output, extending lifespan by 30%.">Czyszczenie łopat na wysokości — maksymalizacja wydajności energetycznej, wydłużenie żywotności o 30%.</p>
+      </div>
+
+      <div class="solution-card rounded-2xl p-8">
+        <div class="flex items-center justify-between mb-6">
+          <span class="badge badge-expanding" data-pl="ROZWIJANY" data-en="EXPANDING">ROZWIJANY</span>
+          <span class="text-xs text-[#333] font-mono">SECTOR 06</span>
+        </div>
+        <h3 class="font-display text-xl font-semibold mb-3" data-pl="Czyszczenie Statków i Jednostek" data-en="Ship & Vessel Cleaning">Czyszczenie Statków i Jednostek</h3>
+        <p class="text-sm text-[#a0a0a0] leading-relaxed" data-pl="Konserwacja kadłuba i nadbudówki nad linią wodną — zero czasu postoju w doku." data-en="Hull and superstructure maintenance above the waterline — zero dock time wasted.">Konserwacja kadłuba i nadbudówki nad linią wodną — zero czasu postoju w doku.</p>
+      </div>
+
+      <div class="solution-card rounded-2xl p-8">
+        <div class="flex items-center justify-between mb-6">
+          <span class="badge badge-ready" data-pl="GOTOWY" data-en="READY">GOTOWY</span>
+          <span class="text-xs text-[#333] font-mono">SECTOR 07</span>
+        </div>
+        <h3 class="font-display text-xl font-semibold mb-3" data-pl="Inspekcja Przemysłowa" data-en="Industrial Inspection">Inspekcja Przemysłowa</h3>
+        <p class="text-sm text-[#a0a0a0] leading-relaxed" data-pl="Inspekcja wizualna i termiczna — wykrywanie awarii zanim nastąpią." data-en="Visual and thermal inspection — detecting failures before they happen.">Inspekcja wizualna i termiczna — wykrywanie awarii zanim nastąpią.</p>
+      </div>
+
+      <div class="solution-card rounded-2xl p-8">
+        <div class="flex items-center justify-between mb-6">
+          <span class="badge badge-operational" data-pl="OPERACYJNY" data-en="OPERATIONAL">OPERACYJNY</span>
+          <span class="text-xs text-[#333] font-mono">SECTOR 08</span>
+        </div>
+        <h3 class="font-display text-xl font-semibold mb-3" data-pl="Czyszczenie Paneli Fotowoltaicznych" data-en="Solar Panel Cleaning">Czyszczenie Paneli Fotowoltaicznych</h3>
+        <p class="text-sm text-[#a0a0a0] leading-relaxed" data-pl="Przywracanie szczytowej wydajności — autonomiczne mycie dronem bez uszkodzenia paneli lub przestojów." data-en="Restoring peak efficiency — autonomous drone washing without panel damage or downtime.">Przywracanie szczytowej wydajności — autonomiczne mycie dronem bez uszkodzenia paneli lub przestojów.</p>
+      </div>
+
+      <div class="solution-card rounded-2xl p-8">
+        <div class="flex items-center justify-between mb-6">
+          <span class="badge badge-expanding" data-pl="ROZWIJANY" data-en="EXPANDING">ROZWIJANY</span>
+          <span class="text-xs text-[#333] font-mono">SECTOR 09</span>
+        </div>
+        <h3 class="font-display text-xl font-semibold mb-3" data-pl="Zarządzanie Roślinnością i Drzewami" data-en="Vegetation & Tree Management">Zarządzanie Roślinnością i Drzewami</h3>
+        <p class="text-sm text-[#a0a0a0] leading-relaxed" data-pl="Precyzyjne opryskiwanie, przycinanie i pielęgnacja koron — palmy, żywopłoty i zieleń miejska." data-en="Precision spraying, trimming reach, and canopy maintenance — palm trees, hedges, and urban greenery.">Precyzyjne opryskiwanie, przycinanie i pielęgnacja koron — palmy, żywopłoty i zieleń miejska.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRECISION BAR -->
+<section class="py-16 border-y border-white/[0.03]">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="font-display text-3xl md:text-4xl font-bold tracking-tight" data-pl="Precyzyjne Inżynieria. Zero Kompromisów." data-en="Precision Engineering. Zero Compromise.">Precyzyjne Inżynieria. Zero Kompromisów.</h2>
+      <p class="text-[#a0a0a0] mt-4 max-w-2xl mx-auto" data-pl="Nasze własne systemy czyszczące wykorzystują filtrowaną wodę, kontrolowaną temperaturę i skalibrowane ciśnienie — zachowując powierzchnie przy jednoczesnym dostarczaniu niezrównanych rezultatów." data-en="Our proprietary cleaning systems use filtered water, controlled heat, and calibrated pressure — preserving surfaces while delivering unmatched results.">Nasze własne systemy czyszczące wykorzystują filtrowaną wodę, kontrolowaną temperaturę i skalibrowane ciśnienie — zachowując powierzchnie przy jednoczesnym dostarczaniu niezrównanych rezultatów.</p>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+      <div class="text-center p-6 rounded-xl bg-white/[0.02] border border-white/[0.03]">
+        <div class="font-display text-3xl font-bold text-[#fafafa] mb-1">99%</div>
+        <p class="text-xs text-[#6b6b6b]" data-pl="Precyzja" data-en="Precision Rate">Precyzja</p>
+        <p class="text-[10px] text-[#333] mt-1" data-pl="Dokładność ścieżki AI" data-en="AI-guided path accuracy">Dokładność ścieżki AI</p>
+      </div>
+      <div class="text-center p-6 rounded-xl bg-white/[0.02] border border-white/[0.03]">
+        <div class="font-display text-3xl font-bold text-[#fafafa] mb-1">5×</div>
+        <p class="text-xs text-[#6b6b6b]" data-pl="Szybciej" data-en="Faster">Szybciej</p>
+        <p class="text-[10px] text-[#333] mt-1" data-pl="vs. tradycyjny dostęp linowy" data-en="vs. traditional rope access">vs. tradycyjny dostęp linowy</p>
+      </div>
+      <div class="text-center p-6 rounded-xl bg-white/[0.02] border border-white/[0.03]">
+        <div class="font-display text-3xl font-bold text-[#fafafa] mb-1">200m</div>
+        <p class="text-xs text-[#6b6b6b]" data-pl="Max Wysokość" data-en="Max Altitude">Max Wysokość</p>
+        <p class="text-[10px] text-[#333] mt-1" data-pl="Pełne pokrycie fasad" data-en="Full facade coverage">Pełne pokrycie fasad</p>
+      </div>
+      <div class="text-center p-6 rounded-xl bg-white/[0.02] border border-white/[0.03]">
+        <div class="font-display text-3xl font-bold text-[#fafafa] mb-1">Zero</div>
+        <p class="text-xs text-[#6b6b6b]" data-pl="Ryzyko Ludzkie" data-en="Human Risk">Ryzyko Ludzkie</p>
+        <p class="text-[10px] text-[#333] mt-1" data-pl="Zero personelu na wysokości" data-en="Zero personnel at height">Zero personelu na wysokości</p>
+      </div>
+      <div class="text-center p-6 rounded-xl bg-white/[0.02] border border-white/[0.03]">
+        <div class="font-display text-3xl font-bold text-[#fafafa] mb-1">24/7</div>
+        <p class="text-xs text-[#6b6b6b]" data-pl="Operacja" data-en="Operation">Operacja</p>
+        <p class="text-[10px] text-[#333] mt-1" data-pl="Harmonogram adaptacyjny" data-en="Weather-adaptive scheduling">Harmonogram adaptacyjny</p>
+      </div>
+      <div class="text-center p-6 rounded-xl bg-white/[0.02] border border-white/[0.03]">
+        <div class="font-display text-3xl font-bold text-[#fafafa] mb-1">360°</div>
+        <p class="text-xs text-[#6b6b6b]" data-pl="Pokrycie" data-en="Coverage">Pokrycie</p>
+        <p class="text-[10px] text-[#333] mt-1" data-pl="Pełna mapa powierzchni" data-en="Complete surface mapping">Pełna mapa powierzchni</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="py-20 md:py-32 border-t border-white/[0.03]">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="mb-16">
+      <p class="text-xs text-[#6b6b6b] tracking-[0.2em] uppercase mb-4" data-pl="Proces" data-en="Process">Proces</p>
+      <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tight" data-pl="Jak Dostarczamy" data-en="How We Deliver">Jak Dostarczamy</h2>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div class="process-step" data-step="01">
+        <h3 class="font-display text-xl font-semibold mb-3" data-pl="Ocena Terenu" data-en="Site Assessment">Ocena Terenu</h3>
+        <p class="text-sm text-[#a0a0a0] leading-relaxed" data-pl="Kompleksowy przegląd dronem i analiza strukturalna. Nasi inżynierowie oceniają każdą powierzchnię, wysokość i czynnik środowiskowy przed rozpoczęciem operacji." data-en="Comprehensive drone survey and structural analysis. Our engineers evaluate every surface, height, and environmental factor before any operation begins.">Kompleksowy przegląd dronem i analiza strukturalna. Nasi inżynierowie oceniają każdą powierzchnię, wysokość i czynnik środowiskowy przed rozpoczęciem operacji.</p>
+      </div>
+
+      <div class="process-step" data-step="02">
+        <h3 class="font-display text-xl font-semibold mb-3" data-pl="Planowanie Misji" data-en="Mission Planning">Planowanie Misji</h3>
+        <p class="text-sm text-[#a0a0a0] leading-relaxed" data-pl="Optymalizacja ścieżki lotu oparta na AI. Każdy milimetr jest kalkulowany — ciśnienie, temperatura, przepływ wody — dla idealnych rezultatów bez uszkodzenia powierzchni." data-en="AI-driven flight path optimization. Every millimeter is calculated — pressure, temperature, water flow — for perfect results with zero surface damage.">Optymalizacja ścieżki lotu oparta na AI. Każdy milimetr jest kalkulowany — ciśnienie, temperatura, przepływ wody — dla idealnych rezultatów bez uszkodzenia powierzchni.</p>
+      </div>
+
+      <div class="process-step" data-step="03">
+        <h3 class="font-display text-xl font-semibold mb-3" data-pl="Autonomiczna Realizacja" data-en="Autonomous Execution">Autonomiczna Realizacja</h3>
+        <p class="text-sm text-[#a0a0a0] leading-relaxed" data-pl="Nawigacja GPS-RTK z precyzją centymetrową. Nasze drony operują w pełni autonomicznie, podczas gdy operatorzy monitorują z bezpiecznej odległości." data-en="GPS-RTK navigation with centimeter precision. Our drones operate fully autonomously while our operators monitor from a safe distance.">Nawigacja GPS-RTK z precyzją centymetrową. Nasze drony operują w pełni autonomicznie, podczas gdy operatorzy monitorują z bezpiecznej odległości.</p>
+      </div>
+
+      <div class="process-step" data-step="04">
+        <h3 class="font-display text-xl font-semibold mb-3" data-pl="Weryfikacja i Raportowanie" data-en="Verification & Reporting">Weryfikacja i Raportowanie</h3>
+        <p class="text-sm text-[#a0a0a0] leading-relaxed" data-pl="Inspekcja termiczna i wizualna 4K po operacji. Pełna dokumentacja zgodności dostarczona w ciągu 24 godzin." data-en="4K thermal and visual inspection post-operation. Full compliance documentation delivered within 24 hours.">Inspekcja termiczna i wizualna 4K po operacji. Pełna dokumentacja zgodności dostarczona w ciągu 24 godzin.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECHNOLOGY -->
+<section id="technology" class="py-20 md:py-32 border-t border-white/[0.03]">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="grid lg:grid-cols-2 gap-16 items-center mb-20">
+      <div>
+        <p class="text-xs text-[#6b6b6b] tracking-[0.2em] uppercase mb-4">05</p>
+        <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tight mb-6" data-pl="Systemy Dronów Bezliny" data-en="Bezliny Drone Systems">Systemy Dronów Bezliny</h2>
+        <p class="text-[#a0a0a0] leading-relaxed" data-pl="Nasza własna technologia sensorowa zapewnia precyzję na poziomie centymetra, wyznaczając nowy standard jakości i znacząco poprawiając wydajność BHP." data-en="Our proprietary sensor technology provides centimeter-level precision, setting a new standard for quality and significantly improving HSE performance.">Nasza własna technologia sensorowa zapewnia precyzję na poziomie centymetra, wyznaczając nowy standard jakości i znacząco poprawiając wydajność BHP.</p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div class="p-6 rounded-xl bg-white/[0.02] border border-white/[0.03]">
+          <svg class="w-6 h-6 text-[#a0a0a0] mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          <h4 class="font-display font-semibold text-sm mb-1" data-pl="Bezkontaktowe podejście" data-en="Non-contact cleaning approach">Bezkontaktowe podejście</h4>
+          <p class="text-xs text-[#6b6b6b]" data-pl="Zachowuje integralność powierzchni" data-en="Preserves surface integrity">Zachowuje integralność powierzchni</p>
+        </div>
+        <div class="p-6 rounded-xl bg-white/[0.02] border border-white/[0.03]">
+          <svg class="w-6 h-6 text-[#a0a0a0] mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          <h4 class="font-display font-semibold text-sm mb-1" data-pl="Patentowany system bezpieczeństwa" data-en="Patented safety system">Patentowany system bezpieczeństwa</h4>
+          <p class="text-xs text-[#6b6b6b]" data-pl="Automatyczne unikanie kolizji" data-en="Automated collision avoidance">Automatyczne unikanie kolizji</p>
+        </div>
+        <div class="p-6 rounded-xl bg-white/[0.02] border border-white/[0.03]">
+          <svg class="w-6 h-6 text-[#a0a0a0] mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <h4 class="font-display font-semibold text-sm mb-1" data-pl="Precyzja centymetrowa" data-en="Centimeter-level precision">Precyzja centymetrowa</h4>
+          <p class="text-xs text-[#6b6b6b]" data-pl="Nawigacja GPS-RTK" data-en="GPS-RTK navigation">Nawigacja GPS-RTK</p>
+        </div>
+        <div class="p-6 rounded-xl bg-white/[0.02] border border-white/[0.03]">
+          <svg class="w-6 h-6 text-[#a0a0a0] mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <h4 class="font-display font-semibold text-sm mb-1" data-pl="Operacja bez chemikaliów" data-en="Chemical-free operation">Operacja bez chemikaliów</h4>
+          <p class="text-xs text-[#6b6b6b]" data-pl="Technologia czystej wody" data-en="Pure water technology">Technologia czystej wody</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GLOBAL MAP -->
+<section class="py-20 md:py-32 border-t border-white/[0.03]">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <p class="text-xs text-[#6b6b6b] tracking-[0.2em] uppercase mb-4" data-pl="Zasięg Globalny" data-en="Global Reach">Zasięg Globalny</p>
+      <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tight mb-4" data-pl="Ekspansja na Całym Świecie" data-en="Worldwide Expansion">Ekspansja na Całym Świecie</h2>
+      <p class="text-[#a0a0a0]" data-pl="Z naszej siedziby w Warszawie, docieramy do głównych centrów przemysłowych na 4 kontynentach" data-en="From our Warsaw headquarters, reaching major industrial hubs across 4 continents">Z naszej siedziby w Warszawie, docieramy do głównych centrów przemysłowych na 4 kontynentach</p>
+    </div>
+
+    <!-- Map -->
+    <div class="relative aspect-[2/1] bg-[#0a0a0c] rounded-2xl border border-white/[0.03] overflow-hidden mb-12">
+      <svg class="absolute inset-0 w-full h-full opacity-10" viewBox="0 0 1000 500" fill="none">
+        <path d="M150,200 Q200,150 280,160 T400,180 Q450,200 500,190 T650,170 Q750,160 850,180" stroke="white" stroke-width="0.5"/>
+        <path d="M200,250 Q250,220 320,240 T450,260 Q500,280 550,270 T700,250 Q800,240 880,260" stroke="white" stroke-width="0.5"/>
+        <path d="M100,300 Q150,280 200,300 T350,320 Q400,340 450,330 T600,310 Q700,300 800,320" stroke="white" stroke-width="0.5"/>
+      </svg>
+
+      <div class="map-dot hq" style="left:52%; top:28%;" title="Warsaw (HQ)"></div>
+      <div class="map-dot" style="left:50%; top:20%;" title="Stockholm"></div>
+      <div class="map-dot" style="left:49%; top:18%;" title="Oslo"></div>
+      <div class="map-dot" style="left:48%; top:22%;" title="Copenhagen"></div>
+      <div class="map-dot" style="left:51%; top:26%;" title="Berlin"></div>
+      <div class="map-dot" style="left:45%; top:24%;" title="London"></div>
+      <div class="map-dot" style="left:47%; top:25%;" title="Amsterdam"></div>
+      <div class="map-dot" style="left:46%; top:29%;" title="Paris"></div>
+      <div class="map-dot" style="left:58%; top:38%;" title="Dubai"></div>
+      <div class="map-dot" style="left:60%; top:36%;" title="Riyadh"></div>
+      <div class="map-dot" style="left:75%; top:45%;" title="Singapore"></div>
+      <div class="map-dot" style="left:22%; top:32%;" title="Houston"></div>
+      <div class="map-dot" style="left:26%; top:28%;" title="New York"></div>
+      <div class="map-dot" style="left:82%; top:30%;" title="Tokyo"></div>
+      <div class="map-dot" style="left:85%; top:55%;" title="Sydney"></div>
+
+      <div class="absolute bottom-6 left-6 flex items-center gap-6">
+        <div class="flex items-center gap-2">
+          <div class="w-3 h-3 rounded-full bg-white"></div>
+          <span class="text-xs text-[#a0a0a0]">HQ</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="w-2 h-2 rounded-full bg-white/50"></div>
+          <span class="text-xs text-[#6b6b6b]">Expansion</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="w-2 h-2 rounded-full bg-white/20"></div>
+          <span class="text-xs text-[#6b6b6b]">Routes</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div class="text-center p-6 rounded-xl bg-white/[0.02] border border-white/[0.03]">
+        <div class="font-display text-3xl font-bold text-[#fafafa] mb-1">8</div>
+        <p class="text-sm text-[#6b6b6b]">Europe</p>
+      </div>
+      <div class="text-center p-6 rounded-xl bg-white/[0.02] border border-white/[0.03]">
+        <div class="font-display text-3xl font-bold text-[#fafafa] mb-1">2</div>
+        <p class="text-sm text-[#6b6b6b]">Middle East</p>
+      </div>
+      <div class="text-center p-6 rounded-xl bg-white/[0.02] border border-white/[0.03]">
+        <div class="font-display text-3xl font-bold text-[#fafafa] mb-1">3</div>
+        <p class="text-sm text-[#6b6b6b]">Asia-Pacific</p>
+      </div>
+      <div class="text-center p-6 rounded-xl bg-white/[0.02] border border-white/[0.03]">
+        <div class="font-display text-3xl font-bold text-[#fafafa] mb-1">2</div>
+        <p class="text-sm text-[#6b6b6b]">North America</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OPERATIONS -->
+<section id="operations" class="py-20 md:py-32 border-t border-white/[0.03]">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="mb-16">
+      <p class="text-xs text-[#6b6b6b] tracking-[0.2em] uppercase mb-4" data-pl="Nasze Operacje" data-en="Our Operations">Nasze Operacje</p>
+      <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tight mb-4" data-pl="Drony w Akcji" data-en="Drones in Action">Drony w Akcji</h2>
+      <p class="text-[#a0a0a0]" data-pl="Prawdziwe nagrania z naszych autonomicznych operacji czyszczenia dronami" data-en="Real footage from our autonomous drone cleaning operations">Prawdziwe nagrania z naszych autonomicznych operacji czyszczenia dronami</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="video-card">
+        <video autoplay muted loop playsinline class="rounded-t-xl">
+          <source src="https://bezliny.com/assets/operation-1.mp4" type="video/mp4">
+        </video>
+        <div class="p-5">
+          <h4 class="font-display font-semibold text-sm mb-1" data-pl="Czyszczenie Fasad" data-en="Façade Cleaning">Czyszczenie Fasad</h4>
+          <p class="text-xs text-[#6b6b6b]" data-pl="Zewnętrze szklane wysokościowe" data-en="High-rise glass exterior">Zewnętrze szklane wysokościowe</p>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <video autoplay muted loop playsinline class="rounded-t-xl">
+          <source src="https://bezliny.com/assets/operation-2.mp4" type="video/mp4">
+        </video>
+        <div class="p-5">
+          <h4 class="font-display font-semibold text-sm mb-1" data-pl="Operacje Dachowe" data-en="Rooftop Operations">Operacje Dachowe</h4>
+          <p class="text-xs text-[#6b6b6b]" data-pl="Konserwacja powierzchni na wysokości" data-en="Elevated surface maintenance">Konserwacja powierzchni na wysokości</p>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <video autoplay muted loop playsinline class="rounded-t-xl">
+          <source src="https://bezliny.com/assets/operation-3.mp4" type="video/mp4">
+        </video>
+        <div class="p-5">
+          <h4 class="font-display font-semibold text-sm mb-1" data-pl="System Wielofunkcyjny" data-en="Multi-Function System">System Wielofunkcyjny</h4>
+          <p class="text-xs text-[#6b6b6b]" data-pl="Wszechstronne tryby czyszczenia" data-en="Versatile cleaning modes">Wszechstronne tryby czyszczenia</p>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <video autoplay muted loop playsinline class="rounded-t-xl">
+          <source src="https://bezliny.com/assets/operation-4.mp4" type="video/mp4">
+        </video>
+        <div class="p-5">
+          <h4 class="font-display font-semibold text-sm mb-1" data-pl="Dysza Podwójna" data-en="Dual Nozzle">Dysza Podwójna</h4>
+          <p class="text-xs text-[#6b6b6b]" data-pl="Precyzyjne dostarczanie wody" data-en="Precision water delivery">Precyzyjne dostarczanie wody</p>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <video autoplay muted loop playsinline class="rounded-t-xl">
+          <source src="https://bezliny.com/assets/operation-5.mp4" type="video/mp4">
+        </video>
+        <div class="p-5">
+          <h4 class="font-display font-semibold text-sm mb-1" data-pl="Lot Uwiązany" data-en="Tethered Flight">Lot Uwiązany</h4>
+          <p class="text-xs text-[#6b6b6b]" data-pl="Nieograniczony czas operacji" data-en="Unlimited operation time">Nieograniczony czas operacji</p>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <video autoplay muted loop playsinline class="rounded-t-xl">
+          <source src="https://bezliny.com/assets/operation-6.mp4" type="video/mp4">
+        </video>
+        <div class="p-5">
+          <h4 class="font-display font-semibold text-sm mb-1" data-pl="Dysza Potrójna" data-en="Triple Nozzle">Dysza Potrójna</h4>
+          <p class="text-xs text-[#6b6b6b]" data-pl="System maksymalnego pokrycia" data-en="Maximum coverage system">System maksymalnego pokrycia</p>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <video autoplay muted loop playsinline class="rounded-t-xl">
+          <source src="https://bezliny.com/assets/operation-7.mp4" type="video/mp4">
+        </video>
+        <div class="p-5">
+          <h4 class="font-display font-semibold text-sm mb-1" data-pl="Widok Zbliżeniowy" data-en="Close-Up View">Widok Zbliżeniowy</h4>
+          <p class="text-xs text-[#6b6b6b]" data-pl="Precyzja sensorowa" data-en="Sensor-guided precision">Precyzja sensorowa</p>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <video autoplay muted loop playsinline class="rounded-t-xl">
+          <source src="https://bezliny.com/assets/operation-8.mp4" type="video/mp4">
+        </video>
+        <div class="p-5">
+          <h4 class="font-display font-semibold text-sm mb-1" data-pl="Pełna Prezentacja" data-en="Full Showcase">Pełna Prezentacja</h4>
+          <p class="text-xs text-[#6b6b6b]" data-pl="Kompletna demonstracja systemu" data-en="Complete system demonstration">Kompletna demonstracja systemu</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLATFORM -->
+<section class="py-20 md:py-32 border-t border-white/[0.03]">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <p class="text-xs text-[#6b6b6b] tracking-[0.2em] uppercase mb-4" data-pl="Technologia" data-en="Technology">Technologia</p>
+      <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tight mb-4" data-pl="Zintegrowana Platforma" data-en="Integrated Platform">Zintegrowana Platforma</h2>
+      <p class="text-[#a0a0a0]" data-pl="Każda misja napędzana naszą własną technologią" data-en="Every mission powered by our proprietary technology stack">Każda misja napędzana naszą własną technologią</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="p-8 rounded-2xl bg-white/[0.02] border border-white/[0.03] hover:border-white/[0.08] transition-all">
+        <div class="text-xs text-[#333] font-mono mb-4">01</div>
+        <h4 class="font-display font-semibold text-lg mb-2">GPS-RTK</h4>
+        <p class="text-sm text-[#6b6b6b]" data-pl="Nawigacja z precyzją centymetrową" data-en="Centimeter-level precision navigation">Nawigacja z precyzją centymetrową</p>
+      </div>
+      <div class="p-8 rounded-2xl bg-white/[0.02] border border-white/[0.03] hover:border-white/[0.08] transition-all">
+        <div class="text-xs text-[#333] font-mono mb-4">02</div>
+        <h4 class="font-display font-semibold text-lg mb-2">AI Vision</h4>
+        <p class="text-sm text-[#6b6b6b]" data-pl="Analiza powierzchni i planowanie ścieżki w czasie rzeczywistym" data-en="Real-time surface analysis & path planning">Analiza powierzchni i planowanie ścieżki w czasie rzeczywistym</p>
+      </div>
+      <div class="p-8 rounded-2xl bg-white/[0.02] border border-white/[0.03] hover:border-white/[0.08] transition-all">
+        <div class="text-xs text-[#333] font-mono mb-4">03</div>
+        <h4 class="font-display font-semibold text-lg mb-2">Thermal Imaging</h4>
+        <p class="text-sm text-[#6b6b6b]" data-pl="Wykrywanie defektów i mapowanie cieplne" data-en="Defect detection & heat mapping">Wykrywanie defektów i mapowanie cieplne</p>
+      </div>
+      <div class="p-8 rounded-2xl bg-white/[0.02] border border-white/[0.03] hover:border-white/[0.08] transition-all">
+        <div class="text-xs text-[#333] font-mono mb-4">04</div>
+        <h4 class="font-display font-semibold text-lg mb-2">LiDAR</h4>
+        <p class="text-sm text-[#6b6b6b]" data-pl="Skanowanie struktur 3D i unikanie kolizji" data-en="3D structure scanning & collision avoidance">Skanowanie struktur 3D i unikanie kolizji</p>
+      </div>
+      <div class="p-8 rounded-2xl bg-white/[0.02] border border-white/[0.03] hover:border-white/[0.08] transition-all">
+        <div class="text-xs text-[#333] font-mono mb-4">05</div>
+        <h4 class="font-display font-semibold text-lg mb-2">Hydro System</h4>
+        <p class="text-sm text-[#6b6b6b]" data-pl="Czyszczenie czystą wodą przy 150+ bar" data-en="Pure water cleaning at 150+ bar">Czyszczenie czystą wodą przy 150+ bar</p>
+      </div>
+      <div class="p-8 rounded-2xl bg-white/[0.02] border border-white/[0.03] hover:border-white/[0.08] transition-all">
+        <div class="text-xs text-[#333] font-mono mb-4">06</div>
+        <h4 class="font-display font-semibold text-lg mb-2">Smart Battery</h4>
+        <p class="text-sm text-[#6b6b6b]" data-pl="System hot-swap, zero przestojów" data-en="Hot-swap system, zero downtime">System hot-swap, zero przestojów</p>
+      </div>
+      <div class="p-8 rounded-2xl bg-white/[0.02] border border-white/[0.03] hover:border-white/[0.08] transition-all">
+        <div class="text-xs text-[#333] font-mono mb-4">07</div>
+        <h4 class="font-display font-semibold text-lg mb-2">Cloud Fleet</h4>
+        <p class="text-sm text-[#6b6b6b]" data-pl="Zdalne monitorowanie i kontrola misji" data-en="Remote monitoring & mission control">Zdalne monitorowanie i kontrola misji</p>
+      </div>
+      <div class="p-8 rounded-2xl bg-white/[0.02] border border-white/[0.03] hover:border-white/[0.08] transition-all">
+        <div class="text-xs text-[#333] font-mono mb-4">08</div>
+        <h4 class="font-display font-semibold text-lg mb-2">Analytics</h4>
+        <p class="text-sm text-[#6b6b6b]" data-pl="Raporty po misji i dane o stanie powierzchni" data-en="Post-mission reports & surface health data">Raporty po misji i dane o stanie powierzchni</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNERS -->
+<section class="py-20 md:py-32 border-t border-white/[0.03]">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <p class="text-xs text-[#6b6b6b] tracking-[0.2em] uppercase mb-4" data-pl="Ekosystem" data-en="Ecosystem">Ekosystem</p>
+      <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tight mb-4" data-pl="Partnerzy Technologiczni" data-en="Technology Partners">Partnerzy Technologiczni</h2>
+      <p class="text-[#a0a0a0]" data-pl="Zintegrowani z wiodącymi platformami i sprzętem branżowym" data-en="Integrated with industry-leading platforms and hardware">Zintegrowani z wiodącymi platformami i sprzętem branżowym</p>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div class="p-8 rounded-xl bg-white/[0.02] border border-white/[0.03] flex items-center justify-center h-24">
+        <span class="font-display text-lg font-semibold text-[#a0a0a0]">DJI Enterprise</span>
+      </div>
+      <div class="p-8 rounded-xl bg-white/[0.02] border border-white/[0.03] flex items-center justify-center h-24">
+        <span class="font-display text-lg font-semibold text-[#a0a0a0]">Kärcher</span>
+      </div>
+      <div class="p-8 rounded-xl bg-white/[0.02] border border-white/[0.03] flex items-center justify-center h-24">
+        <span class="font-display text-lg font-semibold text-[#a0a0a0]">Pix4D</span>
+      </div>
+      <div class="p-8 rounded-xl bg-white/[0.02] border border-white/[0.03] flex items-center justify-center h-24">
+        <span class="font-display text-lg font-semibold text-[#a0a0a0]">DroneDeploy</span>
+      </div>
+      <div class="p-8 rounded-xl bg-white/[0.02] border border-white/[0.03] flex items-center justify-center h-24">
+        <span class="font-display text-lg font-semibold text-[#a0a0a0]">Aerones</span>
+      </div>
+      <div class="p-8 rounded-xl bg-white/[0.02] border border-white/[0.03] flex items-center justify-center h-24">
+        <span class="font-display text-lg font-semibold text-[#a0a0a0]">Wingtra</span>
+      </div>
+      <div class="p-8 rounded-xl bg-white/[0.02] border border-white/[0.03] flex items-center justify-center h-24">
+        <span class="font-display text-lg font-semibold text-[#a0a0a0]">Litchi</span>
+      </div>
+      <div class="p-8 rounded-xl bg-white/[0.02] border border-white/[0.03] flex items-center justify-center h-24">
+        <span class="font-display text-lg font-semibold text-[#a0a0a0]">DroneShield</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INSIGHTS -->
+<section id="insights" class="py-20 md:py-32 border-t border-white/[0.03]">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="mb-16">
+      <p class="text-xs text-[#6b6b6b] tracking-[0.2em] uppercase mb-4" data-pl="Rynek" data-en="Market">Rynek</p>
+      <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tight" data-pl="Wgląd w Branżę" data-en="Industry Insights">Wgląd w Branżę</h2>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="p-8 rounded-2xl bg-white/[0.02] border border-white/[0.03] hover:border-white/[0.08] transition-all group">
+        <div class="flex items-center justify-between mb-6">
+          <span class="text-xs text-[#6b6b6b] tracking-wider uppercase">Industry</span>
+          <span class="text-xs text-[#333]">2025</span>
+        </div>
+        <h3 class="font-display text-xl font-semibold mb-3 group-hover:text-white transition-colors" data-pl="Globalny rynek czyszczenia fasad ma osiągnąć 50 mld USD do 2030 r." data-en="Global Façade Cleaning Market Projected to Reach $50B by 2030">Globalny rynek czyszczenia fasad ma osiągnąć 50 mld USD do 2030 r.</h3>
+        <p class="text-sm text-[#6b6b6b]">Rapid urbanization and stricter safety regulations are driving unprecedented demand for autonomous maintenance solutions worldwide.</p>
+      </div>
+
+      <div class="p-8 rounded-2xl bg-white/[0.02] border border-white/[0.03] hover:border-white/[0.08] transition-all group">
+        <div class="flex items-center justify-between mb-6">
+          <span class="text-xs text-[#6b6b6b] tracking-wider uppercase">EU Policy</span>
+          <span class="text-xs text-[#333]">2025</span>
+        </div>
+        <h3 class="font-display text-xl font-semibold mb-3 group-hover:text-white transition-colors" data-pl="Europejski Zielony Ład napędza popyt na konserwację bez chemikaliów" data-en="European Green Deal Drives Demand for Chemical-Free Maintenance">Europejski Zielony Ład napędza popyt na konserwację bez chemikaliów</h3>
+        <p class="text-sm text-[#6b6b6b]">New EU directives mandate sustainable building maintenance practices, creating massive opportunities for water-based cleaning technologies.</p>
+      </div>
+
+      <div class="p-8 rounded-2xl bg-white/[0.02] border border-white/[0.03] hover:border-white/[0.08] transition-all group">
+        <div class="flex items-center justify-between mb-6">
+          <span class="text-xs text-[#6b6b6b] tracking-wider uppercase">Aviation</span>
+          <span class="text-xs text-[#333]">2024</span>
+        </div>
+        <h3 class="font-display text-xl font-semibold mb-3 group-hover:text-white transition-colors" data-pl="EASA rozszerza ramy operacji komercyjnych dronów w całej UE" data-en="EASA Expands Commercial Drone Operations Framework Across EU">EASA rozszerza ramy operacji komercyjnych dronów w całej UE</h3>
+        <p class="text-sm text-[#6b6b6b]">Updated regulatory frameworks enable beyond-visual-line-of-sight operations, unlocking new commercial applications for industrial drones.</p>
+      </div>
+
+      <div class="p-8 rounded-2xl bg-white/[0.02] border border-white/[0.03] hover:border-white/[0.08] transition-all group">
+        <div class="flex items-center justify-between mb-6">
+          <span class="text-xs text-[#6b6b6b] tracking-wider uppercase">Energy</span>
+          <span class="text-xs text-[#333]">2024</span>
+        </div>
+        <h3 class="font-display text-xl font-semibold mb-3 group-hover:text-white transition-colors" data-pl="Koszty konserwacji floty turbin wiatrowych obniżone o 40% dzięki systemom autonomicznym" data-en="Wind Turbine Fleet Maintenance Costs Reduced 40% with Autonomous Systems">Koszty konserwacji floty turbin wiatrowych obniżone o 40% dzięki systemom autonomicznym</h3>
+        <p class="text-sm text-[#6b6b6b]">Major energy operators report significant cost savings and improved uptime after switching to drone-based maintenance programs.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OPERATIONAL CAPABILITY -->
+<section class="py-20 md:py-32 border-t border-white/[0.03]">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tight mb-4" data-pl="Zdolność Operacyjna" data-en="Operational Capability">Zdolność Operacyjna</h2>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div class="text-center p-8 rounded-xl bg-white/[0.02] border border-white/[0.03]">
+        <div class="font-display text-4xl font-bold text-[#fafafa] mb-2">200m</div>
+        <p class="text-sm text-[#6b6b6b]" data-pl="Wysokość Operacyjna" data-en="Operational Altitude">Wysokość Operacyjna</p>
+      </div>
+      <div class="text-center p-8 rounded-xl bg-white/[0.02] border border-white/[0.03]">
+        <div class="font-display text-4xl font-bold text-[#fafafa] mb-2">24h</div>
+        <p class="text-sm text-[#6b6b6b]" data-pl="Czas Reakcji" data-en="Hour Response Time">Czas Reakcji</p>
+      </div>
+      <div class="text-center p-8 rounded-xl bg-white/[0.02] border border-white/[0.03]">
+        <div class="font-display text-4xl font-bold text-[#fafafa] mb-2">100%</div>
+        <p class="text-sm text-[#6b6b6b]" data-pl="Bez Chemikaliów" data-en="Chemical-Free">Bez Chemikaliów</p>
+      </div>
+      <div class="text-center p-8 rounded-xl bg-white/[0.02] border border-white/[0.03]">
+        <div class="font-display text-4xl font-bold text-[#fafafa] mb-2">365</div>
+        <p class="text-sm text-[#6b6b6b]" data-pl="Dni Operacyjnych/Rok" data-en="Days Operational/Year">Dni Operacyjnych/Rok</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ENVIRONMENTAL IMPACT -->
+<section class="py-20 md:py-32 border-t border-white/[0.03]">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      <div>
+        <p class="text-xs text-[#6b6b6b] tracking-[0.2em] uppercase mb-4" data-pl="Wpływ na Środowisko" data-en="Environmental Impact">Wpływ na Środowisko</p>
+        <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tight mb-6" data-pl="Czyste budynki. Czyste sumienie." data-en="Clean buildings. Clean conscience.">Czyste budynki. Czyste sumienie.</h2>
+        <p class="text-[#a0a0a0] leading-relaxed mb-8" data-pl="Czysta woda przy 142 BAR. Bez detergentów. Bez surfaktantów. Bez kwasów. Elektryczna flota o zerowej emisji węgla." data-en="Pure water at 142 BAR. No detergents. No surfactants. No acids. Carbon-neutral electric fleet.">Czysta woda przy 142 BAR. Bez detergentów. Bez surfaktantów. Bez kwasów. Elektryczna flota o zerowej emisji węgla.</p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-6">
+        <div class="text-center p-8 rounded-xl bg-white/[0.02] border border-white/[0.03]">
+          <div class="font-display text-4xl font-bold text-[#fafafa] mb-2">0</div>
+          <p class="text-sm text-[#6b6b6b]" data-pl="Użytych Chemikaliów" data-en="Chemicals Used">Użytych Chemikaliów</p>
+        </div>
+        <div class="text-center p-8 rounded-xl bg-white/[0.02] border border-white/[0.03]">
+          <div class="font-display text-4xl font-bold text-[#fafafa] mb-2">90%</div>
+          <p class="text-sm text-[#6b6b6b]" data-pl="Recykling Wody" data-en="Water Recycled">Recykling Wody</p>
+        </div>
+        <div class="text-center p-8 rounded-xl bg-white/[0.02] border border-white/[0.03]">
+          <div class="font-display text-4xl font-bold text-[#fafafa] mb-2">0</div>
+          <p class="text-sm text-[#6b6b6b]" data-pl="Emisji CO₂" data-en="CO₂ Emissions">Emisji CO₂</p>
+        </div>
+        <div class="text-center p-8 rounded-xl bg-white/[0.02] border border-white/[0.03]">
+          <div class="font-display text-4xl font-bold text-[#fafafa] mb-2">45dB</div>
+          <p class="text-sm text-[#6b6b6b]" data-pl="Prawie Bezgłośny" data-en="Near Silent">Prawie Bezgłośny</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="py-20 md:py-32 border-t border-white/[0.03]">
+  <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center">
+    <h2 class="font-display text-4xl md:text-6xl font-bold tracking-tight mb-6" data-pl="Gotowi Wyeliminować Rusztowania na Zawsze?" data-en="Ready to Eliminate Scaffolding Forever?">Gotowi Wyeliminować Rusztowania na Zawsze?</h2>
+    <p class="text-[#a0a0a0] text-lg mb-10" data-pl="Dołącz do najbardziej innowacyjnych firm, które już przeszły na autonomiczną konserwację opartą na dronach." data-en="Join the world's most innovative companies that have already switched to autonomous drone-based maintenance.">Dołącz do najbardziej innowacyjnych firm, które już przeszły na autonomiczną konserwację opartą na dronach.</p>
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a href="#contact" class="inline-flex items-center gap-2 bg-white text-black px-8 py-4 rounded-xl text-sm font-semibold hover:bg-[#e0e0e0] transition-all">
+        <span data-pl="Zarezerwuj Demo" data-en="Book a Demo">Zarezerwuj Demo</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="mailto:contact@bezliny.com" class="inline-flex items-center gap-2 px-8 py-4 rounded-xl text-sm font-medium border border-white/10 text-[#a0a0a0] hover:border-white/20 hover:text-[#fafafa] transition-all">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <span data-pl="Kontakt Enterprise" data-en="Enterprise Inquiries">Kontakt Enterprise</span>
+      </a>
+    </div>
+    <p class="text-xs text-[#333] mt-6" data-pl="Zapytania enterprise • Gwarancja odpowiedzi w 24h" data-en="Enterprise inquiries • 24h response guaranteed">Zapytania enterprise • Gwarancja odpowiedzi w 24h</p>
+  </div>
+</section>
+
+<!-- CONTACT SECTION -->
+<section id="contact" class="py-20 md:py-32 border-t border-white/[0.03]">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="grid lg:grid-cols-2 gap-16">
+      <div>
+        <p class="text-xs text-[#6b6b6b] tracking-[0.2em] uppercase mb-4" data-pl="Kontakt" data-en="Contact">Kontakt</p>
+        <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tight mb-8" data-pl="Skontaktuj się z Nami" data-en="Get in Touch">Skontaktuj się z Nami</h2>
+
+        <div class="space-y-6">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <p class="text-sm text-[#6b6b6b] mb-1" data-pl="Adres" data-en="Address">Adres</p>
+              <p class="text-[#fafafa]">Solidarności 68/121</p>
+              <p class="text-[#a0a0a0]">Warsaw, Poland</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div>
+              <p class="text-sm text-[#6b6b6b] mb-1">Email</p>
+              <a href="mailto:contact@bezliny.com" class="text-[#fafafa] hover:text-white transition-colors">contact@bezliny.com</a>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            </div>
+            <div>
+              <p class="text-sm text-[#6b6b6b] mb-1" data-pl="Telefon" data-en="Phone">Telefon</p>
+              <a href="tel:+48579366868" class="text-[#fafafa] hover:text-white transition-colors block">+48 579 366 868</a>
+              <a href="tel:+48739464063" class="text-[#fafafa] hover:text-white transition-colors block">+48 739 464 063</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="p-8 rounded-2xl bg-white/[0.02] border border-white/[0.03]">
+        <h3 class="font-display text-xl font-semibold mb-6" data-pl="Wyślij Wiadomość" data-en="Send a Message">Wyślij Wiadomość</h3>
+        <form action="https://formspree.io/f/xnqevwdr" method="POST" class="space-y-5">
+          <div class="grid md:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-xs text-[#6b6b6b] mb-2" data-pl="Imię" data-en="First Name">Imię</label>
+              <input type="text" name="first_name" class="form-input" required>
+            </div>
+            <div>
+              <label class="block text-xs text-[#6b6b6b] mb-2" data-pl="Nazwisko" data-en="Last Name">Nazwisko</label>
+              <input type="text" name="last_name" class="form-input" required>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs text-[#6b6b6b] mb-2">Email</label>
+            <input type="email" name="email" class="form-input" required>
+          </div>
+          <div>
+            <label class="block text-xs text-[#6b6b6b] mb-2" data-pl="Firma" data-en="Company">Firma</label>
+            <input type="text" name="company" class="form-input">
+          </div>
+          <div>
+            <label class="block text-xs text-[#6b6b6b] mb-2" data-pl="Wiadomość" data-en="Message">Wiadomość</label>
+            <textarea name="message" rows="4" class="form-input resize-none" required></textarea>
+          </div>
+          <button type="submit" class="w-full bg-white text-black py-4 rounded-xl text-sm font-semibold hover:bg-[#e0e0e0] transition-all">
+            <span data-pl="Wyślij Wiadomość" data-en="Send Message">Wyślij Wiadomość</span>
+          </button>
+          <p class="text-xs text-[#333] text-center" data-pl="Odpowiadamy w ciągu 24 godzin" data-en="We respond within 24 hours">Odpowiadamy w ciągu 24 godzin</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="py-16 border-t border-white/[0.03]">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+      <div>
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <span class="font-display text-xl font-semibold">Bezliny</span>
+        </div>
+        <p class="text-sm text-[#6b6b6b] leading-relaxed" data-pl="Autonomiczne drony czyszczące do konserwacji infrastruktury przemysłowej. Zero ryzyka. Absolutna precyzja." data-en="Autonomous cleaning drones for industrial infrastructure maintenance. Zero risk. Absolute precision.">Autonomiczne drony czyszczące do konserwacji infrastruktury przemysłowej. Zero ryzyka. Absolutna precyzja.</p>
+      </div>
+
+      <div>
+        <h4 class="font-display font-semibold text-sm mb-6" data-pl="Rozwiązania" data-en="Solutions">Rozwiązania</h4>
+        <ul class="space-y-3">
+          <li><a href="#solutions" class="text-sm text-[#6b6b6b] hover:text-[#fafafa] transition-colors" data-pl="Czyszczenie Fasad" data-en="Façade Cleaning">Czyszczenie Fasad</a></li>
+          <li><a href="#solutions" class="text-sm text-[#6b6b6b] hover:text-[#fafafa] transition-colors" data-pl="Inspekcja" data-en="Inspection">Inspekcja</a></li>
+          <li><a href="#solutions" class="text-sm text-[#6b6b6b] hover:text-[#fafafa] transition-colors" data-pl="Panele Solarne" data-en="Solar">Panele Solarne</a></li>
+          <li><a href="#solutions" class="text-sm text-[#6b6b6b] hover:text-[#fafafa] transition-colors" data-pl="Turbiny Wiatrowe" data-en="Wind">Turbiny Wiatrowe</a></li>
+          <li><a href="#solutions" class="text-sm text-[#6b6b6b] hover:text-[#fafafa] transition-colors">Oil & Gas</a></li>
+          <li><a href="#solutions" class="text-sm text-[#6b6b6b] hover:text-[#fafafa] transition-colors" data-pl="Mosty" data-en="Bridge">Mosty</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-display font-semibold text-sm mb-6" data-pl="Firma" data-en="Company">Firma</h4>
+        <ul class="space-y-3">
+          <li><a href="#" class="text-sm text-[#6b6b6b] hover:text-[#fafafa] transition-colors" data-pl="O Nas" data-en="About Us">O Nas</a></li>
+          <li><a href="#" class="text-sm text-[#6b6b6b] hover:text-[#fafafa] transition-colors" data-pl="Kariera" data-en="Careers">Kariera</a></li>
+          <li><a href="#insights" class="text-sm text-[#6b6b6b] hover:text-[#fafafa] transition-colors" data-pl="Aktualności" data-en="News">Aktualności</a></li>
+          <li><a href="#" class="text-sm text-[#6b6b6b] hover:text-[#fafafa] transition-colors" data-pl="Case Studies" data-en="Case Studies">Case Studies</a></li>
+          <li><a href="#" class="text-sm text-[#6b6b6b] hover:text-[#fafafa] transition-colors" data-pl="Certyfikaty" data-en="Certifications">Certyfikaty</a></li>
+          <li><a href="#" class="text-sm text-[#6b6b6b] hover:text-[#fafafa] transition-colors" data-pl="Partnerzy" data-en="Partners">Partnerzy</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-display font-semibold text-sm mb-6" data-pl="Kontakt" data-en="Contact">Kontakt</h4>
+        <ul class="space-y-3">
+          <li><a href="mailto:contact@bezliny.com" class="text-sm text-[#6b6b6b] hover:text-[#fafafa] transition-colors">contact@bezliny.com</a></li>
+          <li><a href="tel:+48579366868" class="text-sm text-[#6b6b6b] hover:text-[#fafafa] transition-colors">+48 579 366 868</a></li>
+          <li><a href="tel:+48739464063" class="text-sm text-[#6b6b6b] hover:text-[#fafafa] transition-colors">+48 739 464 063</a></li>
+          <li class="text-sm text-[#6b6b6b]">Solidarności 68/121</li>
+          <li class="text-sm text-[#6b6b6b]">Warsaw, Poland</li>
+          <li><a href="#contact" class="text-sm text-[#fafafa] hover:text-white transition-colors font-medium" data-pl="Zarezerwuj Demo" data-en="Book a Demo">Zarezerwuj Demo →</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pt-8 border-t border-white/[0.03] flex flex-col md:flex-row items-center justify-between gap-4">
+      <p class="text-xs text-[#333]">© 2025 Bezliny. All rights reserved.</p>
+      <div class="flex items-center gap-6">
+        <a href="#" class="text-xs text-[#333] hover:text-[#6b6b6b] transition-colors">Privacy Policy</a>
+        <a href="#" class="text-xs text-[#333] hover:text-[#6b6b6b] transition-colors">Terms of Service</a>
+        <a href="#" class="text-xs text-[#333] hover:text-[#6b6b6b] transition-colors">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- JAVASCRIPT -->
+<script>
+// ===== 3D INTRO =====
+let introScene, introCamera, introRenderer, introDrone;
+let introTime = 0;
+let introActive = true;
+let introSkipped = false;
+
+function initIntro() {
+  const canvas = document.getElementById('intro-canvas');
+  introScene = new THREE.Scene();
+  introScene.fog = new THREE.FogExp2(0x000000, 0.02);
+
+  introCamera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+  introCamera.position.set(0, 0, 15);
+
+  introRenderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+  introRenderer.setSize(window.innerWidth, window.innerHeight);
+  introRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  introRenderer.toneMapping = THREE.ACESFilmicToneMapping;
+
+  const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+  introScene.add(ambientLight);
+
+  const keyLight = new THREE.DirectionalLight(0xffffff, 2);
+  keyLight.position.set(5, 5, 5);
+  introScene.add(keyLight);
+
+  const fillLight = new THREE.DirectionalLight(0x8888aa, 0.5);
+  fillLight.position.set(-5, 0, 2);
+  introScene.add(fillLight);
+
+  const rimLight = new THREE.DirectionalLight(0xffffff, 1);
+  rimLight.position.set(0, 5, -5);
+  introScene.add(rimLight);
+
+  introDrone = new THREE.Group();
+
+  const bodyMat = new THREE.MeshStandardMaterial({ color: 0x222222, metalness: 0.8, roughness: 0.3 });
+  const darkMat = new THREE.MeshStandardMaterial({ color: 0x111111, metalness: 0.9, roughness: 0.2 });
+  const glassMat = new THREE.MeshPhysicalMaterial({ color: 0x111111, metalness: 0.1, roughness: 0.05, transmission: 0.3, transparent: true });
+  const ledMat = new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xffffff, emissiveIntensity: 0.5 });
+  const carbonMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, metalness: 0.7, roughness: 0.4 });
+
+  const bodyGeo = new THREE.CylinderGeometry(0.8, 0.9, 0.6, 8);
+  const body = new THREE.Mesh(bodyGeo, bodyMat);
+  body.rotation.x = Math.PI / 2;
+  introDrone.add(body);
+
+  const domeGeo = new THREE.SphereGeometry(0.7, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2);
+  const dome = new THREE.Mesh(domeGeo, glassMat);
+  dome.position.y = 0.3;
+  introDrone.add(dome);
+
+  const ringGeo = new THREE.TorusGeometry(0.75, 0.02, 8, 32);
+  const ring = new THREE.Mesh(ringGeo, ledMat);
+  ring.position.y = 0.3;
+  ring.rotation.x = Math.PI / 2;
+  introDrone.add(ring);
+
+  for (let i = 0; i < 4; i++) {
+    const angle = (i * Math.PI) / 2;
+    const armGroup = new THREE.Group();
+
+    const armGeo = new THREE.BoxGeometry(0.15, 0.08, 1.8);
+    const arm = new THREE.Mesh(armGeo, carbonMat);
+    arm.position.z = 1.1;
+    armGroup.add(arm);
+
+    const motorGeo = new THREE.CylinderGeometry(0.2, 0.2, 0.25, 16);
+    const motor = new THREE.Mesh(motorGeo, darkMat);
+    motor.position.z = 2.0;
+    motor.rotation.x = Math.PI / 2;
+    armGroup.add(motor);
+
+    const motorLedGeo = new THREE.TorusGeometry(0.22, 0.015, 8, 32);
+    const motorLed = new THREE.Mesh(motorLedGeo, ledMat);
+    motorLed.position.z = 2.0;
+    armGroup.add(motorLed);
+
+    const propGeo = new THREE.BoxGeometry(1.6, 0.02, 0.08);
+    const prop = new THREE.Mesh(propGeo, new THREE.MeshStandardMaterial({ color: 0x333333, transparent: true, opacity: 0.7 }));
+    prop.position.z = 2.15;
+    prop.userData = { isProp: true, speed: 15 + Math.random() * 5 };
+    armGroup.add(prop);
+
+    const guardGeo = new THREE.TorusGeometry(0.8, 0.02, 8, 32);
+    const guard = new THREE.Mesh(guardGeo, new THREE.MeshStandardMaterial({ color: 0x444444, transparent: true, opacity: 0.3 }));
+    guard.position.z = 2.15;
+    guard.rotation.x = Math.PI / 2;
+    armGroup.add(guard);
+
+    armGroup.rotation.y = angle;
+    introDrone.add(armGroup);
+  }
+
+  const gimbalGeo = new THREE.SphereGeometry(0.25, 16, 16);
+  const gimbal = new THREE.Mesh(gimbalGeo, darkMat);
+  gimbal.position.y = -0.5;
+  introDrone.add(gimbal);
+
+  const lensGeo = new THREE.CylinderGeometry(0.12, 0.15, 0.15, 16);
+  const lens = new THREE.Mesh(lensGeo, new THREE.MeshPhysicalMaterial({ color: 0x000000, metalness: 0.1, roughness: 0.05, transmission: 0.8 }));
+  lens.position.y = -0.65;
+  introDrone.add(lens);
+
+  const glowGeo = new THREE.RingGeometry(0.15, 0.18, 32);
+  const glow = new THREE.Mesh(glowGeo, ledMat);
+  glow.position.y = -0.65;
+  glow.rotation.x = Math.PI / 2;
+  introDrone.add(glow);
+
+  const nozzleGeo = new THREE.CylinderGeometry(0.05, 0.08, 0.3, 8);
+  const nozzle = new THREE.Mesh(nozzleGeo, darkMat);
+  nozzle.position.y = -0.7;
+  nozzle.position.z = 0.3;
+  introDrone.add(nozzle);
+
+  for (let i = 0; i < 4; i++) {
+    const angle = (i * Math.PI) / 2 + Math.PI / 4;
+    const legGeo = new THREE.CylinderGeometry(0.03, 0.03, 1.2, 8);
+    const leg = new THREE.Mesh(legGeo, carbonMat);
+    leg.position.set(Math.sin(angle) * 0.8, -1.2, Math.cos(angle) * 0.8);
+    leg.rotation.z = Math.sin(angle) * 0.3;
+    leg.rotation.x = Math.cos(angle) * 0.3;
+    introDrone.add(leg);
+
+    const footGeo = new THREE.CylinderGeometry(0.08, 0.08, 0.05, 16);
+    const foot = new THREE.Mesh(footGeo, new THREE.MeshStandardMaterial({ color: 0x333333 }));
+    foot.position.set(Math.sin(angle) * 1.1, -1.8, Math.cos(angle) * 1.1);
+    introDrone.add(foot);
+  }
+
+  for (let i = 0; i < 8; i++) {
+    const angle = (i * Math.PI) / 4;
+    const ventGeo = new THREE.BoxGeometry(0.02, 0.15, 0.3);
+    const vent = new THREE.Mesh(ventGeo, new THREE.MeshStandardMaterial({ color: 0x000000 }));
+    vent.position.set(Math.sin(angle) * 0.82, 0, Math.cos(angle) * 0.82);
+    vent.rotation.y = angle;
+    introDrone.add(vent);
+  }
+
+  for (let i = 0; i < 8; i++) {
+    const angle = (i * Math.PI) / 4 + Math.PI / 8;
+    const lineGeo = new THREE.BoxGeometry(0.01, 0.6, 0.01);
+    const line = new THREE.Mesh(lineGeo, new THREE.MeshStandardMaterial({ color: 0x111111 }));
+    line.position.set(Math.sin(angle) * 0.81, 0, Math.cos(angle) * 0.81);
+    line.rotation.y = angle;
+    introDrone.add(line);
+  }
+
+  const particleCount = 200;
+  const particlesGeo = new THREE.BufferGeometry();
+  const positions = new Float32Array(particleCount * 3);
+  const velocities = [];
+
+  for (let i = 0; i < particleCount; i++) {
+    positions[i * 3] = (Math.random() - 0.5) * 0.1;
+    positions[i * 3 + 1] = -0.8;
+    positions[i * 3 + 2] = 0.3 + Math.random() * 0.1;
+    velocities.push({ x: (Math.random() - 0.5) * 0.02, y: -0.02 - Math.random() * 0.03, z: 0.01 + Math.random() * 0.02 });
+  }
+  particlesGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+  const particlesMat = new THREE.PointsMaterial({ color: 0xaaccff, size: 0.03, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+  const particles = new THREE.Points(particlesGeo, particlesMat);
+  particles.userData = { velocities, active: false };
+  introDrone.add(particles);
+
+  introScene.add(introDrone);
+
+  const mistGeo = new THREE.PlaneGeometry(30, 30);
+  const mistMat = new THREE.MeshBasicMaterial({ color: 0x111122, transparent: true, opacity: 0.1, side: THREE.DoubleSide });
+  const mist = new THREE.Mesh(mistGeo, mistMat);
+  mist.rotation.x = -Math.PI / 2;
+  mist.position.y = -3;
+  introScene.add(mist);
+
+  animateIntro();
+  setTimeout(() => { if (!introSkipped) skipIntro(); }, 3000);
+}
+
+function animateIntro() {
+  if (!introActive) return;
+  requestAnimationFrame(animateIntro);
+  introTime += 0.016;
+  const t = introTime;
+
+  if (t < 1.0) {
+    const progress = t / 1.0;
+    const ease = 1 - Math.pow(1 - progress, 3);
+    introCamera.position.z = 15 - ease * 10;
+    introDrone.rotation.y = ease * Math.PI * 0.5;
+    introDrone.position.y = Math.sin(progress * Math.PI) * 0.3;
+  } else if (t < 1.8) {
+    const progress = (t - 1.0) / 0.8;
+    introDrone.rotation.y = Math.PI * 0.5 + progress * Math.PI * 2;
+    introCamera.position.z = 5;
+  } else if (t < 2.5) {
+    const progress = (t - 1.8) / 0.7;
+    introDrone.rotation.x = progress * 0.3;
+    introDrone.rotation.y += 0.02;
+    const particles = introDrone.children.find(c => c.type === 'Points');
+    if (particles) {
+      particles.material.opacity = progress * 0.6;
+      particles.userData.active = true;
+      const positions = particles.geometry.attributes.position.array;
+      for (let i = 0; i < 200; i++) {
+        positions[i * 3] += particles.userData.velocities[i].x;
+        positions[i * 3 + 1] += particles.userData.velocities[i].y;
+        positions[i * 3 + 2] += particles.userData.velocities[i].z;
+        if (positions[i * 3 + 1] < -3) {
+          positions[i * 3] = (Math.random() - 0.5) * 0.1;
+          positions[i * 3 + 1] = -0.8;
+          positions[i * 3 + 2] = 0.3;
+        }
+      }
+      particles.geometry.attributes.position.needsUpdate = true;
+    }
+  } else if (t < 3.0) {
+    const progress = (t - 2.5) / 0.5;
+    const ease = progress * progress;
+    introDrone.position.y += ease * 0.5;
+    introDrone.scale.setScalar(1 - ease * 0.8);
+    introCamera.position.z = 5 + ease * 5;
+  }
+
+  introDrone.children.forEach(child => {
+    if (child.userData.isProp) child.rotation.y += child.userData.speed * 0.016;
+  });
+
+  if (t < 2.5) introDrone.position.y += Math.sin(t * 3) * 0.002;
+
+  introRenderer.render(introScene, introCamera);
+}
+
+function skipIntro() {
+  introSkipped = true;
+  introActive = false;
+  const overlay = document.getElementById('intro-overlay');
+  overlay.classList.add('hidden');
+  setTimeout(() => {
+    overlay.style.display = 'none';
+    if (introRenderer) introRenderer.dispose();
+  }, 800);
+}
+
+// ===== LANGUAGE SWITCHER =====
+let currentLang = 'pl';
+
+function setLang(lang) {
+  currentLang = lang;
+  document.getElementById('btn-pl').classList.toggle('active', lang === 'pl');
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  document.querySelectorAll('[data-pl][data-en]').forEach(el => {
+    el.textContent = el.getAttribute('data-' + lang);
+  });
+}
+
+// ===== MOBILE MENU =====
+function toggleMobileMenu() {
+  document.getElementById('mobile-menu').classList.toggle('open');
+}
+
+// ===== NAVBAR SCROLL =====
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('navbar');
+  if (window.scrollY > 50) {
+    nav.classList.add('nav-blur');
+  } else {
+    nav.classList.remove('nav-blur');
+  }
+});
+
+// ===== SCROLL REVEAL =====
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ===== INIT =====
+window.addEventListener('load', () => {
+  initIntro();
+});
+
+window.addEventListener('resize', () => {
+  if (introCamera && introRenderer) {
+    introCamera.aspect = window.innerWidth / window.innerHeight;
+    introCamera.updateProjectionMatrix();
+    introRenderer.setSize(window.innerWidth, window.innerHeight);
+  }
+});
+</script>
+
+</body>
+</html>
