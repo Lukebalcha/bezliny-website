@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bezliny | Autonomous Drone Façade Cleaning</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:#050508;color:#e8e8ec;font-family:'Inter',system-ui,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* CINEMATIC INTRO */
+#cinematic-intro{position:fixed;top:0;left:0;width:100%;height:100vh;z-index:10000;background:#000;transition:opacity 1.5s,visibility 1.5s}
+#cinematic-intro.hidden{opacity:0;visibility:hidden;pointer-events:none}
+#cinematic-intro .skip-btn{position:absolute;bottom:2rem;right:2rem;z-index:10001;padding:.5rem 1.2rem;border:1px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.5);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;border-radius:100px;transition:all .3s;font-family:'Inter',sans-serif}
+#cinematic-intro .skip-btn:hover{color:#fff;border-color:rgba(255,255,255,.5)}
+#cinematic-intro .intro-text{position:absolute;bottom:4rem;left:3rem;z-index:10001}
+#cinematic-intro .intro-text h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(2rem,5vw,4rem);font-weight:700;line-height:1;letter-spacing:-.03em;margin-bottom:.5rem}
+#cinematic-intro .intro-text h2 .grad{color:#fff}
+#cinematic-intro .intro-text p{font-size:.9rem;color:rgba(255,255,255,.4);max-width:400px}
+#cinematic-canvas{position:absolute;top:0;left:0;width:100%;height:100%}
+
+/* NAV - LARGER LIKE BEZLINY.COM */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:1.5rem 3rem;display:flex;justify-content:space-between;align-items:center;transition:all .6s;opacity:0;transform:translateY(-20px)}
+nav.visible{opacity:1;transform:translateY(0)}
+nav.scrolled{background:rgba(5,5,8,.9);backdrop-filter:blur(30px);border-bottom:1px solid rgba(255,255,255,.03)}
+.logo{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;letter-spacing:.2em;color:#fff;cursor:pointer;text-decoration:none}
+.nav-links{display:flex;gap:2rem;list-style:none;align-items:center}
+.nav-links a{color:rgba(255,255,255,.5);text-decoration:none;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;transition:all .4s;position:relative;cursor:pointer;font-weight:500}
+.nav-links a::after{content:'';position:absolute;bottom:-6px;left:0;width:0;height:2px;background:#22d3ee;transition:width .4s}
+.nav-links a:hover{color:#fff}
+.nav-links a:hover::after{width:100%}
+.nav-cta{padding:.5rem 1.5rem;border-radius:100px;font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;background:#fff;color:#050508;text-decoration:none;transition:all .4s;border:1px solid transparent;cursor:pointer}
+.nav-cta:hover{background:transparent;color:#fff;border-color:rgba(255,255,255,.2)}
+.lang-switcher{display:flex;align-items:center;gap:.4rem;margin-left:2rem}
+.lang-switcher button{background:transparent;border:none;color:rgba(255,255,255,.5);font-size:.8rem;font-weight:500;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;padding:.4rem .7rem;border-radius:4px;transition:all .3s;font-family:'Inter',sans-serif}
+.lang-switcher button:hover{color:#fff}
+.lang-switcher button.active{color:#22d3ee;background:rgba(34,211,238,.08)}
+.lang-switcher .divider{color:rgba(255,255,255,.2);font-size:.7rem}
+
+/* HERO */
+#hero{position:relative;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#hero .video-bg{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:.75;transform:scale(1);object-position:center center}
+#hero .video-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,5,8,.3) 0%,transparent 30%,transparent 70%,rgba(5,5,8,.3) 100%)}
+#hero .hero-content{position:relative;z-index:10;text-align:center;padding:2rem}
+#hero .hero-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem 1.2rem;border-radius:100px;background:rgba(255,255,255,.02);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.06);margin-bottom:2rem}
+#hero .hero-badge .dot{width:6px;height:6px;border-radius:50%;background:#c8cdd3}
+#hero .hero-badge span{font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+#hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(2rem,6vw,5rem);font-weight:700;line-height:.9;letter-spacing:-.03em}
+#hero h1 .grad{color:#fff}
+#hero p{margin-top:1rem;font-size:.9rem;color:rgba(255,255,255,.75);max-width:500px;margin-left:auto;margin-right:auto}
+#hero .hero-buttons{display:flex;gap:1rem;justify-content:center;margin-top:2.5rem;flex-wrap:wrap}
+#hero .btn-primary{padding:.8rem 2rem;border-radius:100px;background:#fff;color:#050508;font-size:.85rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;text-decoration:none;transition:all .3s;border:none;cursor:pointer}
+#hero .btn-primary:hover{box-shadow:0 0 60px rgba(255,255,255,.1)}
+#hero .btn-outline{padding:.8rem 2rem;border-radius:100px;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);font-size:.85rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;text-decoration:none;transition:all .3s;background:transparent;cursor:pointer}
+#hero .btn-outline:hover{border-color:rgba(255,255,255,.4);color:#fff}
+
+/* TRUSTED */
+.trusted-section{padding:1.5rem 3rem;text-align:center;border-bottom:1px solid rgba(255,255,255,.03)}
+.trusted-section .label{font-size:.65rem;letter-spacing:.4em;text-transform:uppercase;color:rgba(255,255,255,.2);margin-bottom:1.5rem}
+.trusted-section .items{display:flex;justify-content:center;gap:3rem;flex-wrap:wrap}
+.trusted-section .items span{font-size:.9rem;color:rgba(255,255,255,.4);font-weight:500}
+
+
+
+/* STATS */
+.stats-section{padding:4rem 3rem}
+.stats-section .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;max-width:1200px;margin:0 auto}
+.stat-box{text-align:center;padding:2.5rem 1rem;border:1px solid rgba(255,255,255,.04);border-radius:14px;background:rgba(255,255,255,.008);transition:all .5s}
+.stat-box:hover{border-color:rgba(255,255,255,.08);background:rgba(255,255,255,.015)}
+.stat-box .num{font-family:'Space Grotesk',sans-serif;font-size:2.5rem;font-weight:700;color:rgba(255,255,255,.85);line-height:1;background:linear-gradient(180deg,#fff 0%,rgba(255,255,255,.5) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-box .lbl{font-size:.7rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.12em;margin-top:.8rem}
+
+/* SECTIONS */
+.section{max-width:1200px;margin:0 auto;padding:5rem 3rem;border-bottom:1px solid rgba(255,255,255,.03)}
+.section-label{font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:rgba(34,211,238,.4);margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem}
+.section-label::before{content:'';width:25px;height:1px;background:rgba(34,211,238,.3)}
+.section h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,3.5vw,3.5rem);font-weight:700;line-height:1;letter-spacing:-.03em;margin-bottom:1.5rem;color:#fff}
+.section p{color:rgba(255,255,255,.6);font-size:.9rem;line-height:1.85;max-width:520px}
+.section .lead{color:rgba(255,255,255,.75);font-size:1rem;line-height:1.9;max-width:580px}
+
+/* MISSION */
+.mission-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center}
+.mission-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-top:3rem}
+.mission-stat{padding:1.5rem;border:1px solid rgba(255,255,255,.04);border-radius:12px;background:rgba(255,255,255,.005)}
+.mission-stat .val{font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700;color:rgba(255,255,255,.8)}
+.mission-stat .lbl{font-size:.65rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.1em;margin-top:.3rem}
+.telemetry-panel{border:1px solid rgba(255,255,255,.04);border-radius:16px;padding:2rem;background:rgba(255,255,255,.005);min-width:280px}
+.telemetry-panel .title{font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.15);margin-bottom:1.5rem}
+.telemetry-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.telemetry-item .key{font-size:.55rem;color:rgba(34,211,238,.4);text-transform:uppercase;margin-bottom:.2rem}
+.telemetry-item .val{font-size:.8rem;color:rgba(255,255,255,.6)}
+
+/* SOLUTIONS */
+.solutions-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
+.sol-card{padding:0;overflow:hidden;border-radius:16px;border:1px solid rgba(255,255,255,.04);background:rgba(255,255,255,.005);transition:all .5s}
+.sol-card:hover{border-color:rgba(34,211,238,.08);background:rgba(255,255,255,.01);transform:translateY(-3px)}
+.sol-img{position:relative;height:240px;overflow:hidden}
+.sol-img img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.sol-img:hover img{transform:scale(1.05)}
+.sol-badge{position:absolute;top:1rem;right:1rem;padding:.4rem 1rem;border-radius:100px;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500}
+.sol-badge.operational{background:rgba(34,211,238,.15);border:1px solid rgba(34,211,238,.2);color:#22d3ee}
+.sol-badge.ready{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.5)}
+.sol-badge.expanding{background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.2);color:#f59e0b}
+.sol-sector{position:absolute;bottom:1rem;left:1rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4)}
+.sol-content{padding:1.8rem}
+.sol-content h3{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:.6rem}
+.sol-content p{font-size:.8rem;color:rgba(255,255,255,.5);line-height:1.6}
+
+/* PRECISION */
+.precision-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:4rem;max-width:800px;margin-left:auto;margin-right:auto}
+.precision-section{width:100%;max-width:none;margin:0;padding:0;border-bottom:1px solid rgba(255,255,255,.03)}
+.precision-box{text-align:center;padding:2rem 1.5rem;border:1px solid rgba(255,255,255,.06);border-radius:14px}
+.precision-box .num{font-family:'Space Grotesk',sans-serif;font-size:3rem;font-weight:700;background:linear-gradient(180deg,#fff 0%,rgba(255,255,255,.5) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.precision-box .lbl{font-size:.7rem;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.1em;margin-top:.5rem}
+.precision-box .sub{font-size:.6rem;color:rgba(255,255,255,.4);margin-top:.3rem}
+
+/* PROCESS */
+.process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;margin-top:4rem}
+.process-step{position:relative;padding-top:2rem}
+.process-step::before{content:'';position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,rgba(34,211,238,.3),transparent 70%)}
+.process-step .num{font-family:'Space Grotesk',sans-serif;font-size:2.5rem;font-weight:700;color:rgba(255,255,255,.06);line-height:1;margin-bottom:1rem}
+.process-step h3{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:600;color:rgba(255,255,255,.85);margin-bottom:.8rem}
+.process-step p{font-size:.85rem;color:rgba(255,255,255,.55);line-height:1.7}
+
+/* TECH */
+.tech-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;margin-top:3rem}
+.tech-card{text-align:center;padding:2rem 1.5rem;border:1px solid rgba(255,255,255,.04);border-radius:14px;background:rgba(255,255,255,.005);transition:all .5s}
+.tech-card:hover{border-color:rgba(34,211,238,.1);background:rgba(255,255,255,.01)}
+.tech-card .num{font-size:.6rem;color:rgba(34,211,238,.3);font-family:monospace;margin-bottom:1rem}
+.tech-card h3{font-size:1rem;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:.5rem}
+.tech-card p{font-size:.75rem;color:rgba(255,255,255,.5)}
+
+/* MAP */
+.map-container{position:relative;width:100%;aspect-ratio:2.2/1;border:1px solid rgba(255,255,255,.04);border-radius:20px;background:#0a0a0e;overflow:hidden;margin:3rem 0}
+.map-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 52% 28%,rgba(34,211,238,.03) 0%,transparent 50%),radial-gradient(ellipse at center,#0c0c12 0%,#050508 100%)}
+.map-grid{position:absolute;inset:0;opacity:.03;background-image:linear-gradient(rgba(255,255,255,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.1) 1px,transparent 1px);background-size:60px 60px}
+.city-dot{position:absolute;width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.5)}
+.city-label{position:absolute;white-space:nowrap;font-size:9px;color:rgba(255,255,255,.4);left:10px;top:-3px}
+.city-hq{position:absolute;transform:translate(-50%,-50%)}
+.city-hq .pulse{position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(34,211,238,.2);animation:pulse 2s ease-out infinite}
+.city-hq .dot{width:10px;height:10px;border-radius:50%;background:#22d3ee;box-shadow:0 0 20px rgba(34,211,238,.6),0 0 40px rgba(34,211,238,.3)}
+.city-hq .label{position:absolute;white-space:nowrap;font-size:11px;color:#22d3ee;font-weight:600;left:14px;top:-3px}
+
+/* OPS */
+.ops-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:3rem}
+.ops-item{position:relative;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.04);aspect-ratio:16/9;cursor:pointer;background:#000}
+.ops-item video{width:100%;height:100%;object-fit:cover;object-position:center;transition:transform 8s linear}
+.ops-item:hover video{transform:scale(1.02)}
+.ops-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(5,5,8,.95) 0%,rgba(5,5,8,.3) 40%,transparent 70%);display:flex;flex-direction:column;justify-content:flex-end;padding:1.2rem}
+.ops-overlay h4{font-size:.85rem;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:.2rem}
+.ops-overlay p{font-size:.65rem;color:rgba(255,255,255,.5)}
+
+/* PLATFORM */
+.platform-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:3rem}
+.platform-card{padding:1.5rem;border:1px solid rgba(255,255,255,.03);border-radius:12px;background:rgba(255,255,255,.005);transition:all .4s}
+.platform-card:hover{border-color:rgba(34,211,238,.1);background:rgba(255,255,255,.01)}
+.platform-card .num{font-size:.6rem;color:rgba(34,211,238,.3);font-family:monospace;margin-bottom:.6rem}
+.platform-card h4{font-size:.9rem;font-weight:600;color:rgba(255,255,255,.85);margin-bottom:.3rem}
+.platform-card p{font-size:.7rem;color:rgba(255,255,255,.5);line-height:1.5}
+
+/* PARTNERS */
+.partners-row{display:flex;justify-content:center;gap:3rem;flex-wrap:wrap;margin-top:3rem;opacity:.4}
+.partners-row span{font-size:.85rem;font-weight:500;color:rgba(255,255,255,.8);letter-spacing:.02em}
+
+/* INSIGHTS */
+.insights-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem;margin-top:3rem;max-width:900px}
+.insight-card{padding:1.5rem;border:1px solid rgba(255,255,255,.03);border-radius:12px;background:rgba(255,255,255,.005);transition:all .4s;cursor:pointer}
+.insight-card:hover{border-color:rgba(255,255,255,.06)}
+.insight-card .tag{font-size:.6rem;color:rgba(34,211,238,.35);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.6rem}
+.insight-card h4{font-size:.95rem;font-weight:600;color:rgba(255,255,255,.85);line-height:1.4;margin-bottom:.4rem}
+.insight-card .date{font-size:.6rem;color:rgba(255,255,255,.4)}
+
+/* ENV */
+.env-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;margin-top:4rem;max-width:800px;margin-left:auto;margin-right:auto}
+.env-stat{text-align:center}
+.env-stat .val{font-family:'Space Grotesk',sans-serif;font-size:3rem;font-weight:700;color:rgba(255,255,255,.85);line-height:1}
+.env-stat .lbl{font-size:.75rem;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.1em;margin-top:.6rem}
+
+/* CTA */
+.cta-section{text-align:center;padding:6rem 2rem 4rem;background:linear-gradient(180deg,#050508 0%,#08080e 50%,#050508 100%);position:relative;overflow:hidden}
+.cta-section::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(34,211,238,.1),transparent)}
+.cta-section h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(2rem,5vw,4.5rem);font-weight:700;line-height:1;margin-bottom:1.5rem}
+.cta-section p{color:rgba(255,255,255,.6);margin-bottom:2.5rem;font-size:1.05rem;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.8}
+.cta-btn{display:inline-flex;align-items:center;gap:1rem;padding:1.1rem 2.8rem;border-radius:100px;font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;background:#fff;color:#050508;text-decoration:none;transition:all .5s;border:1px solid transparent;cursor:pointer}
+.cta-btn:hover{background:transparent;color:#fff;border-color:rgba(255,255,255,.15);box-shadow:0 0 60px rgba(34,211,238,.08)}
+
+/* CONTACT FORM */
+.contact-form{max-width:500px;margin:3rem auto 0;text-align:left}
+.contact-form .field{margin-bottom:1.5rem}
+.contact-form label{display:block;font-size:.7rem;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.5rem}
+.contact-form input,.contact-form textarea,.contact-form select{width:100%;padding:1rem 1.2rem;border:1px solid rgba(255,255,255,.08);border-radius:10px;background:rgba(255,255,255,.03);color:#fff;font-size:.9rem;font-family:'Inter',sans-serif;transition:all .3s}
+.contact-form input:focus,.contact-form textarea:focus,.contact-form select:focus{outline:none;border-color:rgba(34,211,238,.3);background:rgba(255,255,255,.05)}
+.contact-form textarea{min-height:120px;resize:vertical}
+.contact-form select option{background:#050508}
+.contact-form .submit{width:100%;padding:1.1rem;border-radius:100px;background:#fff;color:#050508;font-size:.85rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;border:none;cursor:pointer;transition:all .3s}
+.contact-form .submit:hover{box-shadow:0 0 40px rgba(255,255,255,.1)}
+
+/* FOOTER */
+footer{padding:4rem 3rem 2rem;border-top:1px solid rgba(255,255,255,.08);background:#0a0a0e}
+footer .logo{font-size:1.3rem;margin-bottom:1.2rem;font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:.2em;color:#fff}
+footer p{font-size:.85rem;color:rgba(255,255,255,.55);line-height:1.8;margin-bottom:1.5rem}
+footer .bottom-bar{border-top:1px solid rgba(255,255,255,.05);padding-top:2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+footer .bottom-bar p{font-size:.7rem;color:rgba(255,255,255,.4);margin:0}
+
+/* RESPONSIVE */
+@media(max-width:1200px){
+  .nav-links{gap:2rem}
+  .section{padding:6rem 2rem}
+  .stats-section .grid{grid-template-columns:repeat(2,1fr)}
+  .mission-grid{grid-template-columns:1fr;gap:2rem}
+  .telemetry-panel{min-width:auto;width:100%;max-width:400px;margin:0 auto}
+  .precision-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:1024px){
+  .solutions-grid{grid-template-columns:repeat(2,1fr)}
+  .process-grid{grid-template-columns:repeat(2,1fr)}
+  .tech-grid{grid-template-columns:repeat(2,1fr)}
+  .platform-grid{grid-template-columns:repeat(2,1fr)}
+  .ops-grid{grid-template-columns:repeat(2,1fr)}
+  .env-stats{grid-template-columns:repeat(2,1fr)}
+  .mission-grid{grid-template-columns:1fr}
+  .stats-section .grid{grid-template-columns:repeat(2,1fr)}
+  .insights-grid{grid-template-columns:1fr}
+  .section h2{font-size:clamp(2rem,5vw,3.5rem)}
+  .contact-form{max-width:100%;padding:0 1rem}
+  .precision-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .solutions-grid,.process-grid,.tech-grid,.platform-grid,.ops-grid,.insights-grid{grid-template-columns:1fr}
+  .stats-section .grid{grid-template-columns:1fr 1fr}
+  .env-stats{grid-template-columns:1fr 1fr}
+  .precision-grid{grid-template-columns:repeat(2,1fr)}
+  .hero-buttons{flex-direction:column;align-items:center;gap:.8rem}
+  #hero h1{font-size:clamp(1.8rem,10vw,3rem);line-height:1.1}
+  .section{padding:3rem 1.2rem}
+  .section h2{font-size:clamp(1.6rem,7vw,2.5rem)}
+  .cta-section{padding:4rem 1.2rem 3rem}
+  nav{padding:.8rem 1.2rem}
+  .logo{font-size:1rem}
+  .nav-cta{padding:.4rem 1rem;font-size:.65rem}
+  .lang-switcher{margin-left:.8rem}
+  .trusted-section{padding:1.2rem 1rem}
+  .trusted-section .items{gap:1.2rem}
+  .stats-section{padding:2.5rem 1.2rem}
+  .stat-box{padding:1.2rem .4rem}
+  .stat-box .num{font-size:2.2rem}
+  .mission-stats{grid-template-columns:repeat(2,1fr)}
+  .mission-stat{padding:.8rem}
+  .mission-stat .val{font-size:1.3rem}
+  .precision-box{padding:1.2rem .8rem}
+  .precision-box .num{font-size:2.2rem!important}
+  .process-step{padding-top:1.2rem}
+  .process-step .num{font-size:2.2rem}
+  .ops-item{aspect-ratio:16/9;max-height:200px}
+  .ops-item video{object-fit:cover;width:100%;height:100%}
+  #hero .video-bg{object-fit:cover}
+  .tech-section > div{grid-template-columns:1fr!important}
+  .tech-section > div > div:first-child{aspect-ratio:16/9;max-height:240px;min-height:auto}
+  .tech-section video{object-fit:cover;width:100%;height:100%}
+  .precision-section video{object-fit:cover}
+  .map-container{aspect-ratio:1.5/1}
+  .city-label{font-size:8px}
+  .city-hq .label{font-size:9px}
+  footer .bottom-bar{flex-direction:column;text-align:center;gap:.5rem}
+  footer > div{grid-template-columns:1fr!important;gap:1.5rem;text-align:center}
+  .contact-form .field{margin-bottom:.8rem}
+  .contact-form input,.contact-form textarea,.contact-form select{padding:.7rem .8rem}
+  
+  .partners-row{gap:1.2rem}
+  .section-label{font-size:.55rem}
+  .section p{font-size:.85rem}
+  .section .lead{font-size:.9rem}
+  .sol-img{height:200px}
+  .sol-content{padding:1.4rem}
+  .sol-content h3{font-size:1rem}
+  .sol-content p{font-size:.75rem}
+  .tech-card{padding:1.5rem 1rem}
+  .tech-card h3{font-size:.9rem}
+  .tech-card p{font-size:.7rem}
+  .platform-card{padding:1.2rem}
+  .platform-card h4{font-size:.85rem}
+  .platform-card p{font-size:.65rem}
+  .insight-card{padding:1.2rem}
+  .insight-card h4{font-size:.85rem}
+  .ops-overlay{padding:1rem}
+  .ops-overlay h4{font-size:.8rem}
+  .ops-overlay p{font-size:.6rem}
+  footer{padding:2.5rem 1.5rem 1.2rem}
+  .cta-section h2{font-size:clamp(1.8rem,8vw,2.8rem)}
+  .cta-btn{padding:.9rem 2rem;font-size:.75rem}
+}
+@media(max-width:480px){
+  #hero h1{font-size:clamp(1.4rem,10vw,2.4rem)}
+  .section{padding:2rem .8rem}
+  .section h2{font-size:clamp(1.2rem,7vw,2rem)}
+  .hero-buttons{gap:.4rem}
+  .btn-primary,.btn-outline{padding:.6rem 1rem;font-size:.65rem}
+  .stats-section .grid{grid-template-columns:1fr 1fr;gap:.6rem}
+  .stat-box{padding:1rem .3rem}
+  .stat-box .num{font-size:1.5rem}
+  .stat-box .lbl{font-size:.5rem}
+  .precision-grid{grid-template-columns:repeat(2,1fr);gap:.5rem}
+  .precision-box{padding:.6rem .3rem}
+  .precision-box .num{font-size:1.5rem!important}
+  .precision-box .lbl{font-size:.5rem}
+  .precision-box .sub{font-size:.45rem}
+  .mission-stats{grid-template-columns:repeat(2,1fr);gap:.5rem}
+  .mission-stat{padding:.5rem}
+  .mission-stat .val{font-size:1rem}
+  .mission-stat .lbl{font-size:.45rem}
+  .process-grid{grid-template-columns:1fr;gap:1.2rem}
+  .process-step .num{font-size:1.5rem}
+  .process-step h3{font-size:.8rem}
+  .process-step p{font-size:.7rem}
+  .ops-grid{grid-template-columns:1fr}
+  .ops-item{aspect-ratio:16/9}
+  .platform-grid{grid-template-columns:1fr}
+  .tech-grid{grid-template-columns:1fr}
+  .solutions-grid{grid-template-columns:1fr}
+  .insights-grid{grid-template-columns:1fr}
+  .env-stats{grid-template-columns:1fr 1fr;gap:.8rem}
+  .env-stat .val{font-size:1.6rem}
+  .env-stat .lbl{font-size:.5rem}
+  .cta-section h2{font-size:clamp(1.4rem,8vw,2.2rem)}
+  .cta-btn{padding:.7rem 1.2rem;font-size:.65rem}
+  .contact-form .submit{padding:.7rem}
+  .map-container{display:none}
+  
+  .partners-row{gap:.6rem}
+  .partners-row span{font-size:.6rem}
+  .trusted-section .items span{font-size:.6rem}
+  .nav-cta{display:none}
+  .lang-switcher button{font-size:.55rem;padding:.2rem .3rem}
+  .lang-switcher .divider{font-size:.45rem}
+  .nav-links{display:none}
+  .logo{font-size:.85rem}
+  nav{padding:.6rem .8rem}
+  .hero-badge span{font-size:.5rem}
+  #hero p{font-size:.75rem}
+  .section-label{font-size:.5rem}
+  .section p{font-size:.8rem}
+  .section .lead{font-size:.85rem}
+  .sol-img{height:160px}
+  .sol-content{padding:1rem}
+  .sol-content h3{font-size:.9rem}
+  .sol-content p{font-size:.7rem}
+  .tech-card{padding:1.2rem .8rem}
+  .tech-card h3{font-size:.8rem}
+  .tech-card p{font-size:.65rem}
+  .platform-card{padding:1rem}
+  .platform-card h4{font-size:.8rem}
+  .platform-card p{font-size:.6rem}
+  .insight-card{padding:1rem}
+  .insight-card h4{font-size:.8rem}
+  .ops-overlay{padding:.6rem}
+  .ops-overlay h4{font-size:.7rem}
+  .ops-overlay p{font-size:.55rem}
+  footer{padding:1.5rem 1rem .8rem}
+  footer .bottom-bar{padding-top:.8rem}
+  .contact-form .field{margin-bottom:.6rem}
+  .contact-form input,.contact-form textarea,.contact-form select{padding:.6rem .8rem;font-size:.8rem}
+  .contact-form label{font-size:.6rem}
+  .contact-form textarea{min-height:80px}
+  .contact-form .submit{font-size:.75rem}
+  .telemetry-panel{padding:1.2rem}
+  .telemetry-item .key{font-size:.5rem}
+  .telemetry-item .val{font-size:.7rem}
+  .telemetry-panel .title{font-size:.5rem}
+  .mission-grid{gap:1.5rem}
+  .mission-stat .val{font-size:1.2rem}
+  .process-step::before{height:1px}
+  .process-step h3{font-size:.85rem}
+  .process-step p{font-size:.75rem}
+  .stats-section .grid{gap:.8rem}
+  .stat-box .num{font-size:1.6rem}
+  .env-stats{gap:.8rem}
+  .env-stat .val{font-size:1.8rem}
+  .precision-grid{gap:.5rem}
+  .precision-box .num{font-size:1.6rem!important}
+  .cta-section{padding:4rem 1rem 3rem}
+  .cta-btn{padding:.8rem 1.5rem}
+  .cta-section p{font-size:.85rem}
+  .stats-section{padding:2rem 1rem}
+  .stats-section .grid{max-width:100%}
+  .stat-box{padding:1rem .5rem}
+  .stat-box .num{font-size:1.8rem}
+  .stat-box .lbl{font-size:.6rem}
+  .mission-stats{gap:.5rem}
+  .mission-stat{padding:.8rem}
+  .mission-stat .val{font-size:1.2rem}
+  .mission-stat .lbl{font-size:.55rem}
+  .telemetry-panel{min-width:auto;max-width:100%;padding:1.2rem}
+  .telemetry-row{gap:.8rem}
+  .telemetry-item .key{font-size:.5rem}
+  .telemetry-item .val{font-size:.7rem}
+  .process-grid{gap:1.2rem}
+  .process-step{padding-top:1.2rem}
+  .process-step .num{font-size:2rem}
+  .process-step h3{font-size:.9rem}
+  .process-step p{font-size:.8rem}
+  .tech-grid{gap:.8rem}
+  .tech-card{padding:1.2rem .8rem}
+  .tech-card .num{font-size:.55rem}
+  .tech-card h3{font-size:.85rem}
+  .tech-card p{font-size:.65rem}
+  .insights-grid{gap:.8rem}
+  .insight-card{padding:1rem}
+  .insight-card .tag{font-size:.55rem}
+  .insight-card h4{font-size:.8rem}
+  .insight-card .date{font-size:.55rem}
+  .env-stats{gap:1rem}
+  .env-stat .val{font-size:2.2rem}
+  .env-stat .lbl{font-size:.6rem}
+  .partners-row{gap:1rem}
+  .partners-row span{font-size:.7rem}
+  
+  .trusted-section .label{font-size:.55rem}
+  .trusted-section .items{gap:1.2rem}
+  .trusted-section .items span{font-size:.75rem}
+  footer{padding:2rem 1rem 1rem}
+  footer > div{grid-template-columns:1fr!important;gap:1.5rem;text-align:center}
+  footer .logo{font-size:1.1rem}
+  footer p{font-size:.8rem}
+  footer .bottom-bar{padding-top:1rem;gap:.5rem}
+  footer .bottom-bar p{font-size:.6rem}
+  .nav-cta{display:none}
+  .lang-switcher{margin-left:.5rem}
+  .lang-switcher button{font-size:.6rem;padding:.25rem .4rem}
+  .lang-switcher .divider{font-size:.5rem}
+}
+</style>
+</head>
+<body>
+
+<!-- CINEMATIC INTRO -->
+<div id="cinematic-intro">
+  <canvas id="cinematic-canvas"></canvas>
+  <button class="skip-btn" onclick="skipIntro()">Skip Intro</button>
+  <div class="intro-text">
+    <h2><span class="grad">BEZLINY</span></h2>
+    <p data-en="Autonomous Industrial Drone Platform" data-pl="Autonomiczna Platforma Dronowa">Autonomous Industrial Drone Platform</p>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="logo">BEZLINY</a>
+  <ul class="nav-links">
+    <li><a href="#" onclick="resetIntro(); return false;" data-en="Home" data-pl="Strona Główna">Home</a></li>
+    <li><a href="#solutions" data-en="Services" data-pl="Usługi">Services</a></li>
+    <li><a href="#technology" data-en="Technology" data-pl="Technologia">Technology</a></li>
+    <li><a href="#operations" data-en="Projects" data-pl="Projekty">Projects</a></li>
+    <li><a href="#process" data-en="Safety" data-pl="Bezpieczeństwo">Safety</a></li>
+    <li><a href="#mission" data-en="About" data-pl="O Nas">About</a></li>
+    <li><a href="#contact" data-en="Contact" data-pl="Kontakt">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta" data-en="Get in Touch" data-pl="Kontakt">Get in Touch</a>
+  <div class="lang-switcher">
+    <button class="active" onclick="setLang('en')" id="lang-en">EN</button>
+    <span class="divider">|</span>
+    <button onclick="setLang('pl')" id="lang-pl">PL</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <video class="video-bg" autoplay muted loop playsinline><source src="/assets/drone-hero.mp4" type="video/mp4"></video>
+  <div class="video-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><div class="dot"></div><span data-en="Industrial Drone Technology" data-pl="Przemysłowa Technologia Dronów">Industrial Drone Technology</span></div>
+    <h1 data-en="Autonomous <span class='grad'>Drone Cleaning</span><br>for Industrial Infrastructure" data-pl="Autonomiczne <span class='grad'>Mycie Dronami</span><br>dla Infrastruktury Przemysłowej">Autonomous <span class="grad">Drone Cleaning</span><br>for Industrial Infrastructure</h1>
+    <p data-en="Zero scaffolding. Zero risk. Absolute precision." data-pl="Zero rusztowań. Zero ryzyka. Absolutna precyzja.">Zero scaffolding. Zero risk. Absolute precision.</p>
+    <div class="hero-buttons">
+      <a class="btn-primary" href="#solutions" data-en="Explore Solutions" data-pl="Poznaj Rozwiązania">Explore Solutions</a>
+      <a class="btn-outline" href="#process" data-en="How It Works" data-pl="Jak To Działa">How It Works</a>
+    </div>
+  </div>
+</section>
+
+<!-- TRUSTED -->
+<section class="trusted-section">
+  <div class="label" data-en="Trusted & Certified" data-pl="Zaufani i Certyfikowani">Trusted & Certified</div>
+  <div class="items">
+    <span>PANSA Registered</span>
+    <span>ULC Certified</span>
+    <span>CE Certified</span>
+    <span>EASA Compliant</span>
+    <span>ISO 14001</span>
+  </div>
+</section>
+
+<!-- STATS -->
+<
+
+<!-- MISSION -->
+<section class="section" id="mission">
+  <div class="mission-grid">
+    <div>
+      <div class="section-label" data-en="Our Mission" data-pl="Nasza Misja">Our Mission</div>
+      <h2 data-en="Eliminating Human Risk in Industrial Maintenance" data-pl="Eliminowanie Ryzyka Ludzkiego w Konserwacji Przemysłowej">Eliminating Human Risk in Industrial Maintenance</h2>
+      <p class="lead" data-en="Every year, thousands of workers are injured in high-altitude maintenance operations. Bezliny's autonomous drone platform replaces dangerous manual labor with precision robotic systems." data-pl="Co roku tysiące pracowników doznaje obrażeń podczas prac konserwacyjnych na wysokościach. Autonomiczna platforma dronowa Bezliny zastępuje niebezpieczną pracę manualną precyzyjnymi systemami robotycznymi.">Every year, thousands of workers are injured in high-altitude maintenance operations. Bezliny's autonomous drone platform replaces dangerous manual labor with precision robotic systems.</p>
+      <div class="mission-stats">
+        <div class="mission-stat"><div class="val" data-target="0" data-suffix="">0</div><div class="lbl" data-en="Human risk" data-pl="Ryzyko ludzkie">Human risk</div></div>
+        <div class="mission-stat"><div class="val" data-target="3" data-suffix="×">0</div><div class="lbl" data-en="Faster execution" data-pl="Szybsza realizacja">Faster execution</div></div>
+        <div class="mission-stat"><div class="val" data-target="100" data-suffix="%">0</div><div class="lbl" data-en="Chemical-free" data-pl="Bez chemikaliów">Chemical-free</div></div>
+        <div class="mission-stat"><div class="val" data-target="24" data-suffix="/7">0</div><div class="lbl" data-en="Operation capable" data-pl="Gotowość 24/7">Operation capable</div></div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:flex-end">
+      <div class="telemetry-panel">
+        <div class="title">BEZLINY AUTONOMOUS CLEANING PLATFORM</div>
+        <div class="telemetry-row">
+          <div class="telemetry-item"><div class="key">SYS</div><div class="val">NOMINAL</div></div>
+          <div class="telemetry-item"><div class="key">PWR</div><div class="val">94.2%</div></div>
+          <div class="telemetry-item"><div class="key">STATUS</div><div class="val">CLEANING</div></div>
+          <div class="telemetry-item"><div class="key">PRESSURE</div><div class="val">142 BAR</div></div>
+          <div class="telemetry-item"><div class="key">FLOW</div><div class="val">2.4 L/min</div></div>
+          <div class="telemetry-item"><div class="key">TEMP</div><div class="val">18.3°C</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTIONS -->
+<section class="section" id="solutions">
+  <div class="section-label" data-en="03 Solutions" data-pl="03 Rozwiązania">03 Solutions</div>
+  <h2 data-en="Industrial-Grade<br>Services" data-pl="Usługi<br>Przemysłowe">Industrial-Grade<br>Services</h2>
+  <p style="margin-bottom:3rem" data-en="From skyscrapers to offshore platforms — precision drone operations for every sector." data-pl="Od wieżowców po platformy offshore — precyzyjne operacje dronowe dla każdego sektora.">From skyscrapers to offshore platforms — precision drone operations for every sector.</p>
+  <div style="display:flex;flex-wrap:wrap;gap:.8rem;justify-content:center;margin:2rem 0;max-width:900px;margin-left:auto;margin-right:auto">
+    <span style="padding:.5rem 1.2rem;border:1px solid rgba(255,255,255,.08);border-radius:100px;font-size:.75rem;color:rgba(255,255,255,.6);letter-spacing:.05em">PROPERTY MANAGERS</span>
+    <span style="padding:.5rem 1.2rem;border:1px solid rgba(255,255,255,.08);border-radius:100px;font-size:.75rem;color:rgba(255,255,255,.6);letter-spacing:.05em">ENERGY SECTOR</span>
+    <span style="padding:.5rem 1.2rem;border:1px solid rgba(255,255,255,.08);border-radius:100px;font-size:.75rem;color:rgba(255,255,255,.6);letter-spacing:.05em">MARITIME</span>
+    <span style="padding:.5rem 1.2rem;border:1px solid rgba(255,255,255,.08);border-radius:100px;font-size:.75rem;color:rgba(255,255,255,.6);letter-spacing:.05em">INFRASTRUCTURE</span>
+    <span style="padding:.5rem 1.2rem;border:1px solid rgba(255,255,255,.08);border-radius:100px;font-size:.75rem;color:rgba(255,255,255,.6);letter-spacing:.05em">GOVERNMENT</span>
+    <span style="padding:.5rem 1.2rem;border:1px solid rgba(255,255,255,.08);border-radius:100px;font-size:.75rem;color:rgba(255,255,255,.6);letter-spacing:.05em">INDUSTRIAL</span>
+    <span style="padding:.5rem 1.2rem;border:1px solid rgba(255,255,255,.08);border-radius:100px;font-size:.75rem;color:rgba(255,255,255,.6);letter-spacing:.05em">COMMERCIAL</span>
+    <span style="padding:.5rem 1.2rem;border:1px solid rgba(255,255,255,.08);border-radius:100px;font-size:.75rem;color:rgba(255,255,255,.6);letter-spacing:.05em">RENEWABLE</span>
+    <span style="padding:.5rem 1.2rem;border:1px solid rgba(255,255,255,.08);border-radius:100px;font-size:.75rem;color:rgba(255,255,255,.6);letter-spacing:.05em">OIL & GAS</span>
+    <span style="padding:.5rem 1.2rem;border:1px solid rgba(255,255,255,.08);border-radius:100px;font-size:.75rem;color:rgba(255,255,255,.6);letter-spacing:.05em">AVIATION</span>
+    <span style="padding:.5rem 1.2rem;border:1px solid rgba(255,255,255,.08);border-radius:100px;font-size:.75rem;color:rgba(255,255,255,.6);letter-spacing:.05em">LOGISTICS</span>
+    <span style="padding:.5rem 1.2rem;border:1px solid rgba(255,255,255,.08);border-radius:100px;font-size:.75rem;color:rgba(255,255,255,.6);letter-spacing:.05em">AGRICULTURE</span>
+  </div>
+  <div class="solutions-grid">
+
+    <div class="sol-card">
+      <div class="sol-img">
+        <img src="https://kimi-web-img.moonshot.cn/img/image.made-in-china.com/617939a371e16a8bee8d7300bdf1e937cfba9385.webp" alt="High-Rise Façade Cleaning">
+        <div class="sol-badge operational">Operational</div>
+        <div class="sol-sector">Sector 01</div>
+      </div>
+      <div class="sol-content">
+        <h3 data-en="High-Rise Façade Cleaning" data-pl="Mycie Elewacji Wysokościowych">High-Rise Façade Cleaning</h3>
+        <p data-en="Glass, concrete, and cladding — any height, no scaffolding. Autonomous precision up to 200m." data-pl="Szkło, beton i okładziny — dowolna wysokość, bez rusztowań. Autonomiczna precyzja do 200m.">Glass, concrete, and cladding — any height, no scaffolding. Autonomous precision up to 200m.</p>
+      </div>
+    </div>
+
+    <div class="sol-card">
+      <div class="sol-img">
+        <img src="https://kimi-web-img.moonshot.cn/img/eauav.com/d3f8178de49c08da44cbcd90b022ce0b714ba209.png" alt="Government & Public Infrastructure">
+        <div class="sol-badge ready">Sector Ready</div>
+        <div class="sol-sector">Sector 02</div>
+      </div>
+      <div class="sol-content">
+        <h3 data-en="Government & Public Infrastructure" data-pl="Infrastruktura Publiczna i Rządowa">Government & Public Infrastructure</h3>
+        <p data-en="Monument restoration, public buildings, civic infrastructure — partnering with municipal authorities." data-pl="Renowacja zabytków, budynki użyteczności publicznej, infrastruktura miejska — współpraca z władzami samorządowymi.">Monument restoration, public buildings, civic infrastructure — partnering with municipal authorities.</p>
+      </div>
+    </div>
+
+    <div class="sol-card">
+      <div class="sol-img">
+        <img src="https://kimi-web-img.moonshot.cn/img/www.dronitech.com/c3f9a1e902d4211a0e815483ae0df3c723a28ac6.jpg" alt="Bridge & Infrastructure">
+        <div class="sol-badge ready">Sector Ready</div>
+        <div class="sol-sector">Sector 03</div>
+      </div>
+      <div class="sol-content">
+        <h3 data-en="Bridge & Infrastructure" data-pl="Mosty i Infrastruktura">Bridge & Infrastructure</h3>
+        <p data-en="Girders, decks, and supports cleaned without traffic disruption or road closures." data-pl="Belki, pomosty i podpory czyszczone bez zakłócania ruchu lub zamknięć dróg.">Girders, decks, and supports cleaned without traffic disruption or road closures.</p>
+      </div>
+    </div>
+
+    <div class="sol-card">
+      <div class="sol-img">
+        <img src="https://kimi-web-img.moonshot.cn/img/thebalmoregroup.co.uk/aa71d0321bb878589c12498d4077e7400b1b2ecf.jpg" alt="Oil & Gas Platforms">
+        <div class="sol-badge expanding">Expanding</div>
+        <div class="sol-sector">Sector 04</div>
+      </div>
+      <div class="sol-content">
+        <h3 data-en="Oil & Gas Platforms" data-pl="Platformy Naftowe i Gazowe">Oil & Gas Platforms</h3>
+        <p data-en="Offshore rigs, flare stacks, storage tanks — preserving coatings in extreme environments." data-pl="Platformy offshore, kominy odgazowujące, zbiorniki — zachowanie powłok w ekstremalnych warunkach.">Offshore rigs, flare stacks, storage tanks — preserving coatings in extreme environments.</p>
+      </div>
+    </div>
+
+    <div class="sol-card">
+      <div class="sol-img">
+        <img src="https://kimi-web-img.moonshot.cn/img/aerones.com/301ff2033524b303582f011db38e5f1e57816e04.jpg" alt="Wind Turbine Cleaning">
+        <div class="sol-badge operational">Operational</div>
+        <div class="sol-sector">Sector 05</div>
+      </div>
+      <div class="sol-content">
+        <h3 data-en="Wind Turbine Cleaning" data-pl="Mycie Turbin Wiatrowych">Wind Turbine Cleaning</h3>
+        <p data-en="Blade cleaning at height — maximizing energy output, extending lifespan by 30%." data-pl="Mycie łopat na wysokości — maksymalizacja wydajności energetycznej, wydłużenie żywotności o 30%.">Blade cleaning at height — maximizing energy output, extending lifespan by 30%.</p>
+      </div>
+    </div>
+
+    <div class="sol-card">
+      <div class="sol-img">
+        <img src="https://kimi-web-img.moonshot.cn/img/www.shipandoffshore.net/762627f60c45e836c10951421c98d2482e42f61c.jpg" alt="Ship & Vessel Cleaning">
+        <div class="sol-badge expanding">Expanding</div>
+        <div class="sol-sector">Sector 06</div>
+      </div>
+      <div class="sol-content">
+        <h3 data-en="Ship & Vessel Cleaning" data-pl="Mycie Statków i Jednostek">Ship & Vessel Cleaning</h3>
+        <p data-en="Hull and superstructure maintenance above the waterline — zero dock time wasted." data-pl="Konserwacja kadłuba i nadbudówki nad linią wody — zero zmarnowanego czasu w doku.">Hull and superstructure maintenance above the waterline — zero dock time wasted.</p>
+      </div>
+    </div>
+
+    <div class="sol-card">
+      <div class="sol-img">
+        <img src="https://kimi-web-img.moonshot.cn/img/www.thedrive.com/391d9fa879f36e8f7f01859bef9c8b814032ff55.jpeg" alt="Industrial Inspection">
+        <div class="sol-badge ready">Sector Ready</div>
+        <div class="sol-sector">Sector 07</div>
+      </div>
+      <div class="sol-content">
+        <h3 data-en="Industrial Inspection" data-pl="Inspekcja Przemysłowa">Industrial Inspection</h3>
+        <p data-en="Visual and thermal inspection — detecting failures before they happen." data-pl="Inspekcja wizualna i termiczna — wykrywanie usterek zanim do nich dojdzie.">Visual and thermal inspection — detecting failures before they happen.</p>
+      </div>
+    </div>
+
+    <div class="sol-card">
+      <div class="sol-img">
+        <img src="https://kimi-web-img.moonshot.cn/img/eauav.com/c2b930a3ef217d67d8e5d97e33660956a9ff9044.jpeg" alt="Solar Panel Cleaning">
+        <div class="sol-badge operational">Operational</div>
+        <div class="sol-sector">Sector 08</div>
+      </div>
+      <div class="sol-content">
+        <h3 data-en="Solar Panel Cleaning" data-pl="Mycie Paneli Słonecznych">Solar Panel Cleaning</h3>
+        <p data-en="Restoring peak efficiency — autonomous drone washing without panel damage or downtime." data-pl="Przywracanie szczytowej wydajności — autonomiczne mycie dronem bez uszkodzeń paneli lub przestojów.">Restoring peak efficiency — autonomous drone washing without panel damage or downtime.</p>
+      </div>
+    </div>
+
+    <div class="sol-card">
+      <div class="sol-img">
+        <img src="https://kimi-web-img.moonshot.cn/img/media.istockphoto.com/6b1d1b14d6531802376b36afce2ee776f3c822dc.jpg" alt="Vegetation & Tree Management">
+        <div class="sol-badge expanding">Expanding</div>
+        <div class="sol-sector">Sector 09</div>
+      </div>
+      <div class="sol-content">
+        <h3 data-en="Vegetation & Tree Management" data-pl="Zarządzanie Roślinnością i Drzewami">Vegetation & Tree Management</h3>
+        <p data-en="Precision spraying, trimming reach, and canopy maintenance — palm trees, hedges, and urban greenery." data-pl="Precyzyjne opryskiwanie, zasięg przycinania i konserwacja koron — palmy, żywopłoty i zieleń miejska.">Precision spraying, trimming reach, and canopy maintenance — palm trees, hedges, and urban greenery.</p>
+      </div>
+    </div>
+
+  </div>
+  <div style="text-align:center;margin-top:3rem">
+    <a href="#solutions" style="display:inline-block;padding:1rem 2.5rem;border-radius:100px;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.7);font-size:.85rem;font-weight:500;text-decoration:none;transition:all .3s" data-en="View All Services" data-pl="Zobacz Wszystkie Usługi">View All Services</a>
+  </div>
+</section>
+
+<!-- PRECISION -->
+<section class="precision-section" id="precision" style="position:relative;overflow:hidden;width:100%;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;border-bottom:1px solid rgba(255,255,255,.03)">
+  <video class="video-bg" autoplay muted loop playsinline style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;opacity:.4;z-index:0;background:#000"><source src="/assets/videos/drone-rooftop.mp4" type="video/mp4"></video>
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,5,8,.3) 0%,rgba(5,5,8,.15) 30%,rgba(5,5,8,.15) 50%,rgba(5,5,8,.15) 70%,rgba(5,5,8,.3) 100%);z-index:1"></div>
+  <div style="position:relative;z-index:2;text-align:center;width:100%;padding:6rem 3rem 2rem">
+    <div class="section-label" data-en="Verified Operational Data" data-pl="Zweryfikowane Dane Operacyjne">Verified Operational Data</div>
+    <h2 data-en="Precision Engineering.<br>Zero Compromise." data-pl="Inżynieria Precyzyjna.<br>Zero Kompromisów.">Precision Engineering.<br>Zero Compromise.</h2>
+    <p style="margin:0 auto;max-width:600px" data-en="Our proprietary cleaning systems use filtered water, controlled heat, and calibrated pressure — preserving surfaces while delivering unmatched results." data-pl="Nasze autorskie systemy czyszczenia wykorzystują filtrowaną wodę, kontrolowane ciepło i skalibrowane ciśnienie — zachowując powierzchnie przy jednoczesnym dostarczaniu niezrównanych rezultatów.">Our proprietary cleaning systems use filtered water, controlled heat, and calibrated pressure — preserving surfaces while delivering unmatched results.</p>
+  </div>
+  <div class="precision-grid" style="position:relative;z-index:2;width:100%;max-width:1200px;margin:0 auto;padding:2rem 3rem 6rem">
+    <div class="precision-box"><div class="num" data-target="99" data-suffix="%" style="font-size:2.5rem;font-weight:700;color:#fff">0</div><div class="lbl" style="color:rgba(255,255,255,.75)">Precision Rate</div><div class="sub" style="color:rgba(255,255,255,.5)">AI-guided path accuracy</div></div>
+    <div class="precision-box"><div class="num" data-target="5" data-suffix="×" style="font-size:2.5rem;font-weight:700;color:#fff">0</div><div class="lbl" style="color:rgba(255,255,255,.75)">Faster</div><div class="sub" style="color:rgba(255,255,255,.5)">vs. traditional rope access</div></div>
+    <div class="precision-box"><div class="num" data-target="200" data-suffix="m" style="font-size:2.5rem;font-weight:700;color:#fff">0</div><div class="lbl" style="color:rgba(255,255,255,.75)">Max Altitude</div><div class="sub" style="color:rgba(255,255,255,.5)">Full facade coverage</div></div>
+    <div class="precision-box"><div class="num" data-target="0" data-suffix="" style="font-size:2.5rem;font-weight:700;color:#fff">0</div><div class="lbl" style="color:rgba(255,255,255,.75)">Human Risk</div><div class="sub" style="color:rgba(255,255,255,.5)">Zero personnel at height</div></div>
+    <div class="precision-box"><div class="num" data-target="24" data-suffix="/7" style="font-size:2.5rem;font-weight:700;color:#fff">0</div><div class="lbl" style="color:rgba(255,255,255,.75)">Operation</div><div class="sub" style="color:rgba(255,255,255,.5)">Weather-adaptive scheduling</div></div>
+    <div class="precision-box"><div class="num" data-target="360" data-suffix="°" style="font-size:2.5rem;font-weight:700;color:#fff">0</div><div class="lbl" style="color:rgba(255,255,255,.75)">Coverage</div><div class="sub" style="color:rgba(255,255,255,.5)">Complete surface mapping</div></div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="section" id="process">
+  <div class="section-label" data-en="Process" data-pl="Proces">Process</div>
+  <h2 data-en="How We Deliver" data-pl="Jak Działamy">How We Deliver</h2>
+  <div class="process-grid">
+    <div class="process-step">
+      <div class="num">01</div>
+      <h3 data-en="Site Assessment" data-pl="Ocena Terenu">Site Assessment</h3>
+      <p data-en="Comprehensive drone survey and structural analysis. Our engineers evaluate every surface, height, and environmental factor before any operation begins." data-pl="Kompleksowy przegląd dronem i analiza strukturalna. Nasi inżynierowie oceniają każdą powierzchnię, wysokość i czynnik środowiskowy przed rozpoczęciem operacji.">Comprehensive drone survey and structural analysis. Our engineers evaluate every surface, height, and environmental factor before any operation begins.</p>
+    </div>
+    <div class="process-step">
+      <div class="num">02</div>
+      <h3 data-en="Mission Planning" data-pl="Planowanie Misji">Mission Planning</h3>
+      <p data-en="AI-driven flight path optimization. Every millimeter is calculated — pressure, temperature, water flow — for perfect results with zero surface damage." data-pl="Optymalizacja ścieżki lotu oparta na AI. Każdy milimetr jest obliczany — ciśnienie, temperatura, przepływ wody — dla idealnych rezultatów bez uszkodzeń powierzchni.">AI-driven flight path optimization. Every millimeter is calculated — pressure, temperature, water flow — for perfect results with zero surface damage.</p>
+    </div>
+    <div class="process-step">
+      <div class="num">03</div>
+      <h3 data-en="Autonomous Execution" data-pl="Autonomiczna Realizacja">Autonomous Execution</h3>
+      <p data-en="GPS-RTK navigation with centimeter precision. Our drones operate fully autonomously while our operators monitor from a safe distance." data-pl="Nawigacja GPS-RTK z precyzją centymetrową. Nasze drony działają w pełni autonomicznie, podczas gdy operatorzy monitorują z bezpiecznej odległości.">GPS-RTK navigation with centimeter precision. Our drones operate fully autonomously while our operators monitor from a safe distance.</p>
+    </div>
+    <div class="process-step">
+      <div class="num">04</div>
+      <h3 data-en="Verification & Reporting" data-pl="Weryfikacja i Raportowanie">Verification & Reporting</h3>
+      <p data-en="4K thermal and visual inspection post-operation. Full compliance documentation delivered within 24 hours." data-pl="Inspekcja termiczna i wizualna 4K po operacji. Pełna dokumentacja zgodności dostarczana w ciągu 24 godzin.">4K thermal and visual inspection post-operation. Full compliance documentation delivered within 24 hours.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TECHNOLOGY -->
+<section class="section tech-section" id="technology" style="padding:8rem 3rem">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;max-width:1200px;margin:0 auto">
+    <div style="position:relative;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.06);height:100%;min-height:400px;">
+      <video autoplay muted loop playsinline style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.05);"><source src="/assets/videos/drone-closeup.mp4" type="video/mp4"></video>
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(5,5,8,.3) 0%,rgba(5,5,8,.1) 100%);"></div>
+    </div>
+    <div>
+      <div class="section-label" style="margin-bottom:1.5rem" data-en="Technology" data-pl="Technologia">Technology</div>
+      <h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(2.2rem,4vw,3.5rem);font-weight:700;line-height:1;letter-spacing:-.03em;margin-bottom:1.5rem;color:#fff" data-en="Bezliny Drone Systems" data-pl="Systemy Dronów Bezliny">Bezliny Drone Systems</h2>
+      <p style="color:rgba(255,255,255,.55);font-size:1.05rem;line-height:1.85;margin-bottom:2.5rem;max-width:480px" data-en="Our proprietary sensor technology provides centimeter-level precision, setting a new standard for quality and significantly improving HSE performance." data-pl="Nasza autorska technologia sensorowa zapewnia precyzję centymetrową, wyznaczając nowy standard jakości i znacząco poprawiając wydajność HSE.">Our proprietary sensor technology provides centimeter-level precision, setting a new standard for quality and significantly improving HSE performance.</p>
+      <div style="display:flex;flex-direction:column;gap:1.2rem">
+        <div style="display:flex;align-items:flex-start;gap:1rem;padding:1.2rem;border:1px solid rgba(255,255,255,.04);border-radius:12px;background:rgba(255,255,255,.005)">
+          <div style="width:24px;height:24px;border-radius:6px;background:rgba(34,211,238,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <div>
+            <h4 style="font-size:.95rem;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:.2rem" data-en="Non-contact cleaning approach" data-pl="Bezkontaktowe podejście do czyszczenia">Non-contact cleaning approach</h4>
+            <p style="font-size:.8rem;color:rgba(255,255,255,.4)" data-en="Preserves surface integrity" data-pl="Zachowuje integralność powierzchni">Preserves surface integrity</p>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:1rem;padding:1.2rem;border:1px solid rgba(255,255,255,.04);border-radius:12px;background:rgba(255,255,255,.005)">
+          <div style="width:24px;height:24px;border-radius:6px;background:rgba(34,211,238,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <div>
+            <h4 style="font-size:.95rem;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:.2rem" data-en="Patented safety system" data-pl="Opatentowany system bezpieczeństwa">Patented safety system</h4>
+            <p style="font-size:.8rem;color:rgba(255,255,255,.4)" data-en="Automated collision avoidance" data-pl="Automatyczna ochrona przed kolizjami">Automated collision avoidance</p>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:1rem;padding:1.2rem;border:1px solid rgba(255,255,255,.04);border-radius:12px;background:rgba(255,255,255,.005)">
+          <div style="width:24px;height:24px;border-radius:6px;background:rgba(34,211,238,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <div>
+            <h4 style="font-size:.95rem;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:.2rem" data-en="Centimeter-level precision" data-pl="Precyzja centymetrowa">Centimeter-level precision</h4>
+            <p style="font-size:.8rem;color:rgba(255,255,255,.4)" data-en="GPS-RTK navigation" data-pl="Nawigacja GPS-RTK">GPS-RTK navigation</p>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:1rem;padding:1.2rem;border:1px solid rgba(255,255,255,.04);border-radius:12px;background:rgba(255,255,255,.005)">
+          <div style="width:24px;height:24px;border-radius:6px;background:rgba(34,211,238,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <div>
+            <h4 style="font-size:.95rem;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:.2rem" data-en="Chemical-free operation" data-pl="Operacja bez chemikaliów">Chemical-free operation</h4>
+            <p style="font-size:.8rem;color:rgba(255,255,255,.4)" data-en="Pure water technology" data-pl="Technologia czystej wody">Pure water technology</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GLOBAL -->
+<section class="section" id="global">
+  <div class="section-label" data-en="Global Reach" data-pl="Zasięg Globalny">Global Reach</div>
+  <h2 data-en="Worldwide Expansion" data-pl="Ekspansja Światowa">Worldwide Expansion</h2>
+  <p data-en="From our Warsaw headquarters, reaching major industrial hubs across 4 continents" data-pl="Z naszej siedziby w Warszawie, docierając do głównych centrów przemysłowych na 4 kontynentach">From our Warsaw headquarters, reaching major industrial hubs across 4 continents</p>
+  <div class="map-container">
+    <div class="map-bg"></div>
+    <div class="map-grid"></div>
+    <div class="city-hq" style="top:28%;left:52%"><div class="pulse"></div><div class="dot"></div><div class="label">Warsaw (HQ)</div></div>
+    <div class="city-dot" style="top:18%;left:48%"></div><div class="city-label" style="top:18%;left:49%">Stockholm</div>
+    <div class="city-dot" style="top:16%;left:46%"></div><div class="city-label" style="top:16%;left:47%">Oslo</div>
+    <div class="city-dot" style="top:20%;left:45%"></div><div class="city-label" style="top:20%;left:46%">Copenhagen</div>
+    <div class="city-dot" style="top:30%;left:49%"></div><div class="city-label" style="top:30%;left:50%">Berlin</div>
+    <div class="city-dot" style="top:26%;left:43%"></div><div class="city-label" style="top:26%;left:44%">London</div>
+    <div class="city-dot" style="top:24%;left:47%"></div><div class="city-label" style="top:24%;left:48%">Amsterdam</div>
+    <div class="city-dot" style="top:32%;left:46%"></div><div class="city-label" style="top:32%;left:47%">Paris</div>
+    <div class="city-dot" style="top:42%;left:58%"></div><div class="city-label" style="top:42%;left:59%">Dubai</div>
+    <div class="city-dot" style="top:40%;left:60%"></div><div class="city-label" style="top:40%;left:61%">Riyadh</div>
+    <div class="city-dot" style="top:50%;left:75%"></div><div class="city-label" style="top:50%;left:76%">Singapore</div>
+    <div class="city-dot" style="top:38%;left:22%"></div><div class="city-label" style="top:38%;left:23%">Houston</div>
+    <div class="city-dot" style="top:32%;left:26%"></div><div class="city-label" style="top:32%;left:27%">New York</div>
+    <div class="city-dot" style="top:36%;left:82%"></div><div class="city-label" style="top:36%;left:83%">Tokyo</div>
+    <div class="city-dot" style="top:72%;left:88%"></div><div class="city-label" style="top:72%;left:89%">Sydney</div>
+  </div>
+  <div style="display:flex;justify-content:center;gap:3rem;margin-top:2rem;flex-wrap:wrap">
+    <div style="text-align:center"><div style="font-size:2.5rem;font-weight:700;font-family:'Space Grotesk',sans-serif;color:rgba(255,255,255,.8)">8</div><div style="font-size:.75rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;margin-top:.3rem" data-en="Europe" data-pl="Europa">Europe</div></div>
+    <div style="text-align:center"><div style="font-size:2.5rem;font-weight:700;font-family:'Space Grotesk',sans-serif;color:rgba(255,255,255,.8)">2</div><div style="font-size:.75rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;margin-top:.3rem" data-en="Middle East" data-pl="Bliski Wschód">Middle East</div></div>
+    <div style="text-align:center"><div style="font-size:2.5rem;font-weight:700;font-family:'Space Grotesk',sans-serif;color:rgba(255,255,255,.8)">3</div><div style="font-size:.75rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;margin-top:.3rem" data-en="Asia-Pacific" data-pl="Azja-Pacyfik">Asia-Pacific</div></div>
+    <div style="text-align:center"><div style="font-size:2.5rem;font-weight:700;font-family:'Space Grotesk',sans-serif;color:rgba(255,255,255,.8)">2</div><div style="font-size:.75rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;margin-top:.3rem" data-en="North America" data-pl="Ameryka Północna">North America</div></div>
+  </div>
+</section>
+<style>@keyframes pulse{0%{transform:scale(1);opacity:.6}100%{transform:scale(2.5);opacity:0}}</style>
+
+<!-- OPERATIONS -->
+<section class="section" id="operations">
+  <div class="section-label" data-en="Our Operations" data-pl="Nasze Operacje">Our Operations</div>
+  <h2 data-en="Drones in Action" data-pl="Drony w Akcji">Drones in Action</h2>
+  <p data-en="Real footage from our autonomous drone cleaning operations" data-pl="Prawdziwe nagrania z naszych autonomicznych operacji czyszczenia dronami">Real footage from our autonomous drone cleaning operations</p>
+  <div class="ops-grid">
+    <div class="ops-item"><video autoplay muted loop playsinline style="width:100%;height:100%;object-fit:cover;"><source src="/assets/drone-hero.mp4" type="video/mp4"></video><div class="ops-overlay"><h4 data-en="Façade Cleaning" data-pl="Mycie Elewacji">Façade Cleaning</h4><p data-en="High-rise glass exterior" data-pl="Szklana elewacja wysokościowa">High-rise glass exterior</p></div></div>
+    <div class="ops-item"><video autoplay muted loop playsinline style="width:100%;height:100%;object-fit:cover;"><source src="/assets/videos/drone-rooftop.mp4" type="video/mp4"></video><div class="ops-overlay"><h4 data-en="Rooftop Operations" data-pl="Operacje na Dachu">Rooftop Operations</h4><p data-en="Elevated surface maintenance" data-pl="Konserwacja powierzchni na wysokości">Elevated surface maintenance</p></div></div>
+    <div class="ops-item"><video autoplay muted loop playsinline style="width:100%;height:100%;object-fit:cover;"><source src="/assets/videos/drone-multifunction.mp4" type="video/mp4"></video><div class="ops-overlay"><h4 data-en="Multi-Function System" data-pl="System Wielofunkcyjny">Multi-Function System</h4><p data-en="Versatile cleaning modes" data-pl="Wszechstronne tryby czyszczenia">Versatile cleaning modes</p></div></div>
+    <div class="ops-item"><video autoplay muted loop playsinline style="width:100%;height:100%;object-fit:cover;"><source src="/assets/videos/drone-dual-nozzle.mp4" type="video/mp4"></video><div class="ops-overlay"><h4 data-en="Dual Nozzle" data-pl="Dysza Podwójna">Dual Nozzle</h4><p data-en="Precision water delivery" data-pl="Precyzyjne dostarczanie wody">Precision water delivery</p></div></div>
+    <div class="ops-item"><video autoplay muted loop playsinline style="width:100%;height:100%;object-fit:cover;"><source src="/assets/videos/drone-tethered.mp4" type="video/mp4"></video><div class="ops-overlay"><h4 data-en="Tethered Flight" data-pl="Lot Na Uwięzi">Tethered Flight</h4><p data-en="Unlimited operation time" data-pl="Nieograniczony czas operacji">Unlimited operation time</p></div></div>
+    <div class="ops-item"><video autoplay muted loop playsinline style="width:100%;height:100%;object-fit:cover;"><source src="/assets/videos/drone-triple-nozzle.mp4" type="video/mp4"></video><div class="ops-overlay"><h4 data-en="Triple Nozzle" data-pl="Dysza Potrójna">Triple Nozzle</h4><p data-en="Maximum coverage system" data-pl="System maksymalnego pokrycia">Maximum coverage system</p></div></div>
+    <div class="ops-item"><video autoplay muted loop playsinline style="width:100%;height:100%;object-fit:cover;"><source src="/assets/videos/drone-closeup.mp4" type="video/mp4"></video><div class="ops-overlay"><h4 data-en="Close-Up View" data-pl="Widok Zbliżeniowy">Close-Up View</h4><p data-en="Sensor-guided precision" data-pl="Precyzja sterowana sensorami">Sensor-guided precision</p></div></div>
+    <div class="ops-item"><video autoplay muted loop playsinline style="width:100%;height:100%;object-fit:cover;"><source src="/assets/videos/drone-showcase.mp4" type="video/mp4"></video><div class="ops-overlay"><h4 data-en="Full Showcase" data-pl="Pełna Prezentacja">Full Showcase</h4><p data-en="Complete system demonstration" data-pl="Kompletna demonstracja systemu">Complete system demonstration</p></div></div>
+  </div>
+</section>
+
+<section class="stats-section">
+  <div class="grid">
+    <div class="stat-box">
+      <div class="num" data-target="12" data-suffix="+">0</div>
+      <div class="lbl" data-en="Addressable Markets" data-pl="Dostępne Rynki">Addressable Markets</div>
+    </div>
+    <div class="stat-box">
+      <div class="num" data-target="9" data-suffix="+">0</div>
+      <div class="lbl" data-en="Service Sectors" data-pl="Sektory Usług">Service Sectors</div>
+    </div>
+    <div class="stat-box">
+      <div class="num" data-target="100" data-suffix="%">0</div>
+      <div class="lbl" data-en="Safety Record" data-pl="Bezpieczeństwo">Safety Record</div>
+    </div>
+    <div class="stat-box">
+      <div class="num" data-target="70" data-suffix="%">0</div>
+      <div class="lbl" data-en="Cost Reduction" data-pl="Redukcja Kosztów">Cost Reduction</div>
+    </div>
+  </div>
+</section>
+
+<!-- PLATFORM -->
+<section class="section" id="platform" style="position:relative;overflow:hidden">
+  <div style="position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;z-index:0;opacity:.15;">
+    <video autoplay muted loop playsinline style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;transform:scale(1);background:#000;">
+      <source src="/assets/videos/drone-showcase.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,5,8,.3) 0%,rgba(5,5,8,.2) 50%,rgba(5,5,8,.3) 100%);z-index:1"></div>
+  <div style="position:relative;z-index:2">
+  <div class="section-label" data-en="Technology" data-pl="Technologia">Technology</div>
+  <h2 data-en="Integrated Platform" data-pl="Zintegrowana Platforma">Integrated Platform</h2>
+  <p data-en="Every mission powered by our proprietary technology stack" data-pl="Każda misja zasilana naszym autorskim stosem technologicznym">Every mission powered by our proprietary technology stack</p>
+  <div class="platform-grid">
+    <div class="platform-card"><div class="num">01</div><h4>GPS-RTK</h4><p data-en="Centimeter-level precision navigation" data-pl="Nawigacja z precyzją centymetrową">Centimeter-level precision navigation</p></div>
+    <div class="platform-card"><div class="num">02</div><h4>AI Vision</h4><p data-en="Real-time surface analysis & path planning" data-pl="Analiza powierzchni w czasie rzeczywistym i planowanie ścieżki">Real-time surface analysis & path planning</p></div>
+    <div class="platform-card"><div class="num">03</div><h4>Thermal Imaging</h4><p data-en="Defect detection & heat mapping" data-pl="Wykrywanie usterek i mapowanie ciepła">Defect detection & heat mapping</p></div>
+    <div class="platform-card"><div class="num">04</div><h4>LiDAR</h4><p data-en="3D structure scanning & collision avoidance" data-pl="Skanowanie struktur 3D i ochrona przed kolizjami">3D structure scanning & collision avoidance</p></div>
+    <div class="platform-card"><div class="num">05</div><h4>Hydro System</h4><p data-en="Pure water cleaning at 150+ bar" data-pl="Czyszczenie czystą wodą przy 150+ bar">Pure water cleaning at 150+ bar</p></div>
+    <div class="platform-card"><div class="num">06</div><h4>Smart Battery</h4><p data-en="Hot-swap system, zero downtime" data-pl="System hot-swap, zero przestojów">Hot-swap system, zero downtime</p></div>
+    <div class="platform-card"><div class="num">07</div><h4>Cloud Fleet</h4><p data-en="Remote monitoring & mission control" data-pl="Zdalny monitoring i kontrola misji">Remote monitoring & mission control</p></div>
+    <div class="platform-card"><div class="num">08</div><h4>Analytics</h4><p data-en="Post-mission reports & surface health data" data-pl="Raporty po misji i dane o kondycji powierzchni">Post-mission reports & surface health data</p></div>
+  </div>
+  </div>
+</section>
+
+<!-- PARTNERS -->
+<section class="section" style="text-align:center">
+  <div class="section-label" data-en="Partners" data-pl="Partnerzy">Partners</div>
+  <h2 data-en="Technology Partners" data-pl="Partnerzy Technologiczni">Technology Partners</h2>
+  <p data-en="Integrated with industry-leading platforms and hardware" data-pl="Zintegrowane z wiodącymi platformami i sprzętem branżowym">Integrated with industry-leading platforms and hardware</p>
+  <div class="partners-row">
+    <span>DJI Enterprise</span><span>Kärcher</span><span>Pix4D</span><span>DroneDeploy</span><span>Aerones</span><span>Wingtra</span><span>Litchi</span><span>DroneShield</span>
+  </div>
+</section>
+
+<!-- INSIGHTS -->
+<section class="section" id="insights">
+  <div class="section-label" data-en="Market" data-pl="Rynek">Market</div>
+  <h2 data-en="Industry Insights" data-pl="Wgląd w Branżę">Industry Insights</h2>
+  <div class="insights-grid">
+    <div class="insight-card">
+      <div class="tag" data-en="Industry" data-pl="Branża">Industry</div>
+      <h4 data-en="Global Façade Cleaning Market Projected to Reach $50B by 2030" data-pl="Globalny rynek czyszczenia elewacji ma osiągnąć 50 mld USD do 2030 r.">Global Façade Cleaning Market Projected to Reach $50B by 2030</h4>
+      <div class="date">2025</div>
+    </div>
+    <div class="insight-card">
+      <div class="tag" data-en="EU Policy" data-pl="Polityka UE">EU Policy</div>
+      <h4 data-en="European Green Deal Drives Demand for Chemical-Free Maintenance" data-pl="Europejski Zielony Ład napędza popyt na konserwację bez chemikaliów">European Green Deal Drives Demand for Chemical-Free Maintenance</h4>
+      <div class="date">2025</div>
+    </div>
+    <div class="insight-card">
+      <div class="tag" data-en="Aviation" data-pl="Lotnictwo">Aviation</div>
+      <h4 data-en="EASA Expands Commercial Drone Operations Framework Across EU" data-pl="EASA rozszerza ramy operacji komercyjnych dronów w całej UE">EASA Expands Commercial Drone Operations Framework Across EU</h4>
+      <div class="date">2024</div>
+    </div>
+    <div class="insight-card">
+      <div class="tag" data-en="Energy" data-pl="Energia">Energy</div>
+      <h4 data-en="Wind Turbine Fleet Maintenance Costs Reduced 40% with Autonomous Systems" data-pl="Koszty konserwacji floty turbin wiatrowych obniżone o 40% dzięki systemom autonomicznym">Wind Turbine Fleet Maintenance Costs Reduced 40% with Autonomous Systems</h4>
+      <div class="date">2024</div>
+    </div>
+  </div>
+</section>
+
+<!-- OPERATIONAL CAPABILITY -->
+<section class="section" id="capability" style="text-align:center">
+  <div class="section-label" data-en="Operational Capability" data-pl="Zdolność Operacyjna">Operational Capability</div>
+  <div class="env-stats">
+    <div class="env-stat"><div class="val" data-target="200" data-suffix="m">0</div><div class="lbl" data-en="Operational Altitude" data-pl="Wysokość Operacyjna">Operational Altitude</div></div>
+    <div class="env-stat"><div class="val" data-target="24" data-suffix="h">0</div><div class="lbl" data-en="Hour Response Time" data-pl="Czas Reakcji">Hour Response Time</div></div>
+    <div class="env-stat"><div class="val" data-target="100" data-suffix="%">0</div><div class="lbl" data-en="Chemical-Free" data-pl="Bez Chemikaliów">Chemical-Free</div></div>
+    <div class="env-stat"><div class="val" data-target="365" data-suffix="">0</div><div class="lbl" data-en="Days Operational/Year" data-pl="Dni Operacyjne/Rok">Days Operational/Year</div></div>
+  </div>
+</section>
+
+<!-- CTA / CONTACT -->
+<section class="cta-section" id="contact">
+  <h2 data-en="Ready to Eliminate<br>Scaffolding Forever?" data-pl="Gotowy Wyeliminować<br>Rusztowania Na Zawsze?">Ready to Eliminate<br>Scaffolding Forever?</h2>
+  <p data-en="Join the world's most innovative companies that have already switched to autonomous drone-based maintenance." data-pl="Dołącz do najbardziej innowacyjnych firm na świecie, które już przeszły na autonomiczną konserwację opartą na dronach.">Join the world's most innovative companies that have already switched to autonomous drone-based maintenance.</p>
+  <div style="display:flex;justify-content:center;gap:1rem;margin-bottom:1rem;flex-wrap:wrap">
+    <a href="mailto:contact@bezliny.com?subject=Request%20Assessment" class="cta-btn" style="background:#fff;color:#050508" data-en="Request Assessment" data-pl="Poproś o Ocenę">Request Assessment</a>
+    <a href="mailto:contact@bezliny.com?subject=Schedule%20Demo" class="cta-btn" style="background:transparent;color:#fff;border:1px solid rgba(255,255,255,.2)" data-en="Schedule Demo" data-pl="Umów Demo">Schedule Demo</a>
+  </div>
+  <p style="font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-top:1.5rem;margin-bottom:4rem" data-en="Enterprise Inquiries &middot; 24h Response Guaranteed" data-pl="Zapytania Enterprise &middot; Gwarancja Odpowiedzi 24h">Enterprise Inquiries &middot; 24h Response Guaranteed</p>
+
+  <form class="contact-form" id="contactForm" action="https://formspree.io/f/mnjkypeb" method="POST">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem">
+      <div class="field"><label data-en="Name *" data-pl="Imię *">Name *</label><input type="text" name="name" placeholder="Your name" required></div>
+      <div class="field"><label data-en="Email *" data-pl="Email *">Email *</label><input type="email" name="email" placeholder="your@email.com" required></div>
+    </div>
+    <div class="field"><label data-en="Company *" data-pl="Firma *">Company *</label><input type="text" name="company" placeholder="Company name" required></div>
+    <div class="field"><label data-en="I want to *" data-pl="Chcę *">I want to *</label><select name="type" required>
+      <option value="" data-en="Select" data-pl="Wybierz">Select</option>
+      <option value="assessment" data-en="Request Assessment" data-pl="Poproś o Ocenę">Request Assessment</option>
+      <option value="demo" data-en="Schedule Demo" data-pl="Umów Demo">Schedule Demo</option>
+      <option value="quote" data-en="Get a Quote" data-pl="Poproś o Wycenę">Get a Quote</option>
+      <option value="enterprise" data-en="Enterprise Solution" data-pl="Rozwiązanie Enterprise">Enterprise Solution</option>
+      <option value="partnership" data-en="Partnership" data-pl="Partnerstwo">Partnership</option>
+    </select></div>
+    <div class="field"><label data-en="Message" data-pl="Wiadomość">Message</label><textarea name="message" placeholder="Briefly tell us about your project..."></textarea></div>
+    <button type="submit" class="submit" data-en="Send Inquiry" data-pl="Wyślij Zapytanie">Send Inquiry</button>
+    <p style="text-align:center;margin-top:1rem;font-size:.7rem;color:rgba(255,255,255,.3)" data-en="Sent to <strong style='color:rgba(255,255,255,.5)'>contact@bezliny.com</strong> &middot; 24h response" data-pl="Wysłane do <strong style='color:rgba(255,255,255,.5)'>contact@bezliny.com</strong> &middot; odpowiedź 24h">Sent to <strong style="color:rgba(255,255,255,.5)">contact@bezliny.com</strong> &middot; 24h response</p>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr 1.5fr;gap:3rem;margin-bottom:4rem">
+    <div>
+      <div class="logo" style="font-size:1.3rem;margin-bottom:1.2rem;font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:.2em;color:#fff;text-shadow:0 0 20px rgba(255,255,255,.1)">BEZLINY</div>
+      <p style="font-size:.85rem;color:rgba(255,255,255,.35);line-height:1.8;margin-bottom:1.5rem" data-en="Global leader in drone-based cleaning, inspection, and surface treatment. Redefining how the world maintains critical infrastructure." data-pl="Globalny lider w czyszczeniu, inspekcji i obróbce powierzchni opartej na dronach. Przezdefiniowujemy sposób, w jaki świat utrzymuje krytyczną infrastrukturę.">Global leader in drone-based cleaning, inspection, and surface treatment. Redefining how the world maintains critical infrastructure.</p>
+      <div style="display:flex;align-items:center;gap:.5rem">
+        <div style="width:6px;height:6px;border-radius:50%;background:#22d3ee"></div>
+        <span style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.6)" data-en="Operations Active Worldwide" data-pl="Operacje Aktywne Na Całym Świecie">Operations Active Worldwide</span>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:1.5rem" data-en="Navigation" data-pl="Nawigacja">Navigation</div>
+      <div style="display:flex;flex-direction:column;gap:.8rem">
+        <a href="#" style="color:rgba(255,255,255,.6);text-decoration:none;font-size:.85rem;transition:color .3s" data-en="Home" data-pl="Strona Główna">Home</a>
+        <a href="#solutions" style="color:rgba(255,255,255,.4);text-decoration:none;font-size:.85rem;transition:color .3s" data-en="Services" data-pl="Usługi">Services</a>
+        <a href="#technology" style="color:rgba(255,255,255,.4);text-decoration:none;font-size:.85rem;transition:color .3s" data-en="Technology" data-pl="Technologia">Technology</a>
+        <a href="#process" style="color:rgba(255,255,255,.4);text-decoration:none;font-size:.85rem;transition:color .3s" data-en="Safety" data-pl="Bezpieczeństwo">Safety</a>
+        <a href="#global" style="color:rgba(255,255,255,.4);text-decoration:none;font-size:.85rem;transition:color .3s" data-en="Global" data-pl="Globalnie">Global</a>
+        <a href="#contact" style="color:rgba(255,255,255,.4);text-decoration:none;font-size:.85rem;transition:color .3s" data-en="Contact" data-pl="Kontakt">Contact</a>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:1.5rem" data-en="Company" data-pl="Firma">Company</div>
+      <div style="display:flex;flex-direction:column;gap:.8rem">
+        <a href="#" style="color:rgba(255,255,255,.6);text-decoration:none;font-size:.85rem;transition:color .3s" data-en="Environmental Impact" data-pl="Wpływ na Środowisko">Environmental Impact</a>
+        <a href="#" style="color:rgba(255,255,255,.6);text-decoration:none;font-size:.85rem;transition:color .3s" data-en="Investors" data-pl="Inwestorzy">Investors</a>
+        <a href="#" style="color:rgba(255,255,255,.6);text-decoration:none;font-size:.85rem;transition:color .3s" data-en="Brand & Policy" data-pl="Marka i Polityka">Brand & Policy</a>
+        <a href="#" style="color:rgba(255,255,255,.6);text-decoration:none;font-size:.85rem;transition:color .3s" data-en="Government" data-pl="Rząd">Government</a>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:1.5rem" data-en="Headquarters" data-pl="Siedziba Główna">Headquarters</div>
+      <div style="display:flex;flex-direction:column;gap:.8rem">
+        <p style="font-size:.85rem;color:rgba(255,255,255,.8);font-weight:500" data-en="Bezliny Cleaning Corporation" data-pl="Bezliny Cleaning Corporation">Bezliny Cleaning Corporation</p>
+        <p style="font-size:.8rem;color:rgba(255,255,255,.6);margin-top:.3rem" data-en="Aleje Jerozolimskie 68/121<br>00-024 Warsaw, Poland" data-pl="Aleje Jerozolimskie 68/121<br>00-024 Warszawa, Polska">Aleje Jerozolimskie 68/121<br>00-024 Warsaw, Poland</p>
+        <a href="mailto:contact@bezliny.com" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:.85rem;transition:color .3s">contact@bezliny.com</a>
+        <a href="tel:+48579366868" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:.85rem;transition:color .3s">+48 579 366 868</a>
+        <a href="https://wa.me/48579366868" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:.85rem;transition:color .3s">WhatsApp</a>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar">
+    <p data-en="&copy; 2026 Bezliny Cleaning Corporation. All rights reserved." data-pl="&copy; 2026 Bezliny Cleaning Corporation. Wszelkie prawa zastrzeżone.">&copy; 2026 Bezliny Cleaning Corporation. All rights reserved.</p>
+    <div style="display:flex;gap:2rem">
+      <span style="font-size:.7rem;color:rgba(255,255,255,.5)" data-en="Global Operations" data-pl="Operacje Globalne">Global Operations</span>
+      <span style="font-size:.7rem;color:rgba(255,255,255,.15)">|</span>
+      <span style="font-size:.7rem;color:rgba(255,255,255,.5)" data-en="ISO Certified" data-pl="Certyfikacja ISO">ISO Certified</span>
+      <span style="font-size:.7rem;color:rgba(255,255,255,.15)">|</span>
+      <span style="font-size:.7rem;color:rgba(255,255,255,.5)" data-en="Enterprise Grade" data-pl="Klasa Enterprise">Enterprise Grade</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ANIMATED COUNTERS -->
+<script>
+(function() {
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.dataset.target);
+        const suffix = el.dataset.suffix || '';
+        const duration = 2500;
+        const startTime = performance.now();
+
+        function updateCounter(currentTime) {
+          const elapsed = currentTime - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const easeOut = 1 - Math.pow(1 - progress, 3);
+          const current = Math.floor(target * easeOut);
+          el.textContent = current + suffix;
+          if (progress < 1) {
+            requestAnimationFrame(updateCounter);
+          } else {
+            el.textContent = target + suffix;
+          }
+        }
+        requestAnimationFrame(updateCounter);
+        counterObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll('[data-target]').forEach(el => counterObserver.observe(el));
+})();
+</script>
+
+<!-- LANGUAGE SWITCHER -->
+<script>
+let currentLang = 'en';
+
+function setLang(lang) {
+  if (lang === currentLang) return;
+  currentLang = lang;
+
+  document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+  document.getElementById('lang-pl').classList.toggle('active', lang === 'pl');
+
+  document.querySelectorAll('[data-en][data-pl]').forEach(el => {
+    const newText = el.getAttribute('data-' + lang);
+    if (newText) {
+      if (el.querySelector('span, strong, br')) {
+        el.innerHTML = newText;
+      } else {
+        el.textContent = newText;
+      }
+    }
+  });
+
+  document.querySelectorAll('input[placeholder], textarea[placeholder]').forEach(el => {
+    const phEn = el.getAttribute('data-placeholder-en');
+    const phPl = el.getAttribute('data-placeholder-pl');
+    if (phEn && phPl) {
+      el.placeholder = lang === 'en' ? phEn : phPl;
+    }
+  });
+
+  document.querySelectorAll('select option').forEach(el => {
+    const optEn = el.getAttribute('data-en');
+    const optPl = el.getAttribute('data-pl');
+    if (optEn && optPl) {
+      el.textContent = lang === 'en' ? optEn : optPl;
+    }
+  });
+}
+
+(function() {
+  const inputs = document.querySelectorAll('input[placeholder], textarea[placeholder]');
+  inputs.forEach(el => {
+    if (el.name === 'name') {
+      el.setAttribute('data-placeholder-en', 'Your name');
+      el.setAttribute('data-placeholder-pl', 'Twoje imię');
+    } else if (el.name === 'email') {
+      el.setAttribute('data-placeholder-en', 'your@email.com');
+      el.setAttribute('data-placeholder-pl', 'twoj@email.com');
+    } else if (el.name === 'company') {
+      el.setAttribute('data-placeholder-en', 'Company name');
+      el.setAttribute('data-placeholder-pl', 'Nazwa firmy');
+    } else if (el.name === 'message') {
+      el.setAttribute('data-placeholder-en', 'Briefly tell us about your project...');
+      el.setAttribute('data-placeholder-pl', 'Krótko opowiedz nam o swoim projekcie...');
+    }
+  });
+})();
+</script>
+
+<!-- THREE.JS CINEMATIC DRONE -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 100) navbar.classList.add('scrolled');
+  else navbar.classList.remove('scrolled');
+}, {passive:true});
+
+const intro = document.getElementById('cinematic-intro');
+let introSkipped = false;
+function skipIntro() {
+  introSkipped = true;
+  intro.classList.add('hidden');
+  navbar.classList.add('visible');
+}
+setTimeout(() => { if (!introSkipped) skipIntro(); }, 6000);
+
+const canvas = document.getElementById('cinematic-canvas');
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x000000, 0.02);
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
+
+const bodyMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1e, metalness: 0.9, roughness: 0.3 });
+const darkMat = new THREE.MeshStandardMaterial({ color: 0x0d0d10, metalness: 0.95, roughness: 0.4 });
+const accentMat = new THREE.MeshStandardMaterial({ color: 0x22d3ee, metalness: 0.6, roughness: 0.2, emissive: 0x22d3ee, emissiveIntensity: 0.3 });
+const glowMat = new THREE.MeshStandardMaterial({ color: 0x22d3ee, emissive: 0x22d3ee, emissiveIntensity: 0.8 });
+const glassMat = new THREE.MeshPhysicalMaterial({ color: 0x111113, metalness: 0.95, roughness: 0.05, transparent: true, opacity: 0.6, transmission: 0.3 });
+const propMat = new THREE.MeshStandardMaterial({ color: 0x2a2a30, metalness: 0.6, roughness: 0.4 });
+
+const drone = new THREE.Group();
+drone.scale.set(0.6, 0.6, 0.6);
+scene.add(drone);
+
+const body = new THREE.Mesh(new THREE.CylinderGeometry(2, 2.4, 1.4, 8), bodyMat);
+body.castShadow = true;
+drone.add(body);
+
+const dome = new THREE.Mesh(new THREE.SphereGeometry(2, 32, 16, 0, Math.PI*2, 0, Math.PI/2), glassMat);
+dome.position.y = 0.7;
+drone.add(dome);
+
+const bot = new THREE.Mesh(new THREE.SphereGeometry(2.4, 32, 16, 0, Math.PI*2, Math.PI/2, Math.PI/2), darkMat);
+bot.position.y = -0.7;
+drone.add(bot);
+
+const ring = new THREE.Mesh(new THREE.TorusGeometry(2.6, 0.04, 8, 64), accentMat);
+ring.rotation.x = Math.PI/2;
+drone.add(ring);
+
+const gimbal = new THREE.Mesh(new THREE.SphereGeometry(0.5, 16, 16), darkMat);
+gimbal.position.set(0, -2, 0.8);
+drone.add(gimbal);
+
+const lens = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.25, 0.4, 16), glassMat);
+lens.rotation.x = Math.PI/2;
+lens.position.set(0, -2, 1.3);
+drone.add(lens);
+
+const lensRing = new THREE.Mesh(new THREE.TorusGeometry(0.28, 0.02, 8, 32), glowMat);
+lensRing.rotation.x = Math.PI/2;
+lensRing.position.set(0, -2, 1.5);
+drone.add(lensRing);
+
+const armLength = 6;
+const props = [];
+for (let i = 0; i < 4; i++) {
+  const angle = (i * Math.PI/2) + Math.PI/4;
+  const arm = new THREE.Mesh(new THREE.BoxGeometry(armLength, 0.3, 0.3), bodyMat);
+  arm.position.set(Math.cos(angle)*armLength/2, 0.1, Math.sin(angle)*armLength/2);
+  arm.rotation.y = -angle;
+  arm.castShadow = true;
+  drone.add(arm);
+
+  const motor = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.5, 0.8, 16), darkMat);
+  motor.position.set(Math.cos(angle)*armLength, 0.5, Math.sin(angle)*armLength);
+  drone.add(motor);
+
+  const led = new THREE.Mesh(new THREE.TorusGeometry(0.5, 0.02, 8, 32), glowMat);
+  led.rotation.x = Math.PI/2;
+  led.position.set(Math.cos(angle)*armLength, 0.2, Math.sin(angle)*armLength);
+  drone.add(led);
+
+  const propGroup = new THREE.Group();
+  propGroup.position.set(Math.cos(angle)*armLength, 1.1, Math.sin(angle)*armLength);
+  drone.add(propGroup);
+
+  for (let b = 0; b < 2; b++) {
+    const blade = new THREE.Mesh(new THREE.BoxGeometry(3.8, 0.02, 0.2), propMat);
+    blade.rotation.y = b * Math.PI;
+    propGroup.add(blade);
+  }
+  props.push(propGroup);
+
+  const guard = new THREE.Mesh(new THREE.TorusGeometry(1.9, 0.015, 6, 32), accentMat);
+  guard.rotation.x = Math.PI/2;
+  guard.position.set(Math.cos(angle)*armLength, 1.1, Math.sin(angle)*armLength);
+  drone.add(guard);
+}
+
+for (let i = 0; i < 4; i++) {
+  const angle = (i * Math.PI/2) + Math.PI/4;
+  const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.05, 2.2, 8), darkMat);
+  leg.position.set(Math.cos(angle)*1.8, -2.2, Math.sin(angle)*1.8);
+  leg.rotation.z = Math.cos(angle)*0.3;
+  leg.rotation.x = -Math.sin(angle)*0.3;
+  drone.add(leg);
+
+  const foot = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.25, 0.12, 8), accentMat);
+  foot.position.set(Math.cos(angle)*2.3, -3.3, Math.sin(angle)*2.3);
+  drone.add(foot);
+}
+
+const nozzle = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.35, 0.8, 12), darkMat);
+nozzle.position.set(0, -2.5, -0.5);
+drone.add(nozzle);
+
+const nozzleTip = new THREE.Mesh(new THREE.ConeGeometry(0.1, 0.3, 12), accentMat);
+nozzleTip.position.set(0, -3.1, -0.5);
+nozzleTip.rotation.x = Math.PI;
+drone.add(nozzleTip);
+
+const sprayCount = 200;
+const sprayGeo = new THREE.BufferGeometry();
+const sprayPos = new Float32Array(sprayCount * 3);
+for (let i = 0; i < sprayCount; i++) {
+  sprayPos[i*3] = (Math.random()-0.5)*0.4;
+  sprayPos[i*3+1] = -3.2 - Math.random()*2;
+  sprayPos[i*3+2] = -0.5 + (Math.random()-0.5)*0.2;
+}
+sprayGeo.setAttribute('position', new THREE.BufferAttribute(sprayPos, 3));
+const sprayMat = new THREE.PointsMaterial({ color: 0x22d3ee, size: 0.04, transparent: true, opacity: 0.4 });
+const spray = new THREE.Points(sprayGeo, sprayMat);
+drone.add(spray);
+
+scene.add(new THREE.AmbientLight(0x404060, 0.4));
+const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
+keyLight.position.set(10, 15, 10);
+scene.add(keyLight);
+const fillLight = new THREE.DirectionalLight(0x22d3ee, 0.4);
+fillLight.position.set(-10, 5, -5);
+scene.add(fillLight);
+const rimLight = new THREE.DirectionalLight(0xffffff, 0.6);
+rimLight.position.set(0, -5, -15);
+scene.add(rimLight);
+
+let startTime = Date.now();
+function animate() {
+  if (introSkipped) return;
+  requestAnimationFrame(animate);
+
+  const elapsed = (Date.now() - startTime) / 1000;
+  const progress = Math.min(elapsed / 6, 1);
+
+  if (progress < 0.33) {
+    const t = progress / 0.33;
+    camera.position.set(0, 2, 28 - t*16);
+    drone.rotation.y = t * 0.5;
+  } else if (progress < 0.67) {
+    const t = (progress - 0.33) / 0.34;
+    camera.position.set(0, 2.5, 12);
+    drone.rotation.y = 0.5 + t * Math.PI * 2;
+    drone.rotation.x = Math.sin(t * Math.PI) * 0.1;
+  } else {
+    const t = (progress - 0.67) / 0.33;
+    camera.position.set(0, 1.5, 12 - t*4);
+    drone.rotation.y = Math.PI;
+    drone.rotation.x = -0.2 * t;
+    sprayMat.opacity = 0.4 + t * 0.3;
+  }
+
+  const time = Date.now() * 0.001;
+  drone.position.y = Math.sin(time) * 0.1;
+
+  props.forEach((p, i) => { p.rotation.y += 0.3 + (i%2)*0.1; });
+
+  const sp = spray.geometry.attributes.position.array;
+  for (let i = 0; i < sprayCount; i++) {
+    sp[i*3+1] -= 0.03;
+    if (sp[i*3+1] < -6) { sp[i*3+1] = -3.2; sp[i*3] = (Math.random()-0.5)*0.4; }
+  }
+  spray.geometry.attributes.position.needsUpdate = true;
+
+  camera.lookAt(0, -0.5, 0);
+  renderer.render(scene, camera);
+}
+animate();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+
+</body>
+</html>
